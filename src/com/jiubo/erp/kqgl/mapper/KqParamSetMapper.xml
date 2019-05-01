@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.erp.kqgl.dao.KqParamSetDao">
+	<!-- 查询假期种类-->
+	<select id="queryVacation"  resultType="com.jiubo.erp.kqgl.vo.Vacation">
+		SELECT
+		    ID,
+  			NAME,
+  			ISDELETE,
+  			CREATEDATE,
+  			CREATOR
+		FROM
+  			T_ATT_LEAVETYPE
+	</select>
+	
+	<!-- 修改假期种类 -->
+	<update id="updateVacation">
+		UPDATE T_ATT_LEAVETYPE
+		SET 
+			NAME = #{vacation.name}
+		WHERE 
+			ID = #{vacation.id}	
+	</update>
+	
+	<!-- 删除假期种类 -->
+	<delete id="deleteVacation">
+		DELETE T_ATT_LEAVETYPE
+		WHERE ID = #{id}	
+	</delete>
+
+	<!-- 添加假期种类 -->
+	<insert id="addVacation">
+		INSERT INTO T_ATT_LEAVETYPE(NAME,ISDELETE,CREATEDATE,CREATOR)
+		VALUES(#{vacation.name},#{vacation.isDelete},#{vacation.createDate},#{vacation.creator})
+	</insert>
+	
+	<!-- 查询考勤规则 -->
+	<select id="queryAttRuleType" resultType="com.jiubo.erp.kqgl.vo.AttRuleType">
+		SELECT
+			ID,
+			NAME,
+			EARLYMINUTES,
+			LATEMINUTES,
+			ISDELETE,
+			CREATEDATE,
+			CREATOR
+		FROM
+			T_ATT_RULETYPE
+	</select>
+	
+	<!-- 添加考勤规则 -->
+	<insert id="addAttRuleType">
+		INSERT INTO T_ATT_RULETYPE(NAME,EARLYMINUTES,LATEMINUTES,ISDELETE,CREATEDATE,CREATOR)
+		VALUES (#{attRuleType.name},#{attRuleType.earlyMinutes},#{attRuleType.lateMinutes},#{attRuleType.isDelete},#{attRuleType.createDate},#{attRuleType.creator})   
+	</insert>
+	
+	<!-- 删除考勤规则 -->
+	<delete id="deleteAttRuleType">
+		DELETE FROM T_ATT_RULETYPE
+		WHERE ID = #{id}
+	</delete>
+	
+	<!-- 修改考勤规则 -->
+	<update id="updateAttRuleType">
+		UPDATE T_ATT_RULETYPE 
+		SET   
+		  NAME = #{attRuleType.name},
+		  EARLYMINUTES = #{attRuleType.earlyMinutes},
+		  LATEMINUTES = #{attRuleType.lateMinutes}
+		WHERE 
+			ID = #{attRuleType.id}
+	</update>
+</mapper>

@@ -1,1 +1,8 @@
 /com/
+/jdbc.properties
+/log4j.properties
+/mybatis.xml
+/spring-mybatis.xml
+/spring.xml
+/springmvc.xml
+/表结构20170911.xlsx
