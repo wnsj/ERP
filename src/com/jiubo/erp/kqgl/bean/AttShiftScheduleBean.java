@@ -2,56 +2,56 @@ package com.jiubo.erp.kqgl.bean;
 
 //班次表
 public class AttShiftScheduleBean {
-	private String ID;
-	private String Name;
-	private String ShortName;
-	private String  StartTime;
-	private String EndTime;
-	private String Type;
-	private String Remarks;
-	public String getID() {
-		return ID;
+	private String id;//编号
+	private String name;//名称
+	private String shortName;//简称
+	private String startTime;//开始时间
+	private String endTime;//结束时间
+	private String type;//类型1.工作2.休息
+	private String remarks;//备注
+	public AttShiftScheduleBean() {
+		super();
 	}
-	public void setID(String iD) {
-		ID = iD;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getName() {
-		return Name;
+		return name;
 	}
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 	public String getShortName() {
-		return ShortName;
+		return shortName;
 	}
 	public void setShortName(String shortName) {
-		ShortName = shortName;
+		this.shortName = shortName;
 	}
 	public String getStartTime() {
-		return StartTime;
+		return startTime;
 	}
 	public void setStartTime(String startTime) {
-		StartTime = startTime;
+		this.startTime = startTime;
 	}
 	public String getEndTime() {
-		return EndTime;
+		return endTime;
 	}
 	public void setEndTime(String endTime) {
-		EndTime = endTime;
+		this.endTime = endTime;
 	}
 	public String getType() {
-		return Type;
+		return type;
 	}
 	public void setType(String type) {
-		Type = type;
+		this.type = type;
 	}
 	public String getRemarks() {
-		return Remarks;
+		return remarks;
 	}
 	public void setRemarks(String remarks) {
-		Remarks = remarks;
+		this.remarks = remarks;
 	}
-	
-	
-
 }

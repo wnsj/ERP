@@ -1,30 +1,33 @@
 package com.jiubo.erp.kqgl.bean;
 
-public class AttshiftGroupBean {
-	
-	private String ID; //编号
-	private String Name; //班组名称
-	private String Remark; //备注
-	private String isDelete;
-	private String CreateDate;
-	private String Creator;
-	public String getID() {
-		return ID;
+//班组表
+public class AttShiftGroupBean {
+	private String id; //编号
+	private String name; //班组名称
+	private String remark; //备注
+	private String isDelete;//是否启用
+	private String createDate;//创建时间
+	private String creator;//创建者
+	public AttShiftGroupBean() {
+		super();
 	}
-	public void setID(String iD) {
-		ID = iD;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getName() {
-		return Name;
+		return name;
 	}
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 	public String getRemark() {
-		return Remark;
+		return remark;
 	}
 	public void setRemark(String remark) {
-		Remark = remark;
+		this.remark = remark;
 	}
 	public String getIsDelete() {
 		return isDelete;
@@ -33,20 +36,15 @@ public class AttshiftGroupBean {
 		this.isDelete = isDelete;
 	}
 	public String getCreateDate() {
-		return CreateDate;
+		return createDate;
 	}
 	public void setCreateDate(String createDate) {
-		CreateDate = createDate;
+		this.createDate = createDate;
 	}
 	public String getCreator() {
-		return Creator;
+		return creator;
 	}
 	public void setCreator(String creator) {
-		Creator = creator;
+		this.creator = creator;
 	}
-
-	
-	
-
-
 }

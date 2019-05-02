@@ -581,56 +581,108 @@ public class EmpController {
 	@RequestMapping(value = "/uUpdateUserInfo")
 	public void updateUserBaseInfo(HttpServletResponse response, HttpServletRequest request) {
 
+//		UserInfo userInfo = new UserInfo();
+//		Account account = new Account();
+//		QueryFamilyResult qfr = new QueryFamilyResult();
+//		String string;
+//		try {
+//			string = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+//			
+//			JSONObject jsonData = JSONObject.fromObject(string);
+//			
+//			userInfo.setUserId(Integer.valueOf(jsonData.getString("ID")));
+//			userInfo.setuName(jsonData.getString("Name"));
+//			userInfo.setuState(jsonData.getString("State"));
+//			userInfo.setuSex(jsonData.getString("Sex"));
+//			userInfo.setuBirth(jsonData.getString("Birth"));
+//			userInfo.setuAccountId(jsonData.getString("Account_Id"));
+//			userInfo.setuDepartment_id(jsonData.getString("DepartmentId"));
+//			userInfo.setPositionId(jsonData.getString("PositionId"));
+//			userInfo.setuEntryDte(jsonData.getString("EntryDate"));
+//			userInfo.setuPositiveDate(jsonData.getString("PositiveDate"));
+//			userInfo.setuResignDate(jsonData.getString("ResignDate"));
+//			userInfo.setuResignType(jsonData.getString("ResignType"));
+//			userInfo.setuRemark(jsonData.getString("Remark"));
+//			
+//			
+//			
+//			
+//			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
-		UserInfo userInfo = new UserInfo();
-		Map<String, String> mapList = ToolClass.mapShiftStr(request);
-		
-		userInfo.setuSex(mapList.get("userId"));
-		//基本信息
-		userInfo.setuSex(mapList.get("uName"));
-		userInfo.setuSex(mapList.get("uSex"));
-		userInfo.setuSex(mapList.get("uBirth"));
-		userInfo.setuSex(mapList.get("uAccount"));
-		userInfo.setuSex(mapList.get("uDepartment_id"));
-		userInfo.setuSex(mapList.get("positionId"));
-		userInfo.setuSex(mapList.get("uEntryDte"));
-		userInfo.setuSex(mapList.get("uPositiveDate"));
-		userInfo.setuSex(mapList.get("uResignDate"));
-		userInfo.setuSex(mapList.get("uResignType"));
-		userInfo.setuSex(mapList.get("uResignReason"));
-		userInfo.setuSex(mapList.get("uState"));
-		userInfo.setuSex(mapList.get("uRemark"));
 		//详细信息
-		userInfo.setuSex(mapList.get("uIdNum"));
-		userInfo.setuSex(mapList.get("uPloitical"));
-		userInfo.setuSex(mapList.get("uHomeTown"));
-		userInfo.setuSex(mapList.get("uNationality"));
-		userInfo.setuSex(mapList.get("uMarital"));
-		userInfo.setuSex(mapList.get("uHomeAddress"));
-		userInfo.setuSex(mapList.get("uCurrentAddress"));
-		userInfo.setuSex(mapList.get("uDomicile"));
-		userInfo.setuSex(mapList.get("uAccountProp"));
-		
-		userInfo.setuSex(mapList.get("uSchools"));
-		userInfo.setuSex(mapList.get("uEducation"));
-		userInfo.setuSex(mapList.get("uProfession"));
-		userInfo.setuSex(mapList.get("uGraduation"));
-		userInfo.setuSex(mapList.get("uAtSchool"));
-		
-		userInfo.setuSex(mapList.get("uContact"));
-		userInfo.setuSex(mapList.get("uEmergencyContact"));
-		userInfo.setuSex(mapList.get("uEmergencyphone"));
-		
-		userInfo.setuSex(mapList.get("uLicenseType"));
-		userInfo.setuSex(mapList.get("uDrivingExpe"));
-		
-		Integer baseInfoInt = this.service.updataBaselInfo(userInfo);
-		Integer detailInfoInt = this.service.updataDetialInfo(userInfo);
-		if (baseInfoInt==1&&detailInfoInt==1) {
-			ResponseMessageUtils.responseMessage(response, "插入成功!");
-		}else {
-			ResponseMessageUtils.responseMessage(response, "插入失败!");
-		}
+//		IDNum: vm.updataIDNum,
+//		ploitical: vm.updataPloitical,
+//		homeTown: vm.updataHomeTown,
+//		nationality: vm.updataNationality,
+//		accountProp: vm.updataUAccountProp,
+//		domicile: vm.updataUDomicile,
+//		marital: vm.updataUMarital,
+//		homeAddress: vm.updataUHomeAddress,
+//		currentAddress: vm.updataUCurrentAddress,
+//		schools: vm.updataUSchools,
+//		education: vm.updataUEducation,
+//		profession: vm.updataUProfession,
+//		graduation: vm.updataUGraduation,
+//		atSchool: vm.updataUAtSchool,
+//		contact: vm.updataUContact,
+//		emergencyContact: vm.updataUEmergencyContact,
+//		emergencyPhone: vm.updataUEmergencyPhone,
+//		drivingExpe: vm.updataUDrivingExpe,
+//		licenseType: vm.updataULicenseType,
+//		
+//		//家庭信息
+//		updataFamilyNumList:vm.FamilyNumList,
+	
+//		userInfo.setuSex(mapList.get("userId"));
+//		//基本信息
+//		userInfo.setuSex(mapList.get("uName"));
+//		userInfo.setuSex(mapList.get("uSex"));
+//		userInfo.setuSex(mapList.get("uBirth"));
+//		userInfo.setuSex(mapList.get("uAccount"));
+//		userInfo.setuSex(mapList.get("uDepartment_id"));
+//		userInfo.setuSex(mapList.get("positionId"));
+//		userInfo.setuSex(mapList.get("uEntryDte"));
+//		userInfo.setuSex(mapList.get("uPositiveDate"));
+//		userInfo.setuSex(mapList.get("uResignDate"));
+//		userInfo.setuSex(mapList.get("uResignType"));
+//		userInfo.setuSex(mapList.get("uResignReason"));
+//		userInfo.setuSex(mapList.get("uState"));
+//		userInfo.setuSex(mapList.get("uRemark"));
+//		//详细信息
+//		userInfo.setuSex(mapList.get("uIdNum"));
+//		userInfo.setuSex(mapList.get("uPloitical"));
+//		userInfo.setuSex(mapList.get("uHomeTown"));
+//		userInfo.setuSex(mapList.get("uNationality"));
+//		userInfo.setuSex(mapList.get("uMarital"));
+//		userInfo.setuSex(mapList.get("uHomeAddress"));
+//		userInfo.setuSex(mapList.get("uCurrentAddress"));
+//		userInfo.setuSex(mapList.get("uDomicile"));
+//		userInfo.setuSex(mapList.get("uAccountProp"));
+//		
+//		userInfo.setuSex(mapList.get("uSchools"));
+//		userInfo.setuSex(mapList.get("uEducation"));
+//		userInfo.setuSex(mapList.get("uProfession"));
+//		userInfo.setuSex(mapList.get("uGraduation"));
+//		userInfo.setuSex(mapList.get("uAtSchool"));
+//		
+//		userInfo.setuSex(mapList.get("uContact"));
+//		userInfo.setuSex(mapList.get("uEmergencyContact"));
+//		userInfo.setuSex(mapList.get("uEmergencyphone"));
+//		
+//		userInfo.setuSex(mapList.get("uLicenseType"));
+//		userInfo.setuSex(mapList.get("uDrivingExpe"));
+//		
+//		Integer baseInfoInt = this.service.updataBaselInfo(userInfo);
+//		Integer detailInfoInt = this.service.updataDetialInfo(userInfo);
+//		if (baseInfoInt==1&&detailInfoInt==1) {
+//			ResponseMessageUtils.responseMessage(response, "插入成功!");
+//		}else {
+//			ResponseMessageUtils.responseMessage(response, "插入失败!");
+//		}
 	}
 	
 	
@@ -661,15 +713,8 @@ public class EmpController {
 			
 			JSONObject jsonData = JSONObject.fromObject(string);
 			
-			userInfo.setPositionId(jsonData.getString("Position_Name"));
-			if(jsonData.has("newFamilyNumList")){         
-				JSONArray jArr = jsonData.getJSONArray("newFamilyNumList"); 
-				for(int i = 0 ;i<jArr.size();i++){
-					QueryFamilyResult qfr = new QueryFamilyResult();
-					qfr.setAppellation(jArr.getJSONObject(i).getString("appellation")); 
-				}
-			}
-		
+			System.out.println("jsonData"+jsonData);
+			
 			userInfo.setuName(jsonData.getString("Name"));
 			List<UserInfo> uList = this.service.searchUBInfo(userInfo);
 			
@@ -693,7 +738,7 @@ public class EmpController {
 				resultM.put("0", "ERP账号已存在");
 				return resultM;
 			}else {
-				account.setPositionId(jsonData.getString("Position_Name"));
+				account.setPositionId(jsonData.getString("PositionId"));
 				Integer isSucess=this.service.insertAccountInfo(account);
 				if (isSucess==1) {
 					aList = this.service.selectAccountList(account);
@@ -711,13 +756,13 @@ public class EmpController {
 			userInfo.setuDepartment_id(jsonData.getString("DepartmentId"));
 			userInfo.setuBirth(jsonData.getString("Birth"));
 			
-			userInfo.setPositionId(jsonData.getString("Position_Name"));
-			userInfo.setuEntryDte(jsonData.getString("EntryDte"));
+			userInfo.setPositionId(jsonData.getString("PositionId"));
+			userInfo.setuEntryDte(jsonData.getString("EntryDate"));
 			userInfo.setuPositiveDate(jsonData.getString("PositiveDate"));
 			userInfo.setuResignDate(jsonData.getString("ResignDate"));
 			userInfo.setuRemark(jsonData.getString("Remark"));
 			//详细信息
-			userInfo.setuIdNum(jsonData.getString("IdNum"));
+			userInfo.setuIdNum(jsonData.getString("IDNum"));
 			userInfo.setuPloitical(jsonData.getString("ploitical"));
 			userInfo.setuHomeTown(jsonData.getString("homeTown"));
 			userInfo.setuNationality(jsonData.getString("nationality"));
@@ -738,9 +783,26 @@ public class EmpController {
 			userInfo.setuEmergencyphone(jsonData.getString("emergencyPhone"));
 					
 			userInfo.setuLicenseType(jsonData.getString("licenseType"));
-			userInfo.setuDrivingExpe(jsonData.getString("drivingExpe"));			
+			userInfo.setuDrivingExpe(jsonData.getString("drivingExpe"));
 			
-
+			
+			//提交家庭信息
+			if(jsonData.has("newFamilyNumList")){         
+				JSONArray jArr = jsonData.getJSONArray("newFamilyNumList"); 
+				for(int i = 0 ;i<jArr.size();i++){
+					QueryFamilyResult qfr = new QueryFamilyResult();
+					qfr.setuAccountId(userInfo.getuAccountId());
+					qfr.setAppellation(jArr.getJSONObject(i).getString("appellation"));
+					qfr.setChname(jArr.getJSONObject(i).getString("chname"));
+					qfr.setBirth(jArr.getJSONObject(i).getString("birth"));
+					qfr.setWorkadress(jArr.getJSONObject(i).getString("workadress"));
+					qfr.setPosition(jArr.getJSONObject(i).getString("position"));
+					qfr.setPhone(jArr.getJSONObject(i).getString("phone"));
+					qfr.setWechat(jArr.getJSONObject(i).getString("wechat"));
+					qfr.setFamAddress(jArr.getJSONObject(i).getString("famAddress"));
+				}
+			}
+			
 			String newDate = ToolClass.strDateTimeStr(new Date());
 			userInfo.setuCreateDate(newDate);
 			userInfo.setuUpdateDate(newDate);
@@ -768,8 +830,7 @@ public class EmpController {
 		}
 		
 	}
-
-
+	
 	/**
 	 * 插入和更新家庭信息
 	 * 

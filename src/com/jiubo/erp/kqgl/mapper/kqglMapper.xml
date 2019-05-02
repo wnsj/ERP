@@ -221,7 +221,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </insert>
 
 <!--加载班组列表  -->
-<select id="selectAttshiftGroupList" resultType="com.jiubo.erp.kqgl.bean.AttshiftGroupBean">
+<select id="selectAttshiftGroupList" resultType="com.jiubo.erp.kqgl.bean.AttShiftGroupBean">
    SELECT    
        dbo.T_Att_ShiftGroup.*
    FROM         
@@ -229,7 +229,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
 <!--添加班组  -->
-<insert id="addAttshiftGroup" parameterType="com.jiubo.erp.kqgl.bean.AttshiftGroupBean">
+<insert id="addAttshiftGroup" parameterType="com.jiubo.erp.kqgl.bean.AttShiftGroupBean">
 	  INSERT INTO 
 	  dbo.T_Att_ShiftGroup
 	 <trim prefix="(" suffix=")" suffixOverrides="," >

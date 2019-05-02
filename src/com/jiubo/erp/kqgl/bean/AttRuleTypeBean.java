@@ -1,53 +1,59 @@
 package com.jiubo.erp.kqgl.bean;
 
+//出勤规则表
 public class AttRuleTypeBean {
-	private String ID;
-	private String Name;
-	private String Earlyminutes;
-	private String Lateminutes;
-	private String IsDelete;
-	private String CreateDate;
-	private String Creator;
-	public String getID() {
-		return ID;
+	private String id;//编号
+	private String name;//名称
+	private String earlyMinutes;//早退时间
+	private String lateMinutes;//迟到时间
+	private String isDelete;//是否有效
+	private String createDate;//创建时间
+	private String creator;//创建者
+	public AttRuleTypeBean() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	public void setID(String iD) {
-		ID = iD;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getName() {
-		return Name;
+		return name;
 	}
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
-	public String getEarlyminutes() {
-		return Earlyminutes;
+	public String getEarlyMinutes() {
+		return earlyMinutes;
 	}
-	public void setEarlyminutes(String earlyminutes) {
-		Earlyminutes = earlyminutes;
+	public void setEarlyMinutes(String earlyMinutes) {
+		this.earlyMinutes = earlyMinutes;
 	}
-	public String getLateminutes() {
-		return Lateminutes;
+	public String getLateMinutes() {
+		return lateMinutes;
 	}
-	public void setLateminutes(String lateminutes) {
-		Lateminutes = lateminutes;
+	public void setLateMinutes(String lateMinutes) {
+		this.lateMinutes = lateMinutes;
 	}
 	public String getIsDelete() {
-		return IsDelete;
+		return isDelete;
 	}
 	public void setIsDelete(String isDelete) {
-		IsDelete = isDelete;
+		this.isDelete = isDelete;
 	}
 	public String getCreateDate() {
-		return CreateDate;
+		return createDate;
 	}
 	public void setCreateDate(String createDate) {
-		CreateDate = createDate;
+		this.createDate = createDate;
 	}
 	public String getCreator() {
-		return Creator;
+		return creator;
 	}
 	public void setCreator(String creator) {
-		Creator = creator;
+		this.creator = creator;
 	}
+	
 }

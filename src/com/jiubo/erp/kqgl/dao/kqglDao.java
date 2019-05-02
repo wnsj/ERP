@@ -5,7 +5,7 @@ import java.util.List;
 import com.jiubo.erp.kqgl.bean.AttLeaveTypeBean;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
-import com.jiubo.erp.kqgl.bean.AttshiftGroupBean;
+import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.PositionDataBean;
 import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.vo.ClassTime;
@@ -37,9 +37,9 @@ public interface kqglDao {
 	//添加职位信息
 	int addPositionInfo(PositionDataBean input);
 	//加载班组列表
-	List<AttshiftGroupBean> selectAttshiftGroupList();
+	List<AttShiftGroupBean> selectAttshiftGroupList();
 	//添加班组
-	int addAttshiftGroup(AttshiftGroupBean input);
+	int addAttShiftGroup(AttShiftGroupBean input);
 	//加载假期种类列表
 	List<AttLeaveTypeBean> selectAttLeaveTypelist();
 	//添加假期种类

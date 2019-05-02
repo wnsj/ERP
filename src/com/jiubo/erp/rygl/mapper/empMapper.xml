@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  <!-- 添加员工ERP账号-->
  <insert id="insertAccountInfo" parameterType="com.jiubo.erp.rygl.vo.Account">
 
-	INSERT INTO  dbo.Acccount_Data
+	INSERT INTO  dbo.Account_Data
 	
 		(Account_Name,Account_Pwd,Account_State,Position_ID,Account_Mac)
 		
@@ -102,12 +102,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 d.ID AS departId,
 		 c.Position_Name AS positionName,
 		 b.Account_Name AS ERPAaccount,
+		 b.Account_ID AS accountId,
 		 a.Birth AS birth,
 		 a.EntryDate AS entryDate,
 		 a.PositiveDate AS PositiveDate,
 		 a.ResignDate AS ResignDate,
 		 a.State AS State
-		 
 	FROM        
 	 dbo.T_Employee_Basic a
 	 INNER JOIN dbo.Account_Data b ON a.Account=b.Account_ID

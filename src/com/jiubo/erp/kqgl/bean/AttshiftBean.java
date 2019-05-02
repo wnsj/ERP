@@ -1,93 +1,94 @@
 package com.jiubo.erp.kqgl.bean;
 
 //班次类别
-public class AttshiftBean {
-	
-	private String ID;
-	private String Name;
-	private String Year;
-	private String Month;
-	private String ShiftDate;
-	private String StartTime;
-	private String EndTimel;
-	private String ColorValue;
-	private String Type;
-	private String IsValid;
-	private String CreateDate;
-	private String Creator;
-	public String getID() {
-		return ID;
+public class AttShiftBean {
+	private String id;//主键
+	private String name;//班次名称
+	private String year;//年
+	private String month;//月
+	private String shiftDate; //班次日期
+	private String startTime; //上班时间
+	private String endTime; //下班时间
+	private String colorValue;//标记颜色
+	private String type; //工作还是休息
+	private String isDelete;//是否有效
+	private String createDate;//创建时间
+	private String creator;//创建者
+	public AttShiftBean() {
+		super();
 	}
-	public void setID(String iD) {
-		ID = iD;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getName() {
-		return Name;
+		return name;
 	}
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 	public String getYear() {
-		return Year;
+		return year;
 	}
 	public void setYear(String year) {
-		Year = year;
+		this.year = year;
 	}
 	public String getMonth() {
-		return Month;
+		return month;
 	}
 	public void setMonth(String month) {
-		Month = month;
+		this.month = month;
 	}
 	public String getShiftDate() {
-		return ShiftDate;
+		return shiftDate;
 	}
 	public void setShiftDate(String shiftDate) {
-		ShiftDate = shiftDate;
+		this.shiftDate = shiftDate;
 	}
 	public String getStartTime() {
-		return StartTime;
+		return startTime;
 	}
 	public void setStartTime(String startTime) {
-		StartTime = startTime;
+		this.startTime = startTime;
 	}
-	public String getEndTimel() {
-		return EndTimel;
+	public String getEndTime() {
+		return endTime;
 	}
-	public void setEndTimel(String endTimel) {
-		EndTimel = endTimel;
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 	public String getColorValue() {
-		return ColorValue;
+		return colorValue;
 	}
 	public void setColorValue(String colorValue) {
-		ColorValue = colorValue;
+		this.colorValue = colorValue;
 	}
 	public String getType() {
-		return Type;
+		return type;
 	}
 	public void setType(String type) {
-		Type = type;
+		this.type = type;
 	}
-	public String getIsValid() {
-		return IsValid;
+	public String getIsDelete() {
+		return isDelete;
 	}
-	public void setIsValid(String isValid) {
-		IsValid = isValid;
+	public void setIsDelete(String isDelete) {
+		this.isDelete = isDelete;
 	}
 	public String getCreateDate() {
-		return CreateDate;
+		return createDate;
 	}
 	public void setCreateDate(String createDate) {
-		CreateDate = createDate;
+		this.createDate = createDate;
 	}
 	public String getCreator() {
-		return Creator;
+		return creator;
 	}
 	public void setCreator(String creator) {
-		Creator = creator;
+		this.creator = creator;
 	}
-	
 	
 
 

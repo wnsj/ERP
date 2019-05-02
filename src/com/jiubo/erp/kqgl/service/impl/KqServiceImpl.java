@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jiubo.erp.kqgl.bean.AttLeaveTypeBean;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
+import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
-import com.jiubo.erp.kqgl.bean.AttshiftGroupBean;
 import com.jiubo.erp.kqgl.bean.PositionDataBean;
 import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.dao.kqglDao;
@@ -21,7 +21,6 @@ import com.jiubo.erp.kqgl.vo.PositionResultInfo;
 import com.jiubo.erp.kqgl.vo.PunchRecord;
 import com.jiubo.erp.kqgl.vo.ScheduleQueryResult;
 import com.jiubo.erp.rygl.bean.DepartmentBean;
-
 @Service
 @Transactional
 public class KqServiceImpl implements KqService {
@@ -88,15 +87,15 @@ public class KqServiceImpl implements KqService {
 	}
 
 	@Override
-	public List<AttshiftGroupBean> selectAttshiftGroupList() {
+	public List<AttShiftGroupBean> selectAttshiftGroupList() {
 		// TODO Auto-generated method stub
 		return dao.selectAttshiftGroupList();
 	}
 
 	@Override
-	public int addAttshiftGroup(AttshiftGroupBean input) {
+	public int addAttshiftGroup(AttShiftGroupBean input) {
 		// TODO Auto-generated method stub
-		return dao.addAttshiftGroup(input);
+		return dao.addAttShiftGroup(input);
 	}
 
 	@Override

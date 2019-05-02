@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   			CREATOR
 		FROM
   			T_ATT_LEAVETYPE
+  		WHERE ISDELETE = 0	
 	</select>
 	
 	<!-- 修改假期种类 -->
@@ -37,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<!-- 查询考勤规则 -->
-	<select id="queryAttRuleType" resultType="com.jiubo.erp.kqgl.vo.AttRuleType">
+	<select id="queryAttRuleType" resultType="com.jiubo.erp.kqgl.bean.AttRuleTypeBean">
 		SELECT
 			ID,
 			NAME,
@@ -48,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			CREATOR
 		FROM
 			T_ATT_RULETYPE
+		WHERE ISDELETE = 0	
 	</select>
 	
 	<!-- 添加考勤规则 -->
@@ -71,5 +73,68 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		  LATEMINUTES = #{attRuleType.lateMinutes}
 		WHERE 
 			ID = #{attRuleType.id}
+	</update>
+	
+	<!-- 查询班次 -->
+	<select id="queryAttShiftSchedule" resultType="com.jiubo.erp.kqgl.bean.AttShiftScheduleBean">
+		SELECT 
+			ID, NAME, SHORTNAME, STARTTIME, ENDTIME, TYPE, REMARKS
+		FROM 
+			T_ATT_SHIFTSCHEDULE
+	</select>
+	
+	<!-- 添加班次 -->
+	<insert id="addAttShiftSchedule">
+		INSERT INTO T_ATT_SHIFTSCHEDULE (NAME, SHORTNAME, STARTTIME, ENDTIME, TYPE, REMARKS)
+		VALUES(#{attShiftSchedule.name},#{attShiftSchedule.shortName},#{attShiftSchedule.startTime},#{attShiftSchedule.endTime},#{attShiftSchedule.type},#{attShiftSchedule.remarks})
+	</insert>
+	
+	<!-- 删除班次 -->
+	<delete id="deleteAttShiftSchedule">
+		DELETE FROM T_ATT_SHIFTSCHEDULE 
+		WHERE ID = #{id}
+	</delete>
+	
+	<!-- 修改班次 -->
+	<update id="updateAttShiftSchedule">
+		UPDATE T_ATT_SHIFTSCHEDULE
+		SET 
+			NAME = #{attShiftSchedule.name}
+			, SHORTNAME = #{attShiftSchedule.shortName}
+			, STARTTIME = #{attShiftSchedule.startTime}
+			, ENDTIME = #{attShiftSchedule.endTime}
+			, TYPE = #{attShiftSchedule.type}
+			, REMARKS = #{attShiftSchedule.remarks}
+		WHERE ID = #{attShiftSchedule.id}
+	</update>
+	
+	<!-- 查询班组 -->
+	<select id="queryAttShiftGroup" resultType="com.jiubo.erp.kqgl.bean.AttShiftGroupBean">
+		SELECT 
+			ID, NAME, REMARK, ISDELETE, CREATEDATE, CREATOR
+		FROM 
+			T_ATT_SHIFTGROUP
+		WHERE
+			ISDELETE = 0
+	</select>
+	
+	<!-- 添加班组 -->
+	<insert id="addAttShiftGroup">
+		INSERT INTO T_ATT_SHIFTGROUP (NAME, REMARK, ISDELETE, CREATEDATE, CREATOR)
+		VALUES(#{attShiftGroupBean.name},#{attShiftGroupBean.remark},#{attShiftGroupBean.isDelete},#{attShiftGroupBean.createDate},#{attShiftGroupBean.creator})
+	</insert>
+	
+	<!-- 删除班组 -->
+	<delete id="deleteAttShiftGroup">
+		DELETE FROM T_ATT_SHIFTGROUP
+		WHERE ID = #{id}
+	</delete>
+	
+	<!-- 修改班组 -->
+	<update id="updateAttShiftGroup">
+		UPDATE T_ATT_SHIFTGROUP
+		SET  NAME = #{attShiftGroupBean.name}
+			, REMARK = #{attShiftGroupBean.remark}
+		WHERE ID = #{attShiftGroupBean.id}
 	</update>
 </mapper>
