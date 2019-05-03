@@ -18,4 +18,9 @@ public class Constant {
        public static final String RETCOUNT = "count";
        public static final String CODE = "code";
    }
+   
+   public interface Charset{
+       final public static String UTF8 ="UTF-8";
+       final public static String GBK ="GBK";
+   }
 }
