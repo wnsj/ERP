@@ -647,9 +647,9 @@ public class EmpController {
 					qfr.setPhone(jArr.getJSONObject(i).getString("phone"));
 					qfr.setWechat(jArr.getJSONObject(i).getString("wechat"));
 					qfr.setFamAddress(jArr.getJSONObject(i).getString("famAddress"));
-//					if (qfr.getID()=='') {
-//						
-//					}
+					if (qfr.getID()=="") {
+						System.out.println("有一个新的家庭成员");
+					}
 				}
 			}
 			
