@@ -164,6 +164,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 单个成员的家庭信息查询-->
 <select id="singleFamilyList" parameterType="com.jiubo.erp.rygl.vo.QueryFamilyResult" resultType="com.jiubo.erp.rygl.vo.QueryFamilyResult">
 	SELECT   
+		ID AS ID,
 		appellation AS appellation,
 		name AS chname,
 		workaddress AS workadress,

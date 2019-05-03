@@ -14,6 +14,20 @@ public class DepartKQ {
 	public DepartKQ() {
 		// TODO Auto-generated constructor stub
 	}
+	
+
+	public DepartKQ(String departKQName) {
+		super();
+		this.departKQName = departKQName;
+		this.laterTimes = "0";
+		this.leaveEarlyTimes = "0";
+		this.minersTimes = "0";
+		this.onPA = "0";
+		this.downPA = "0";
+		this.restDays = "0";
+		this.overTimesDays = "0";
+	}
+
 
 	public String getDepartKQName() {
 		return departKQName;
