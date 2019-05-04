@@ -137,4 +137,52 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			, REMARK = #{attShiftGroupBean.remark}
 		WHERE ID = #{attShiftGroupBean.id}
 	</update>
+	
+	<!-- 查询部门信息 -->
+	<select id="queryDepartment" resultType="java.util.Map">
+		SELECT A.ID, A.NAME, A.PARENTID, A.ORDERNUM,ISNULL(B.ID,0) PID,ISNULL(B.NAME,'') PNAME
+		FROM T_DEPARTMENT A
+		LEFT JOIN T_DEPARTMENT B ON A.PARENTID = B.ID
+	</select>
+	
+	<!-- 增加部门信息 -->
+	<insert id="addDepartment" parameterType="com.jiubo.erp.rygl.bean.DepartmentBean">
+		INSERT INTO T_DEPARTMENT (NAME, PARENTID, ORDERNUM)
+		values(#{Name},#{ParentID},#{OrderNum})
+	</insert>
+	
+	<!-- 删除部门信息 -->
+	<delete id="deleteDepartment">
+		DELETE FROM T_DEPARTMENT
+		WHERE ID = #{id}
+	</delete>
+	
+	<!-- 修改部门信息 -->
+	<update id="updateDepartment" parameterType="com.jiubo.erp.rygl.bean.DepartmentBean">
+		UPDATE T_DEPARTMENT
+		SET 
+	 		NAME = #{Name}
+			, PARENTID = #{ParentID}
+			, ORDERNUM = #{OrderNum}
+		WHERE ID = #{ID}
+	</update>
+	
+	<select id="queryPosition" resultType="com.jiubo.erp.rygl.vo.Position">
+		SELECT POSITION_ID, POSITION_NAME, POSITIONTYPE_ID, ISPOINT
+		FROM  POSITION_DATA
+	</select>
+	
+	<insert id="addPosition" parameterType="com.jiubo.erp.rygl.vo.Position">
+		INSERT INTO POSITION_DATA (POSITION_NAME, POSITIONTYPE_ID, ISPOINT)
+		VALUES(#{positionId},#{positionTypeId},#{isPoint})
+	</insert>
+	
+	<update id="updatePosition" parameterType="com.jiubo.erp.rygl.vo.Position">
+		UPDATE POSITION_DATA
+		SET 
+			 POSITION_NAME = #{positionName}
+			, POSITIONTYPE_ID = #{positionTypeId}
+			, ISPOINT = #{isPoint}
+		WHERE POSITION_ID = #{positionId}
+	</update>
 </mapper>
