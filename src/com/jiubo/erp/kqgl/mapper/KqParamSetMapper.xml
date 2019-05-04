@@ -78,9 +78,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 查询班次 -->
 	<select id="queryAttShiftSchedule" resultType="com.jiubo.erp.kqgl.bean.AttShiftScheduleBean">
 		SELECT 
-			ID, NAME, SHORTNAME, STARTTIME, ENDTIME, TYPE, REMARKS
+	 		ID, NAME, SHORTNAME, STARTTIME, ENDTIME,(CASE TYPE WHEN 1 THEN '工作'  WHEN 2 THEN '休息'  END) AS TYPE , REMARKS
 		FROM 
-			T_ATT_SHIFTSCHEDULE
+	 		T_ATT_SHIFTSCHEDULE
 	</select>
 	
 	<!-- 添加班次 -->
@@ -167,22 +167,65 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE ID = #{ID}
 	</update>
 	
-	<select id="queryPosition" resultType="com.jiubo.erp.rygl.vo.Position">
-		SELECT POSITION_ID, POSITION_NAME, POSITIONTYPE_ID, ISPOINT
-		FROM  POSITION_DATA
+	<!-- 查询职位 -->
+	<select id="queryPositionData" resultType="java.util.Map">
+		SELECT A.POSITION_ID, A.POSITION_NAME, A.POSITIONTYPE_ID,(CASE A.ISPOINT WHEN 1 THEN '是' ELSE '' END) ISPOINT,B.POSITIONTYPE_NAME 
+		FROM  POSITION_DATA A,POSITION_TYPE B
+		WHERE A.POSITIONTYPE_ID = B.POSITIONTYPE_ID
 	</select>
 	
-	<insert id="addPosition" parameterType="com.jiubo.erp.rygl.vo.Position">
+	<!-- 增加职位 -->
+	<insert id="addPositionData" parameterType="com.jiubo.erp.kqgl.bean.PositionDataBean">
 		INSERT INTO POSITION_DATA (POSITION_NAME, POSITIONTYPE_ID, ISPOINT)
-		VALUES(#{positionId},#{positionTypeId},#{isPoint})
+		VALUES(#{Position_Name},#{PositionType_ID},#{IsPoint})
 	</insert>
 	
-	<update id="updatePosition" parameterType="com.jiubo.erp.rygl.vo.Position">
+	<!-- 修改职位 -->
+	<update id="updatePositionData" parameterType="com.jiubo.erp.kqgl.bean.PositionDataBean">
 		UPDATE POSITION_DATA
 		SET 
-			 POSITION_NAME = #{positionName}
-			, POSITIONTYPE_ID = #{positionTypeId}
-			, ISPOINT = #{isPoint}
-		WHERE POSITION_ID = #{positionId}
+			 POSITION_NAME = #{Position_Name}
+			, POSITIONTYPE_ID = #{PositionType_ID}
+			, ISPOINT = #{IsPoint}
+		WHERE POSITION_ID = #{Position_ID}
 	</update>
+	
+	<!-- 查询岗位类型 -->
+	<select id="queryPositionType" resultType="com.jiubo.erp.kqgl.bean.PositionTypeBean">
+		SELECT POSITIONTYPE_ID, POSITIONTYPE_NAME
+		FROM POSITION_TYPE
+	</select>
+	
+	<!-- 添加岗位类型 -->
+	<insert id="addPositionType" parameterType="com.jiubo.erp.kqgl.bean.PositionTypeBean">
+		INSERT INTO POSITION_TYPE (POSITIONTYPE_NAME)
+		VALUES (#{PositionType_Name})
+	</insert>
+	
+	<!-- 删除岗位类型 -->
+	<delete id="deletePositionType">
+		DELETE FROM POSITION_TYPE
+		WHERE POSITIONTYPE_ID = #{id}
+	</delete>
+	
+	<!-- 修改岗位类型 -->
+	<update id="updatePositionType" parameterType="com.jiubo.erp.kqgl.bean.PositionTypeBean">
+		UPDATE POSITION_TYPE
+		SET 
+			POSITIONTYPE_NAME = #{PositionType_Name}
+		WHERE POSITIONTYPE_ID = #{PositionType_ID}
+	</update>
+	
+	<!-- 根据ParentID查询部门信息 -->
+	<select id="queryDepartmentByPId" resultType="com.jiubo.erp.rygl.bean.DepartmentBean">
+		SELECT ID, NAME, PARENTID, ORDERNUM 
+		FROM T_DEPARTMENT
+		WHERE PARENTID = #{pId}
+	</select>
+	
+	<select id="queryEmployeeBasic" resultType="com.jiubo.erp.rygl.bean.EmployeeBasicBean">
+		SELECT ID, NAME, SEX, JOBNUM, JOBNUMOLD, DEPARTMENT_ID, BIRTH, ENTRYDATE, POSITIVEDATE, RESIGNDATE, PHOTO, CREATEDATE, UPDATEDATE, ISDELETE, STATE, CREATEUSER, ACCOUNT, REMARK, PARENT_ID, RESIGNTYPE, RESIGNREASON, RECRUITDATAID
+		FROM T_EMPLOYEE_BASIC
+		WHERE DEPARTMENT_ID = #{departmentId} AND STATE = #{state}
+	</select>
 </mapper>
