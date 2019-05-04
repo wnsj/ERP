@@ -1,12 +1,15 @@
 package com.jiubo.erp.kqgl.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.jiubo.erp.common.MessageException;
+import com.jiubo.erp.common.Position;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
 import com.jiubo.erp.kqgl.vo.Vacation;
+import com.jiubo.erp.rygl.bean.DepartmentBean;
 
 public interface KqParamSetService {
 	/**
@@ -170,6 +173,52 @@ public interface KqParamSetService {
 	 * @version: 1.0
 	 */
 	public void updateAttShiftGroup(AttShiftGroupBean attShiftGroupBean)throws MessageException;
+	
+	/**
+	 * @desc:查询部门信息
+	 * @param:
+	 * @return: List<Map<String,Object>>
+	 * @Create at: 2019-05-02
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public List<Map<String,Object>> queryDepartment()throws MessageException;
+	
+	/**
+	 * @desc:增加部门信息
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-02
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void addDepartment(DepartmentBean departmentBean)throws MessageException;
+	
+	/**
+	 * @desc:删除部门信息
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-02
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void deleteDepartment(int id)throws MessageException;
+	
+	/**
+	 * @desc:修改部门信息
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-02
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void updateDepartment(DepartmentBean departmentBean)throws MessageException;
+	
+	public List<Position> queryPosition()throws MessageException;
+	
+	public void addPosition(Position position)throws MessageException;
+	
+	public void updatePosition(Position position)throws MessageException;
 	
 	
 }

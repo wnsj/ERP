@@ -1,13 +1,17 @@
 package com.jiubo.erp.kqgl.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.jiubo.erp.common.MessageException;
+import com.jiubo.erp.common.Position;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
 import com.jiubo.erp.kqgl.vo.Vacation;
+import com.jiubo.erp.rygl.bean.DepartmentBean;
 
 public interface KqParamSetDao {
 	
@@ -58,4 +62,25 @@ public interface KqParamSetDao {
 	
 	//修改班组
 	public void updateAttShiftGroup(@Param("attShiftGroupBean")AttShiftGroupBean attShiftGroupBean);
+	
+	//查询部门信息
+	public List<Map<String,Object>> queryDepartment();
+	
+	//增加部门信息
+	public void addDepartment(DepartmentBean departmentBean);
+	
+	//删除部门信息
+	public void deleteDepartment(int id);
+	
+	//修改部门信息
+	public void updateDepartment(DepartmentBean departmentBean);
+	
+	//查询职位
+	public List<Position> queryPosition();
+	
+	//增加职位
+	public void addPosition(Position position);
+	
+	//修改职位
+	public void updatePosition(Position position);
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.util.StreamUtils;
 
 import com.jiubo.erp.rygl.vo.UserFamily;
@@ -38,6 +39,10 @@ public class ToolClass {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static String getStrFromInputStream(HttpServletRequest request) throws IOException {
+		return StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
 	}
 	
 	//比较两个时间字符串的大小
