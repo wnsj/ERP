@@ -217,8 +217,8 @@ public class EmpServiceImpl implements EmpService {
 	/**
 	 * 更新用户的基本信息
 	 */
-	public Integer updataBaselInfo(UserInfo userInfo) {
-		this.dao.updataBaselInfo(userInfo);
+	public Integer updataBaseInfo(UserInfo userInfo) {
+		this.dao.updataBaseInfo(userInfo);
 		return null;
 	}
 

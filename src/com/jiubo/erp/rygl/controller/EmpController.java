@@ -653,9 +653,9 @@ public class EmpController {
 				}
 			}
 			
-			Integer baseInfoInt = this.service.updataBaselInfo(userInfo);
+			Integer baseInfoInt = this.service.updataBaseInfo(userInfo);
 			Integer detailInfoInt = this.service.updataDetialInfo(userInfo);
-			
+			System.out.println("基础家庭成员"+baseInfoInt+"详细信息"+detailInfoInt);
 			if (baseInfoInt==1&&detailInfoInt==1) {
 				ResponseMessageUtils.responseMessage(response, "修改成功!");
 			}else {

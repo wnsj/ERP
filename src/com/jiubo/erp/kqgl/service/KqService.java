@@ -11,6 +11,7 @@ import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.PositionDataBean;
 import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.vo.ClassTime;
+import com.jiubo.erp.kqgl.vo.DepartKQ;
 import com.jiubo.erp.kqgl.vo.KqInfoResult;
 import com.jiubo.erp.kqgl.vo.PositionResultInfo;
 import com.jiubo.erp.kqgl.vo.PunchRecord;
@@ -26,6 +27,16 @@ public interface KqService {
 		List<ClassTime> selectClassTimeList(ClassTime ct);
 		//查询打卡信息
 		List<PunchRecord> selectPunchRecordList(PunchRecord pRecord);
+		
+		//部门初始当天的考勤情况
+		List<DepartKQ> selectDepartKqInfoList();
+		//搜索部门考勤
+		List<DepartKQ> searchDepartKqInfoList(DepartKQ departKQ);
+		
+		
+		
+		
+		
 	    //加载岗位类型列表
 		List<PositionTypeBean> selectPositionTypeList();
 		//修改

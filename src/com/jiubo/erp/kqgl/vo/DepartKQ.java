@@ -15,17 +15,17 @@ public class DepartKQ {
 		// TODO Auto-generated constructor stub
 	}
 	
-
-	public DepartKQ(String departKQName) {
+	public DepartKQ(String departKQName, String laterTimes, String leaveEarlyTimes, String minersTimes, String onPA,
+			String downPA, String restDays, String overTimesDays) {
 		super();
 		this.departKQName = departKQName;
-		this.laterTimes = "0";
-		this.leaveEarlyTimes = "0";
-		this.minersTimes = "0";
-		this.onPA = "0";
-		this.downPA = "0";
-		this.restDays = "0";
-		this.overTimesDays = "0";
+		this.laterTimes = laterTimes;
+		this.leaveEarlyTimes = leaveEarlyTimes;
+		this.minersTimes = minersTimes;
+		this.onPA = onPA;
+		this.downPA = downPA;
+		this.restDays = restDays;
+		this.overTimesDays = overTimesDays;
 	}
 
 
