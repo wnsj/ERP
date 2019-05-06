@@ -29,6 +29,8 @@ import com.jiubo.erp.erpLogin.util.ResponseMessageUtils;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
+import com.jiubo.erp.kqgl.bean.PositionDataBean;
+import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.service.KqParamSetService;
 import com.jiubo.erp.kqgl.vo.Vacation;
 import com.jiubo.erp.rygl.bean.DepartmentBean;
@@ -601,6 +603,7 @@ public class KqParamSetController {
 		 * @author:  dx
 		 * @version: 1.0
 		 */
+		//
 		@ResponseBody
 		@RequestMapping(value="/queryDepartment",method = {RequestMethod.POST})
 		public JSONObject queryDepartment(HttpServletRequest request,HttpServletResponse response) {
@@ -631,6 +634,7 @@ public class KqParamSetController {
 		 * @author:  dx
 		 * @version: 1.0
 		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/addDepartment?Name=test99&ParentID=0&OrderNum=10
 		@ResponseBody
 		@RequestMapping(value="/addDepartment",method = {RequestMethod.POST})
 		public JSONObject addDepartment(HttpServletRequest request) {
@@ -641,8 +645,9 @@ public class KqParamSetController {
 		    	   String str = ToolClass.getStrFromInputStream(request);
 		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
 		    	   DepartmentBean departmentBean = MapUtil.transJsonStrToObjectIgnoreCase(str,DepartmentBean.class);
+		    	   if(StringUtils.isBlank(departmentBean.getName()))throw new MessageException("部门名不能为空！");
+		    	   if(StringUtils.isBlank(departmentBean.getOrderNum()))departmentBean.setOrderNum("0");
 		    	   KqParamSetService.addDepartment(departmentBean);
-		    	   if(false)throw new MessageException("1222");
 			   }catch (MessageException e){
 			        retCode = Constant.Result.ERROR;
 			        retMsg = e.getMessage();
@@ -665,6 +670,7 @@ public class KqParamSetController {
 		 * @author:  dx
 		 * @version: 1.0
 		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/deleteDepartment?id=87
 		@ResponseBody
 		@RequestMapping(value="/deleteDepartment",method = {RequestMethod.POST})
 		public JSONObject deleteDepartment(@RequestBody Map<String,Object> requestMap) {
@@ -696,6 +702,7 @@ public class KqParamSetController {
 		 * @author:  dx
 		 * @version: 1.0
 		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/updateDepartment?Name=test88&ParentID=10&OrderNum=20&ID=87
 		@ResponseBody
 		@RequestMapping(value="/updateDepartment",method = {RequestMethod.POST})
 		public JSONObject updateDepartment(HttpServletRequest request) {
@@ -706,6 +713,7 @@ public class KqParamSetController {
 		    	   String str = ToolClass.getStrFromInputStream(request);
 		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
 		    	   DepartmentBean departmentBean = MapUtil.transJsonStrToObjectIgnoreCase(str,DepartmentBean.class);
+		    	   if(StringUtils.isBlank(departmentBean.getName()) || StringUtils.isBlank(departmentBean.getID()))throw new MessageException("部门名或部门id为空！");
 		    	   KqParamSetService.updateDepartment(departmentBean);
 			   }catch (MessageException e){
 			        retCode = Constant.Result.ERROR;
@@ -720,4 +728,281 @@ public class KqParamSetController {
 			        return result;
 			  }    
 		};
+		
+		/**查询岗位类型
+		 * @desc:
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-03
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/queryPositionType
+		@ResponseBody
+		@RequestMapping(value="/queryPositionType",method = {RequestMethod.POST})
+		public JSONObject queryPositionType(){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   result.put(Constant.Result.RETDATA, KqParamSetService.queryPositionType());
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		/**
+		 * @desc:添加岗位类型
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-03
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/addPositionType?positionTypeName=999
+		@ResponseBody
+		@RequestMapping(value="/addPositionType",method = {RequestMethod.POST})
+		public JSONObject addPositionType(HttpServletRequest request){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   String str = ToolClass.getStrFromInputStream(request);
+		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
+		    	   JSONObject jsObj = JSONObject.parseObject(str);
+		    	   if(!jsObj.containsKey("positionTypeName") || jsObj.get("positionTypeName") == null)throw new MessageException("岗位类型名字不能为空！");
+		    	   PositionTypeBean positionTypeBean = new PositionTypeBean();
+		    	   positionTypeBean.setPositionType_Name(jsObj.getString("positionTypeName"));
+		    	   KqParamSetService.addPositionType(positionTypeBean);
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		/**
+		 * @desc:删除岗位类型
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-03
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/deletePositionType?id=8
+		@ResponseBody
+		@RequestMapping(value="/deletePositionType",method = {RequestMethod.POST})
+		public JSONObject deletePositionType(@RequestBody Map<String,Object> requestMap){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   int id = MapUtil.getIntIgnoreCase(requestMap, "id", MapUtil.NOT_NULL);
+		    	   KqParamSetService.deletePositionType(id);
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		/**
+		 * @desc:修改岗位类型
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-03
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/updatePositionType?positionTypeName=999&positionTypeId=8
+		@ResponseBody
+		@RequestMapping(value="/updatePositionType",method = {RequestMethod.POST})
+		public JSONObject updatePositionType(HttpServletRequest request){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   String str = ToolClass.getStrFromInputStream(request);
+		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
+		    	   JSONObject jsObj = JSONObject.parseObject(str);
+		    	   if(!jsObj.containsKey("positionTypeName") || jsObj.get("positionTypeName") == null
+		    			|| !jsObj.containsKey("positionTypeId") || jsObj.get("positionTypeId") == null
+		    		)throw new MessageException("岗位类型名字或岗位类型id为空！");
+		    	   PositionTypeBean positionTypeBean = new PositionTypeBean();
+		    	   positionTypeBean.setPositionType_ID(jsObj.getString("positionTypeId"));
+		    	   positionTypeBean.setPositionType_Name(jsObj.getString("positionTypeName"));
+		    	   KqParamSetService.updatePositionType(positionTypeBean);
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		/**
+		 * @desc:查询职位信息
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-04
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/queryPositionData
+		@ResponseBody
+		@RequestMapping(value="/queryPositionData",method = {RequestMethod.POST})
+		public JSONObject queryPositionData(){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   result.put(Constant.Result.RETDATA, KqParamSetService.queryPositionData());
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		/**
+		 * @desc:添加职位信息
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-04
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/addPositionData?positionName=test88&isPoint=1&positionTypeId=2
+		@ResponseBody
+		@RequestMapping(value="/addPositionData",method = {RequestMethod.POST})
+		public JSONObject addPositionData(HttpServletRequest request){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   String str = ToolClass.getStrFromInputStream(request);
+		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
+		    	   JSONObject jsObj = JSONObject.parseObject(str);
+		    	   if(jsObj.get("positionName") == null)throw new MessageException("职位名不能为空！");
+		    	   PositionDataBean positionDataBean = new PositionDataBean();
+		    	   positionDataBean.setPosition_Name(jsObj.getString("positionName"));
+		    	   positionDataBean.setIsPoint(jsObj.get("isPoint") == null ? "0" : jsObj.getString("isPoint"));
+		    	   positionDataBean.setPositionType_ID(jsObj.get("positionTypeId") == null ? "0" : jsObj.getString("positionTypeId"));
+		    	   KqParamSetService.addPositionData(positionDataBean);
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		/**
+		 * @desc:修改职位信息
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-04
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/updatePositionData?positionName=test88&isPoint=1&positionTypeId=2&positionId=103
+		@ResponseBody
+		@RequestMapping(value="/updatePositionData",method = {RequestMethod.POST})
+		public JSONObject updatePositionData(HttpServletRequest request){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   String str = ToolClass.getStrFromInputStream(request);
+		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
+		    	   JSONObject jsObj = JSONObject.parseObject(str);
+		    	   if(jsObj.get("positionName") == null || jsObj.get("positionId") == null)throw new MessageException("职位名或职位id为空！");
+		    	   PositionDataBean positionDataBean = new PositionDataBean();
+		    	   positionDataBean.setPosition_ID(jsObj.getString("positionId"));
+		    	   positionDataBean.setPosition_Name(jsObj.getString("positionName"));
+		    	   positionDataBean.setIsPoint(jsObj.get("isPoint") == null ? "0" : jsObj.getString("isPoint"));
+		    	   positionDataBean.setPositionType_ID(jsObj.get("positionTypeId") == null ? "0" : jsObj.getString("positionTypeId"));
+		    	   KqParamSetService.updatePositionData(positionDataBean);
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		@ResponseBody
+		@RequestMapping(value="/test",method = {RequestMethod.GET,RequestMethod.POST})
+		public JSONObject test(String positionTypeName,String id,HttpServletRequest request){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   List<Map<String,Object>> list = KqParamSetService.queryDepartmentEmployee();
+		    	   result.put(Constant.Result.RETDATA, list);
+		    	   if(false)throw new MessageException("参数接收失败！");
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		
+		
 }

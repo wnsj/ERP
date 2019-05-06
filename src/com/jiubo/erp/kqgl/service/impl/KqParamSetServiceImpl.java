@@ -1,5 +1,7 @@
 package com.jiubo.erp.kqgl.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,15 +9,19 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.common.Position;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
+import com.jiubo.erp.kqgl.bean.PositionDataBean;
+import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.dao.KqParamSetDao;
 import com.jiubo.erp.kqgl.service.KqParamSetService;
 import com.jiubo.erp.kqgl.vo.Vacation;
 import com.jiubo.erp.rygl.bean.DepartmentBean;
+import com.jiubo.erp.rygl.bean.EmployeeBasicBean;
 
 @Service
 public class KqParamSetServiceImpl implements KqParamSetService{
@@ -129,22 +135,98 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 	}
 
 	@Override
-	public List<Position> queryPosition() throws MessageException {
-		return kqParamSetDao.queryPosition();
+	public List<PositionTypeBean> queryPositionType() throws MessageException {
+		return kqParamSetDao.queryPositionType();
 	}
 
 	@Override
-	public void addPosition(Position position) throws MessageException {
-//		if(StringUtils.isBlank(position.))
-		
+	public void addPositionType(PositionTypeBean positionTypeBean) throws MessageException {
+		kqParamSetDao.addPositionType(positionTypeBean);
 	}
 
 	@Override
-	public void updatePosition(Position position) throws MessageException {
-		// TODO Auto-generated method stub
+	public void deletePositionType(int id) throws MessageException {
+		kqParamSetDao.deletePositionType(id);
+	}
+
+	@Override
+	public void updatePositionType(PositionTypeBean positionTypeBean) throws MessageException {
+		kqParamSetDao.updatePositionType(positionTypeBean);
+	}
+
+	@Override
+	public List<Map<String,Object>> queryPositionData() throws MessageException {
+		return kqParamSetDao.queryPositionData();
+	}
+
+	@Override
+	public void addPositionData(PositionDataBean positionDataBean) throws MessageException {
+		if(StringUtils.isBlank(positionDataBean.getPosition_Name()))
+			throw new MessageException("职位名为空！");
+		kqParamSetDao.addPositionData(positionDataBean);
+	}
+
+	@Override
+	public void updatePositionData(PositionDataBean positionDataBean) throws MessageException {
+		if(StringUtils.isBlank(positionDataBean.getPosition_ID()) || StringUtils.isBlank(positionDataBean.getPosition_Name()))
+			throw new MessageException("职位id或职位名为空！");
+		kqParamSetDao.updatePositionData(positionDataBean);
+	}
+
+	@Override
+	public List<Map<String,Object>> queryDepartmentEmployee() {
 		
+		List<Map<String,Object>> oneList = new ArrayList<Map<String,Object>>();
+		List<DepartmentBean> departmentList = queryDepartmentByPId("0");
+		for(DepartmentBean departmentBean : departmentList) {
+			//第一层
+			Map<String,Object> beanMap = new HashMap<String,Object>();
+			beanMap.put("depId", departmentBean.getID());
+			beanMap.put("depName", departmentBean.getName());
+			beanMap.put("depParentID",departmentBean.getParentID());
+			beanMap.put("depOrderNum", departmentBean.getOrderNum());
+			beanMap.put("employees",queryEmployeeBasic(departmentBean.getID(),"1"));//部门下的员工
+			
+			List<Map<String,Object>> twoList = new ArrayList<Map<String,Object>>();
+			List<DepartmentBean> sonList = queryDepartmentByPId(departmentBean.getID());
+			for(DepartmentBean bean : sonList) {
+				//第二层
+				Map<String,Object> twoMap = new HashMap<String,Object>();
+				twoMap.put("depId", bean.getID());
+				twoMap.put("depName", bean.getName());
+				twoMap.put("depParentID",bean.getParentID());
+				twoMap.put("depOrderNum", bean.getOrderNum());
+				twoMap.put("employees",queryEmployeeBasic(departmentBean.getID(),"1"));//部门下的员工
+				twoList.add(twoMap);
+				
+				List<Map<String,Object>> threeList = new ArrayList<Map<String,Object>>();
+				List<DepartmentBean> sList = queryDepartmentByPId(bean.getID());
+				for(DepartmentBean depBean : sList) {
+					//第三层
+					Map<String,Object> threeMap = new HashMap<String,Object>();
+					threeMap.put("depId", depBean.getID());
+					threeMap.put("depName", depBean.getName());
+					threeMap.put("depParentID",depBean.getParentID());
+					threeMap.put("depOrderNum", depBean.getOrderNum());
+					threeMap.put("employees",queryEmployeeBasic(departmentBean.getID(),"1"));//部门下的员工
+				}
+				beanMap.put("sonDep", threeList);//子部门
+			}
+			
+			beanMap.put("sonDep", twoList);//子部门
+			oneList.add(beanMap);
+		}
+		return oneList;
 	}
 	
+	public List<DepartmentBean> queryDepartmentByPId(String pId){
+		return kqParamSetDao.queryDepartmentByPId(pId);
+	}
+	
+	public List<EmployeeBasicBean> queryEmployeeBasic(String departmentId,String state){
+		return kqParamSetDao.queryEmployeeBasic(departmentId, state);
+	}
+
 	
 	
 }

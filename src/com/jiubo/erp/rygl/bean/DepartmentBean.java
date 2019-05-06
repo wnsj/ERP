@@ -35,6 +35,13 @@ public class DepartmentBean {
 		OrderNum = orderNum;
 	}
 
+
+	@Override
+	public String toString() {
+		return "DepartmentBean [ID=" + ID + ", Name=" + Name + ", ParentID=" + ParentID + ", OrderNum=" + OrderNum
+				+ "]";
+	}
+
 	
 	
 	

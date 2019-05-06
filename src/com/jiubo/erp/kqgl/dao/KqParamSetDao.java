@@ -6,15 +6,17 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.jiubo.erp.common.MessageException;
-import com.jiubo.erp.common.Position;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
+import com.jiubo.erp.kqgl.bean.PositionDataBean;
+import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.vo.Vacation;
 import com.jiubo.erp.rygl.bean.DepartmentBean;
+import com.jiubo.erp.rygl.bean.EmployeeBasicBean;
 
 public interface KqParamSetDao {
-	
+
 	//查询假期种类
 	public List<Vacation> queryVacation();
 	
@@ -76,11 +78,29 @@ public interface KqParamSetDao {
 	public void updateDepartment(DepartmentBean departmentBean);
 	
 	//查询职位
-	public List<Position> queryPosition();
+	public List<Map<String,Object>> queryPositionData();
 	
 	//增加职位
-	public void addPosition(Position position);
+	public void addPositionData(PositionDataBean positionDataBean);
 	
 	//修改职位
-	public void updatePosition(Position position);
+	public void updatePositionData(PositionDataBean positionDataBean);
+	
+	//查询岗位类型
+	public List<PositionTypeBean> queryPositionType();
+	
+	//添加岗位类型
+	public void addPositionType(PositionTypeBean positionTypeBean);
+	
+	//删除岗位类型
+	public void deletePositionType(int id);
+	
+	//修改岗位类型
+	public void updatePositionType(PositionTypeBean positionTypeBean);
+	
+	//根据ParentID查询部门信息
+	public List<DepartmentBean> queryDepartmentByPId(String pId);
+	
+	//查询所属部门员工
+	public List<EmployeeBasicBean> queryEmployeeBasic(@Param("departmentId")String departmentId,@Param("state")String state);
 }

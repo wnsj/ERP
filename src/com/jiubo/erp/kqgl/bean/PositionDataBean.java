@@ -1,6 +1,9 @@
 package com.jiubo.erp.kqgl.bean;
 
-public class PositionDataBean {
+import java.io.Serializable;
+
+public class PositionDataBean implements Serializable{
+	private static final long serialVersionUID = 455919147520681059L;
 	private String Position_ID;
 	private String Position_Name;
 	private String PositionType_ID;
@@ -29,8 +32,10 @@ public class PositionDataBean {
 	public void setIsPoint(String isPoint) {
 		IsPoint = isPoint;
 	}
+	@Override
+	public String toString() {
+		return "PositionDataBean [Position_ID=" + Position_ID + ", Position_Name=" + Position_Name
+				+ ", PositionType_ID=" + PositionType_ID + ", IsPoint=" + IsPoint + "]";
+	}
 	
-	
-
-
 }

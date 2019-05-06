@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.jiubo.erp.common.MessageException;
-import com.jiubo.erp.common.Position;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
+import com.jiubo.erp.kqgl.bean.PositionDataBean;
+import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.vo.Vacation;
 import com.jiubo.erp.rygl.bean.DepartmentBean;
 
@@ -214,11 +215,85 @@ public interface KqParamSetService {
 	 */
 	public void updateDepartment(DepartmentBean departmentBean)throws MessageException;
 	
-	public List<Position> queryPosition()throws MessageException;
+	/**
+	 * @desc:查询职位
+	 * @param:
+	 * @return: List<PositionDataBean>
+	 * @Create at: 2019-05-04
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public List<Map<String,Object>> queryPositionData()throws MessageException;
 	
-	public void addPosition(Position position)throws MessageException;
+	/**
+	 * @desc:添加职位
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-04
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void addPositionData(PositionDataBean positionDataBean)throws MessageException;
 	
-	public void updatePosition(Position position)throws MessageException;
+	/**
+	 * @desc:修改职位
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-04
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void updatePositionData(PositionDataBean positionDataBean)throws MessageException;
+	
+	/**
+	 * @desc:岗位类型
+	 * @param:
+	 * @return: List<PositionTypeBean>
+	 * @Create at: 2019-05-03
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public List<PositionTypeBean> queryPositionType()throws MessageException;
+	
+	/**
+	 * @desc:添加岗位类型
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-03
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void addPositionType(PositionTypeBean positionTypeBean)throws MessageException;
+	
+	/**
+	 * @desc:删除岗位类型
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-03
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void deletePositionType(int id)throws MessageException;
+	
+	/**
+	 * @desc:修改岗位类型
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-03
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void updatePositionType(PositionTypeBean positionTypeBean)throws MessageException;
+	
+	/**
+	 * @desc:查询部门及部门下的员工
+	 * @param:
+	 * @return: Map<String,Object>
+	 * @Create at: 2019-05-04
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public List<Map<String,Object>> queryDepartmentEmployee();
 	
 	
 }
