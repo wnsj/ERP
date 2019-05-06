@@ -318,7 +318,7 @@ public class KqController {
   * @return
   */
 public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults) {
-	DepartKQ departKQ;
+	DepartKQ departKQ = new DepartKQ("","0","0","0","0","0","0","0");
 	List<DepartKQ> dpList = new ArrayList<>();
 	for (KqInfoResult kqInfoResult : kqInfoResults) {
 		if (dpList.size()>0) {
@@ -332,21 +332,15 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults) {
 			}
 			if (isSame==false) {
 				if (kqInfoResult.getClassTimeType()=="2") {
-					departKQ = new DepartKQ(kqInfoResult.getDepartname(),"0","0","0","0","0","1","0");
-					dpList.add(departKQ);
-				}else {
-					departKQ = new DepartKQ(kqInfoResult.getDepartname(),"0","0","0","0","0","0","0");
-					dpList.add(departKQ);
+					departKQ.setRestDays("1");
 				}
+				dpList.add(departKQ);
 			}
 		}else {
 			if (kqInfoResult.getClassTimeType()=="2") {
-				departKQ = new DepartKQ(kqInfoResult.getDepartname(),"0","0","0","0","0","1","0");
-				dpList.add(departKQ);
-			}else {
-				departKQ = new DepartKQ(kqInfoResult.getDepartname(),"0","0","0","0","0","0","0");
-				dpList.add(departKQ);
+				departKQ.setRestDays("1");
 			}
+			dpList.add(departKQ);
 		}
 	}
 	return dpList;
