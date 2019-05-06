@@ -228,4 +228,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM T_EMPLOYEE_BASIC
 		WHERE DEPARTMENT_ID = #{departmentId} AND STATE = #{state}
 	</select>
+	
+	
 </mapper>

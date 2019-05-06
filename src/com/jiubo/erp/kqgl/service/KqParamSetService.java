@@ -295,6 +295,7 @@ public interface KqParamSetService {
 	 */
 	public List<Map<String,Object>> queryDepartmentEmployee();
 	
+	
 }
 //班次类别
 //public List<AttShift> queryAttShift();

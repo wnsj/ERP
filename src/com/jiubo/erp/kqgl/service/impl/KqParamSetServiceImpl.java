@@ -227,4 +227,6 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 		return kqParamSetDao.queryEmployeeBasic(departmentId, state);
 	}
 
+	
+	
 }
