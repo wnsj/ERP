@@ -1,35 +1,34 @@
 package com.jiubo.erp.kqgl.controller;
 
 
-import java.io.IOException;
-import java.nio.charset.Charset;
+
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+
+
 import java.util.List;
 import java.util.Map;
 
-import javax.print.DocFlavor.STRING;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.lucene.queryparser.flexible.precedence.processors.PrecedenceQueryNodeProcessorPipeline;
+import org.mybatis.generator.codegen.ibatis2.Ibatis2FormattingUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import com.jiubo.erp.erpLogin.util.ResponseMessageUtils;
 import com.jiubo.erp.kqgl.service.KqService;
-import com.jiubo.erp.kqgl.vo.ClassTime;
+
 import com.jiubo.erp.kqgl.vo.DepartKQ;
 import com.jiubo.erp.kqgl.vo.KqInfoResult;
 import com.jiubo.erp.kqgl.vo.PunchRecord;
+import com.jiubo.erp.rygl.bean.DepartmentBean;
 import com.quicksand.push.ToolClass;
 
-import net.sf.json.JSONObject;
+
 
 
 @Controller
@@ -38,6 +37,8 @@ public class KqController {
 	
  @Autowired
  private KqService service;
+ 
+
  
  
  /**
@@ -96,58 +97,70 @@ public class KqController {
 		if (kqParam.getEndDate().equals("")) {
 			kqParam.setEndDate(ToolClass.inquirNowDate());
 		}
-	 
+		
+		
 	 List<KqInfoResult> kqInfoRes = this.service.searchKqInfoList(kqParam);
 	 System.out.println("---班型测试kqInfoRes----"+kqInfoRes.size()+kqParam.getEndDate()+kqParam.getStartDate());
 	 
 	 //查询班次数据为空时执行，返回基本信息
 	 if (kqInfoRes.size()<1) {
 		 kqInfoRes=this.service.selectKqInfoList(kqParam);
-//		 System.out.println("kqInfoRes:"+kqInfoRes.size());
+		 System.out.println("kqInfoRes:"+kqInfoRes.size());
 		 return kqInfoRes;
+	}else {
+		kqInfoRes = kquClassTime(kqInfoRes);
+		return kqInfoRes;
 	}
-	 
-	 
-	 try {
-	    for (int i=0;i < kqInfoRes.size();i++) {
-	    	KqInfoResult kqInfoResult = kqInfoRes.get(i);
-	    	if (kqInfoResult.getShiftDate() != null) {
-	    		System.out.println("getShiftDate"+kqInfoResult.getShiftDate());
-	    		PunchRecord pRecord= new PunchRecord();
-	    		pRecord.setYear(kqInfoResult.getShiftDate().substring(0, 4));
-		    	pRecord.setMonth(kqInfoResult.getShiftDate().substring(6, 7)); 
-		    	pRecord.setDay(kqInfoResult.getShiftDate().substring(9, 10));
-		    	pRecord.setUserId(kqInfoResult.getuId());
-				System.out.println("打卡参数"+pRecord.getYear()+"-"+pRecord.getMonth()+"-"+pRecord.getDay());
-				
-				List<PunchRecord> prList = this.service.selectPunchRecordList(pRecord);
-				pRecord = prList.get(0);
-				if (prList.size()>0 && pRecord !=null) {
-					
-//					System.out.println("prList"+prList.size()+pRecord.toString());
-					if ( pRecord.getMaxAttTime()==null && pRecord.getMinAttTime()==null) {
-						
-					}else {
-						
-						kqInfoResult.setFirstTime(pRecord.getMinAttTime());
-						kqInfoResult.setFirstTimeState(completForeKQInfo(pRecord.getMinAttTime(), kqInfoResult.getStartTime(), kqInfoResult.getEndTime()));
-						kqInfoResult.setEndDate(pRecord.getMaxAttTime());
-						kqInfoResult.setLastTimeState(completAfterKQInfo(pRecord.getMaxAttTime(), kqInfoResult.getStartTime(), kqInfoResult.getEndTime()));
-						
-					}
-			}
-	    	
-			}
-	    }
-	     System.out.println("kqList:"+kqInfoRes.size());
-	     return kqInfoRes;
-	} catch (Exception e) {
-		e.printStackTrace();
-		ResponseMessageUtils.responseMessage(response, "查询错误,请重试!");
-		return null;
-	}
+ 
 }
  
+ /**
+  * 将班次信息赋值给所有查询到的考勤人员
+  * @param kqInfoRes考勤人员列表
+  * @return
+  */
+ public List<KqInfoResult> kquClassTime(List<KqInfoResult> kqInfoRes) {
+	 try {
+		    for (int i=0;i < kqInfoRes.size();i++) {
+		    	KqInfoResult kqInfoResult = kqInfoRes.get(i);
+//		    	System.out.println("getClassTimeType"+kqInfoResult.getClassTimeType());
+		    	if (kqInfoResult.getShiftDate() != null && kqInfoResult.getClassTimeType().equals("1")) {
+		    		System.out.println("getShiftDate"+kqInfoResult.getShiftDate());
+		    		PunchRecord pRecord= new PunchRecord();
+		    		pRecord.setYear(kqInfoResult.getShiftDate().substring(0, 4));
+			    	pRecord.setMonth(kqInfoResult.getShiftDate().substring(5, 7)); 
+			    	pRecord.setDay(kqInfoResult.getShiftDate().substring(8, 10));
+			    	pRecord.setUserId(kqInfoResult.getuId());
+//					System.out.println("打卡参数"+pRecord.getYear()+"-"+pRecord.getMonth()+"-"+pRecord.getDay());
+					
+					List<PunchRecord> prList = this.service.selectPunchRecordList(pRecord);
+					pRecord = prList.get(0);
+					if (prList.size()>0 && pRecord != null) {
+						if ( pRecord.getMaxAttTime()==null && pRecord.getMinAttTime()==null) {
+							System.out.println("最大值和最小值为null");
+						}else if (pRecord.getMaxAttTime()==pRecord.getMinAttTime()) {
+							System.out.println("最大值和最小值相等");
+						}else {
+							System.out.println("最大值和最小值不等");
+							kqInfoResult.setFirstTime(pRecord.getMinAttTime());
+							kqInfoResult.setFirstTimeState(completForeKQInfo(pRecord.getMinAttTime(), kqInfoResult.getStartTime(), kqInfoResult.getEndTime()));
+							kqInfoResult.setLastTime(pRecord.getMaxAttTime());
+							kqInfoResult.setLastTimeState(completAfterKQInfo(pRecord.getMaxAttTime(), kqInfoResult.getStartTime(), kqInfoResult.getEndTime()));
+							
+						}
+					}
+		    	
+				}else {
+					kqInfoResult.setFirstTimeState(kqInfoResult.getClassTimeName());
+				}
+		    }
+		     System.out.println("kqInfoRes:"+kqInfoRes.size());
+		     return kqInfoRes;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return kqInfoRes;
+		}
+}
  /**
   * 用来判断打卡时间在那个时间段
   * 上班时间之前---------------返回1-------正常
@@ -204,89 +217,141 @@ public class KqController {
 	}
 }
  /**
+  * 加载当天的全部的用户考勤信息
+  * @param request
+  * @param response
+  * @return
+  */
+ @ResponseBody
+ @RequestMapping(value="/departBaseKQInfo")
+ private List<DepartKQ> departBaseKQInfo(HttpServletRequest request,HttpServletResponse response) {
+		
+//	 	KqInfoResult kqParam = new KqInfoResult();
+//		Map<String, String> mapList = ToolClass.mapShiftStr(request);
+//		List<DepartKQ> dpList  = new ArrayList<>();
+//		DepartKQ dpKq;
+//			
+//		kqParam.setName(mapList.get("name"));
+//		kqParam.setDepartname(mapList.get("dpId"));
+//		kqParam.setPositionName(mapList.get("positionName"));
+//		kqParam.setJobNum(mapList.get("jobNum"));
+//		
+//		 try {
+//		    List<KqInfoResult> kqInfoList = this.service.selectKqInfoList(kqParam);
+//		     System.out.println("kqList:"+kqInfoList.size());
+//		     for (KqInfoResult kqInfoResult : kqInfoList) {
+//				if (dpList.size()>0) {
+//					for (DepartKQ dpkqLsit : dpList) {
+//						if (kqInfoResult.getDepartname()==dpKq.getDepartKQName()) {
+//							
+//						}
+//					}
+//				}else {
+//					dpKq = new DepartKQ(kqInfoResult.getDepartname());
+//					dpList.add(dpKq);
+//				}
+//			}
+//		     
+//		     
+//		     return dpList;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			ResponseMessageUtils.responseMessage(response, "查询错误,请重试!");
+			return null;
+//		}
+}
+ /**
   * 部门考勤的全部信息,通过searchKQInfo方法搜索全部的考勤，进行部门考勤的计算
   * @param request
   * @param response
   * @return
   */
   @ResponseBody
-  @RequestMapping(value="/departKQList")
+  @RequestMapping(value="/searchDepartKQList")
   private List<DepartKQ> departKQList(HttpServletRequest request,HttpServletResponse response) {
 	  
-	  List<DepartKQ> departList = new ArrayList<>();
-	  List<KqInfoResult> dpkqInfoList = new ArrayList<>();
-	  KqInfoResult kqInfo = new KqInfoResult();
-	 
-	  
-	  String string;
-		try {
-			string = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
-			JSONObject jsonData = JSONObject.fromObject(string);
+	  	KqInfoResult kqParam = new KqInfoResult();
+		Map<String, String> mapList = ToolClass.mapShiftStr(request);
+		List<DepartKQ> dpkqLsit = new ArrayList<>();
+		
 			
-			System.out.println(jsonData);
-			
-			kqInfo.setDepartname(jsonData.getString("departName"));
-			kqInfo.setStartDate(jsonData.getString("beginData"));
-			kqInfo.setEndDate(jsonData.getString("endData"));
-			
-			if (kqInfo.getStartDate().equals("")) {
-				kqInfo.setStartDate(ToolClass.inquirNowDate());
-			}
-			if (kqInfo.getEndDate().equals("")) {
-				kqInfo.setEndDate(ToolClass.inquirNowDate());
-			}
-		 
-			List<KqInfoResult> kqInfoRes = this.service.searchKqInfoList(kqInfo);
-			System.out.println("---班型测试kqInfoRes----"+kqInfoRes.size()+kqInfo.getEndDate()+kqInfo.getStartDate());
-		 
-			//查询班次数据为空时执行，返回基本信息
-			if (dpkqInfoList.size()<1) {
-				dpkqInfoList=this.service.selectKqInfoList(kqInfo);
-			 	System.out.println("dpkqInfoList:"+kqInfoRes.size());
-//				return dpkqInfoList;
-			}
-		    for (int i=0;i < kqInfoRes.size();i++) {
-		    	KqInfoResult kqInfoResult = kqInfoRes.get(i);
-		    	if (kqInfoResult.getShiftDate() != null) {
-		    		System.out.println("getShiftDate"+kqInfoResult.getShiftDate());
-		    		PunchRecord pRecord= new PunchRecord();
-		    		pRecord.setYear(kqInfoResult.getShiftDate().substring(0, 4));
-			    	pRecord.setMonth(kqInfoResult.getShiftDate().substring(6, 7)); 
-			    	pRecord.setDay(kqInfoResult.getShiftDate().substring(9, 10));
-			    	pRecord.setUserId(kqInfoResult.getuId());
-					System.out.println("打卡参数"+pRecord.getYear()+"-"+pRecord.getMonth()+"-"+pRecord.getDay());
-					
-					List<PunchRecord> prList = this.service.selectPunchRecordList(pRecord);
-					pRecord = prList.get(0);
-					if (prList.size()>0 && pRecord !=null) {
-						
-//						System.out.println("prList"+prList.size()+pRecord.toString());
-						if ( pRecord.getMaxAttTime()==null && pRecord.getMinAttTime()==null) {
-							
-						}else {
-							
-							kqInfoResult.setFirstTime(pRecord.getMinAttTime());
-							kqInfoResult.setFirstTimeState(completForeKQInfo(pRecord.getMinAttTime(), kqInfoResult.getStartTime(), kqInfoResult.getEndTime()));
-							kqInfoResult.setEndDate(pRecord.getMaxAttTime());
-							kqInfoResult.setLastTimeState(completAfterKQInfo(pRecord.getMaxAttTime(), kqInfoResult.getStartTime(), kqInfoResult.getEndTime()));
-							
-						}
-				}
-		    	
-				}
-		    }	
-	 		System.out.println("dpkqInfoList"+dpkqInfoList.size());
-	 		
-	 	    return departList;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			ResponseMessageUtils.responseMessage(response, "查询错误,请重试!");
-	 		return null;
+		kqParam.setName(mapList.get("name"));
+		kqParam.setDepartname(mapList.get("departName"));
+		kqParam.setPositionName(mapList.get("positionName"));
+		kqParam.setJobNum(mapList.get("jobNum"));
+		kqParam.setStartDate(mapList.get("beginData"));
+		kqParam.setEndDate(mapList.get("endData"));
+		
+		if (kqParam.getStartDate().equals("")) {
+			kqParam.setStartDate(ToolClass.inquirNowDate()+" "+"00:00:00.000");
 		}
-	  
+		if (kqParam.getEndDate().equals("")) {
+			kqParam.setEndDate(ToolClass.inquirNowDate()+" "+"23:59:59.000");
+		}
+		
+		
+		List<KqInfoResult> kqInfoRes = this.service.searchKqInfoList(kqParam);
+		System.out.println("---班型测试kqInfoRes----："+kqParam.getDepartname());
+		System.out.println("---班型测试kqInfoRes----："+kqInfoRes.size());
+		System.out.println("---班型测试kqInfoRes----："+kqParam.getEndDate());
+		System.out.println("---班型测试kqInfoRes----："+kqParam.getStartDate());
+	 
+		//查询班次数据为空时执行，返回基本信息
+		if (kqInfoRes.size()<1) {
+			kqInfoRes=this.service.selectKqInfoList(kqParam);
+			System.out.println("kqInfoRes:"+kqInfoRes.size());
+		 
+			dpkqLsit = selectDepartKqInfo(kqInfoRes);
+			System.out.println("dpkqLsit1:"+kqInfoRes.size());
+			return dpkqLsit;
+		}else {
+			kqInfoRes = kquClassTime(kqInfoRes);
+			dpkqLsit = selectDepartKqInfo(kqInfoRes);
+			System.out.println("dpkqLsit2:"+kqInfoRes.size());
+			return dpkqLsit;
+		}
+
  }
- 
+ /**
+  * 通过个人考勤信息计算部门考勤信息
+  * @param kqInfoResults
+  * @return
+  */
+public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults) {
+	DepartKQ departKQ;
+	List<DepartKQ> dpList = new ArrayList<>();
+	for (KqInfoResult kqInfoResult : kqInfoResults) {
+		if (dpList.size()>0) {
+			boolean isSame = false;
+			for (DepartKQ departKQ2 : dpList) {
+				if (departKQ2.getDepartKQName().equals(kqInfoResult.getDepartname())) {
+					isSame = true;
+					departKQ2.setRestDays(String.valueOf(Integer.valueOf(departKQ2.getRestDays())+1));
+					break;
+				}
+			}
+			if (isSame==false) {
+				if (kqInfoResult.getClassTimeType()=="2") {
+					departKQ = new DepartKQ(kqInfoResult.getDepartname(),"0","0","0","0","0","1","0");
+					dpList.add(departKQ);
+				}else {
+					departKQ = new DepartKQ(kqInfoResult.getDepartname(),"0","0","0","0","0","0","0");
+					dpList.add(departKQ);
+				}
+			}
+		}else {
+			if (kqInfoResult.getClassTimeType()=="2") {
+				departKQ = new DepartKQ(kqInfoResult.getDepartname(),"0","0","0","0","0","1","0");
+				dpList.add(departKQ);
+			}else {
+				departKQ = new DepartKQ(kqInfoResult.getDepartname(),"0","0","0","0","0","0","0");
+				dpList.add(departKQ);
+			}
+		}
+	}
+	return dpList;
+}
+  
 /**
  * 个人的出勤统计
  * @param request

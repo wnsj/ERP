@@ -65,7 +65,7 @@ public interface EmpService {
 	public Integer insertUserInfo(UserInfo userInfo);
 	
 	//更新基础用户信息
-	public Integer updataBaselInfo(UserInfo userInfo);
+	public Integer updataBaseInfo(UserInfo userInfo);
 	
 	
 	//插入用户的详细信息

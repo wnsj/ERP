@@ -2,6 +2,8 @@ package com.jiubo.erp.kqgl.vo;
 
 //打卡
 public class PunchRecord {
+	
+
 	private String userId;
 	private String maxAttTime;
 	private String minAttTime;
@@ -13,7 +15,11 @@ public class PunchRecord {
 		// TODO Auto-generated constructor stub
 	}
 
-	
+	@Override
+	public String toString() {
+		return "PunchRecord [userId=" + userId + ", maxAttTime=" + maxAttTime + ", minAttTime=" + minAttTime + ", year="
+				+ year + ", month=" + month + ", day=" + day + "]";
+	}
 
 	public String getMaxAttTime() {
 		return maxAttTime;

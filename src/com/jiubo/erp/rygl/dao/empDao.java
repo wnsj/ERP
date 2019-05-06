@@ -43,7 +43,7 @@ public interface empDao {
 	
 	Integer insertBaseInfo(UserInfo userInfo);
 	
-	Integer updataBaselInfo(UserInfo userInfo);
+	Integer updataBaseInfo(UserInfo userInfo);
 	
 	Integer insertDetailInfo(UserInfo userInfo);
 	

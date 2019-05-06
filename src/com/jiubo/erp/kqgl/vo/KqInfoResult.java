@@ -3,7 +3,7 @@ package com.jiubo.erp.kqgl.vo;
 //人员考勤
 public class KqInfoResult {
 	
-	private String uId;//姓名
+	private String uId;//姓名id
 	private String name;//姓名
 	private String jobNum;//工号
 	private String departname;//部门
@@ -11,6 +11,7 @@ public class KqInfoResult {
 	private String positionName;//职位
 	private String punchTime;//班次
 	private String classTimeName;//出勤班次名称
+	private String classTimeType;//出勤班次类型 所有休息2 上班1
 	private String shiftDate;//出勤班次日期
 	private String attTime;//打卡时间
 	private String startDate;//开始日期
@@ -28,6 +29,14 @@ public class KqInfoResult {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public String getClassTimeType() {
+		return classTimeType;
+	}
+
+	public void setClassTimeType(String classTimeType) {
+		this.classTimeType = classTimeType;
+	}
+
 	public String getStartDate() {
 		return startDate;
 	}

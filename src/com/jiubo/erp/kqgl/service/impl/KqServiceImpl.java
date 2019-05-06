@@ -16,6 +16,7 @@ import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.dao.kqglDao;
 import com.jiubo.erp.kqgl.service.KqService;
 import com.jiubo.erp.kqgl.vo.ClassTime;
+import com.jiubo.erp.kqgl.vo.DepartKQ;
 import com.jiubo.erp.kqgl.vo.KqInfoResult;
 import com.jiubo.erp.kqgl.vo.PositionResultInfo;
 import com.jiubo.erp.kqgl.vo.PunchRecord;
@@ -44,6 +45,22 @@ public class KqServiceImpl implements KqService {
 	public List<ClassTime> selectClassTimeList(ClassTime ct){
 		return this.dao.selectClassTimeList(ct);
 	}
+	
+	@Override
+	public List<DepartKQ> selectDepartKqInfoList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<DepartKQ> searchDepartKqInfoList(DepartKQ departKQ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	
+	
 	@Override
 	public List<PositionTypeBean> selectPositionTypeList() {
 		// TODO Auto-generated method stub
@@ -145,6 +162,8 @@ public class KqServiceImpl implements KqService {
 		// TODO Auto-generated method stub
 		return dao.addRuleTypeInfo(bean);
 	}
+
+	
 
 
 }

@@ -269,7 +269,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	update
 		dbo.T_Employee_Basic 
 	set
-		Name=#{uName},Sex=#{uSex},JobNum=#{uJobNum},Department_id=#{uDepartment_id},Birth=#{uBirth},
+		Name=#{uName},Sex=#{uSex},Department_id=#{uDepartment_id},Birth=#{uBirth},
 		EntryDate=#{uEntryDte},PositiveDate=#{uPositiveDate},ResignDate=#{uResignDate},Photo=#{uPhoto},
 		CreateDate='2019-04-13 11:30:29:000',UpdateDate=#{uUpdateDate},IsDelete=#{uIsDelete},State=#{uState},
 		CreateUser=#{uCreateUser},Account=#{uAccount},Remark=#{uRemark},Parent_ID=#{uParent_ID},
@@ -298,7 +298,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	update
 		dbo.T_Employee_Detial
 	set
-		Employee_basic_ID=#{uEmployeeBasicID},IDNum=#{uIdNum},Political=#{uPloitical},Contact=#{uContact},HomeTown=#{uHomeTown}
+		Political=#{uPloitical},Contact=#{uContact},HomeTown=#{uHomeTown}
 		,Nationality=#{uNationality},Marital=#{uMarital},HomeAddress=#{uHomeAddress},CurrentAddress=#{uCurrentAddress},
 		Schools=#{uSchools},Education=#{uEducation},Profession=#{uProfession},Graduation=#{uGraduation},
 		EmergencyContact=#{uEmergencyContact},EmergencyPhone=#{uEmergencyphone},Height=#{uHeight},Weight=#{uWeight},

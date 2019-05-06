@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   b.ID AS departId,
 	   d.Position_Name AS positionName,
 	   f.Name AS classTimeName,
+	   f.Type AS classTimeType,
 	   f.ShiftDate AS shiftDate,
 	   f.StartTime AS startTime,
 	   f.EndTime As endTime
@@ -129,6 +130,54 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 
 </select>
 
+
+<!-- 搜索部门考勤人员考勤信息列表 -->
+<select id="selectDepartKqInfoList" resultType="com.jiubo.erp.kqgl.vo.DepartKQ">
+	 SELECT 
+	   DISTINCT 
+	   
+	   Name AS departname
+	   
+	 FROM 
+	   T_Department
+		 
+	
+</select>
+<!-- 搜索部门考勤人员考勤信息列表 -->
+<select id="searchDepartKqInfoList" parameterType="com.jiubo.erp.kqgl.vo.DepartKQ" resultType="com.jiubo.erp.kqgl.vo.DepartKQ">
+	 SELECT 
+	   DISTINCT 
+	   a.ID AS uId,
+	   b.Name AS departname,
+	   a.JobNum AS jobNum,
+	   b.ID AS departId,
+	   d.Position_Name AS positionName,
+	   f.Name AS classTimeName,
+	   f.Type AS classTimeType,
+	   f.ShiftDate AS shiftDate,
+	   f.StartTime AS startTime,
+	   f.EndTime As endTime
+	   
+	 FROM 
+		 T_Employee_Basic a 
+		 INNER JOIN T_Department b ON a.Department_ID=b.ID 
+		 INNER JOIN Account_Data c  ON a.Account=c.Account_ID 
+		 INNER JOIN Position_Data d ON c.Position_ID=d.Position_ID
+		 INNER JOIN T_Att_PeopleShift e ON e.UserID = a.ID
+		 INNER JOIN T_Att_Shift f ON e.ShiftID=f.ID
+	<trim prefix="WHERE" prefixOverrides="AND | OR">
+     		<if test="departname!=null and departname!=''">
+       		    AND b.Name=#{departname}
+     		</if>
+     		<if test="startDate!=null and startDate!=''">
+    		    AND f.ShiftDate&gt;=#{startDate} 
+		</if>
+		<if test="endDate!=null and endDate!=''">
+    		    AND	f.ShiftDate&lt;=#{endDate}
+		</if>
+     		AND a.JobNum != '0'
+   	</trim>	 
+</select>
 
 
 

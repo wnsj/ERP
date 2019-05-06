@@ -647,15 +647,15 @@ public class EmpController {
 					qfr.setPhone(jArr.getJSONObject(i).getString("phone"));
 					qfr.setWechat(jArr.getJSONObject(i).getString("wechat"));
 					qfr.setFamAddress(jArr.getJSONObject(i).getString("famAddress"));
-//					if (qfr.getID()=='') {
-//						
-//					}
+					if (qfr.getID()=="") {
+						System.out.println("有一个新的家庭成员");
+					}
 				}
 			}
 			
-			Integer baseInfoInt = this.service.updataBaselInfo(userInfo);
+			Integer baseInfoInt = this.service.updataBaseInfo(userInfo);
 			Integer detailInfoInt = this.service.updataDetialInfo(userInfo);
-			
+			System.out.println("基础家庭成员"+baseInfoInt+"详细信息"+detailInfoInt);
 			if (baseInfoInt==1&&detailInfoInt==1) {
 				ResponseMessageUtils.responseMessage(response, "修改成功!");
 			}else {

@@ -126,7 +126,7 @@
                                	 sinf="离职";
                                 }
 	                      %>
-                            <tr>
+                           <%--  <tr>
                                 <td><%=bean.getId() %></td>
                                 <td><%=bean.getJobNum() %></td>
                                 <td><%=bean.getName() %></td>
@@ -139,7 +139,7 @@
                                 <td><%=bean.getPositiveDate() %></td>
                                 <td><%=bean.getResignDate() %></td>                               
                                 <td><%=sinf%></td>
-                            </tr>
+                            </tr> --%>
                              <%}%>
                         </tbody>
                         <!-- 分页信息 -->
