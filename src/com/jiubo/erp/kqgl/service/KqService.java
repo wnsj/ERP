@@ -28,7 +28,7 @@ public interface KqService {
 		//查询打卡信息
 		List<PunchRecord> selectPunchRecordList(PunchRecord pRecord);
 		
-		//部门初始当天的考勤情况
+		//查询部门列表
 		List<DepartKQ> selectDepartKqInfoList();
 		//搜索部门考勤
 		List<DepartKQ> searchDepartKqInfoList(DepartKQ departKQ);

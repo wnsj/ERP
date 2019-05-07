@@ -2,6 +2,7 @@ package com.jiubo.erp.kqgl.vo;
 
 //部门考勤
 public class DepartKQ {
+	
 	private String departKQName;//部门名称
 	private String laterTimes;//迟到次数
 	private String leaveEarlyTimes;//早退次数

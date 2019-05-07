@@ -130,18 +130,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 
 </select>
 
-
-<!-- 搜索部门考勤人员考勤信息列表 -->
+<!-- 搜索部门列表 -->
 <select id="selectDepartKqInfoList" resultType="com.jiubo.erp.kqgl.vo.DepartKQ">
 	 SELECT 
-	   DISTINCT 
-	   
-	   Name AS departname
-	   
+	   Name AS departKQName
 	 FROM 
 	   T_Department
-		 
-	
 </select>
 <!-- 搜索部门考勤人员考勤信息列表 -->
 <select id="searchDepartKqInfoList" parameterType="com.jiubo.erp.kqgl.vo.DepartKQ" resultType="com.jiubo.erp.kqgl.vo.DepartKQ">

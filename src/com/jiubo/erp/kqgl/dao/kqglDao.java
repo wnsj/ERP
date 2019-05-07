@@ -23,10 +23,11 @@ public interface kqglDao {
 	List<KqInfoResult> searchKqInfoList(KqInfoResult kResult);
 	//查询班次列表
 	List<ClassTime> selectClassTimeList(ClassTime ct);
+	
 	//查询考勤信息
 	List<PunchRecord> selectPunchRecordList(PunchRecord pRecord);
 	
-	//部门初始当天的考勤情况
+	//查询所有部门
 	List<DepartKQ> selectDepartKqInfoList();
 	//搜索部门考勤
 	List<DepartKQ> searchDepartKqInfoList(DepartKQ departKQ);
