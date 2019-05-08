@@ -5,6 +5,8 @@ public class KqInfoResult {
 	
 	private String uId;//姓名id
 	private String name;//姓名
+	private String accountId;//账号ID
+	private String accountName;//账号
 	private String jobNum;//工号
 	private String departname;//部门
 	private String departId;//部门id
@@ -29,6 +31,22 @@ public class KqInfoResult {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
 	public String getClassTimeType() {
 		return classTimeType;
 	}

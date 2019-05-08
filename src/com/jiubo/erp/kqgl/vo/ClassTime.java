@@ -1,8 +1,8 @@
 package com.jiubo.erp.kqgl.vo;
 
-//班次
+//班次  班次表中使用的userId是accountId
 public class ClassTime {
-	private String userId;
+	private String accountId;
 	private String ctName;//班次名称
 	private String ctShiftDate;
 	private String ctStartTime;
@@ -32,12 +32,12 @@ public class ClassTime {
 		this.ctEndDate = ctEndDate;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getAccountId() {
+		return accountId;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
 	}
 
 	public String getCtName() {
