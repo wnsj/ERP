@@ -1138,11 +1138,4 @@ public class KqParamSetController {
 			        return result;
 			  } 
 		};
-		
-		
-		
-		
-		
-		
-		
 }
