@@ -979,6 +979,141 @@ public class KqParamSetController {
 			  } 
 		};
 		
+		/**
+		 * @desc:查询部门及部门下的员工
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-06
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/queryDepartmentEmployee
+		@ResponseBody
+		@RequestMapping(value="/queryDepartmentEmployee",method = {RequestMethod.GET,RequestMethod.POST})
+		public JSONObject queryDepartmentEmployee(HttpServletRequest request){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   result.put(Constant.Result.RETDATA, KqParamSetService.queryDepartmentEmployee());
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		/**
+		 * @desc:查询具体员工的排班计划
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-07
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		@ResponseBody
+		@RequestMapping(value="/queryEmpAttShift",method = {RequestMethod.GET,RequestMethod.POST})
+		public JSONObject queryEmpAttShift(HttpServletRequest request){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   String str = ToolClass.getStrFromInputStream(request);
+		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
+		    	   JSONObject jsObj = JSONObject.parseObject(str);
+		    	   //KqParamSetService.queryEmpAttShift("217", "2017-01-02", "2017-01-08", "");
+		    	   if(jsObj.get("userId") == null || jsObj.get("startTime") == null || jsObj.get("endTime") == null)
+		    		   throw new MessageException("userId,startTime或endTime为空！");
+		    	   result = KqParamSetService.queryEmpAttShift(jsObj.getString("userId"), jsObj.getString("startTime"), jsObj.getString("endTime"), jsObj.getString("flag"));
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		/**
+		 * @desc:查询全部员工的排班计划
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-07
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/queryAllEmpAttShift?begDate=2017-02-01&endDate=2017-02-01
+		@ResponseBody
+		@RequestMapping(value="/queryAllEmpAttShift",method = {RequestMethod.GET,RequestMethod.POST})
+		public JSONObject queryAllEmpAttShift(HttpServletRequest request){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   String str = ToolClass.getStrFromInputStream(request);
+		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
+		    	   JSONObject jsObj = JSONObject.parseObject(str);
+		    	   if(jsObj.get("begDate") == null || jsObj.get("endDate") == null)throw new MessageException("begDate或endDate为空！");
+		    	   List<Map<String,Object>> dataList = KqParamSetService.queryAllEmpAttShift(jsObj.getString("begDate"),jsObj.getString("endDate"));
+		    	   result.put(Constant.Result.RETDATA, dataList);
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		/**
+		 * @desc:删除员工排班计划（逻辑删除）
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-08
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/updateEmpAttShift?id=301201
+		@ResponseBody
+		@RequestMapping(value="/updateEmpAttShift",method = {RequestMethod.POST})
+		public JSONObject updateEmpAttShift(@RequestBody Map<String,Object> requestMap) {
+			  JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   String id = MapUtil.getStringIgnoreCase(requestMap, "id", MapUtil.NOT_NULL);
+		    	   KqParamSetService.updateEmpAttShift(id);
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		}
+		
 		@ResponseBody
 		@RequestMapping(value="/test",method = {RequestMethod.GET,RequestMethod.POST})
 		public JSONObject test(String positionTypeName,String id,HttpServletRequest request){
@@ -986,8 +1121,9 @@ public class KqParamSetController {
 		       String retCode = Constant.Result.SUCCESS;
 		       String retMsg = Constant.Result.SUCCESS_MSG;
 		       try {
-		    	   List<Map<String,Object>> list = KqParamSetService.queryDepartmentEmployee();
-		    	   result.put(Constant.Result.RETDATA, list);
+//		    	   List<Map<String,Object>> list = KqParamSetService.queryDepartmentEmployee();
+//		    	   KqParamSetService.test();
+		    	   result.put(Constant.Result.RETDATA, KqParamSetService.queryDepartmentEmployee());
 		    	   if(false)throw new MessageException("参数接收失败！");
 			   }catch (MessageException e){
 			        retCode = Constant.Result.ERROR;

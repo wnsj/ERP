@@ -1,18 +1,27 @@
 package com.jiubo.erp.kqgl.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.erp.common.Constant;
 import com.jiubo.erp.common.MessageException;
-import com.jiubo.erp.common.Position;
+import com.jiubo.erp.common.TimeUtil;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
+import com.jiubo.erp.kqgl.bean.AttShiftBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
 import com.jiubo.erp.kqgl.bean.PositionDataBean;
@@ -23,7 +32,9 @@ import com.jiubo.erp.kqgl.vo.Vacation;
 import com.jiubo.erp.rygl.bean.DepartmentBean;
 import com.jiubo.erp.rygl.bean.EmployeeBasicBean;
 
+
 @Service
+@Transactional
 public class KqParamSetServiceImpl implements KqParamSetService{
 	
 	@Autowired
@@ -174,9 +185,169 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 	}
 
 	@Override
-	public List<Map<String,Object>> queryDepartmentEmployee() {
-		
-		List<Map<String,Object>> oneList = new ArrayList<Map<String,Object>>();
+	public List<DepartmentBean> queryDepartmentEmployee() {
+		//查询父级目录
+		List<DepartmentBean> departmentList = queryDepartmentByPId("0");
+		Iterator<DepartmentBean> iterator = departmentList.iterator();
+		for(;iterator.hasNext();) {
+			DepartmentBean departmentBean = iterator.next();
+			//查询子目录
+			departmentBean.setChildren(getChildren(departmentBean.getID(),true));
+			//查询部门下的员工
+			departmentBean.setEmployeeList(queryEmployeeBasic(true,departmentBean.getID(),"1"));
+		}
+		return departmentList;
+	}
+	
+	public List<DepartmentBean> queryDepartmentByPId(String pId){
+		return kqParamSetDao.queryDepartmentByPId(pId);
+	}
+	
+	public List<EmployeeBasicBean> queryEmployeeBasic(boolean flag,String departmentId,String state){
+		if(flag)return kqParamSetDao.queryEmployeeBasic(departmentId, state);
+		else return new ArrayList<EmployeeBasicBean>();
+	}
+	
+	//获取所有子目录
+	private List<DepartmentBean> getChildren(String pId,boolean flag) {
+		List<DepartmentBean> list = new ArrayList<DepartmentBean>();
+		List<DepartmentBean> departmentList = queryDepartmentByPId(pId);
+		Iterator<DepartmentBean> iterator = departmentList.iterator();
+		for(;iterator.hasNext();) {
+			DepartmentBean departmentBean = iterator.next();
+			//递归查询子目录
+			departmentBean.setChildren(getChildren(departmentBean.getID(),flag));
+			//查询部门下的员工
+			departmentBean.setEmployeeList(queryEmployeeBasic(flag,departmentBean.getID(),"1"));
+			list.add(departmentBean);
+		}
+		return list;
+	}
+	
+
+	@Override
+	public void test() {
+		List<DepartmentBean> list = new ArrayList<DepartmentBean>();
+		//父级目录
+		List<DepartmentBean> departmentList = queryDepartmentByPId("0");
+		for(DepartmentBean departmentBean : departmentList) {
+			departmentBean.setChildren(getChildren(departmentBean.getID(),true));
+			list.add(departmentBean);
+		}
+		System.out.println(JSON.toJSONString(list));
+	}
+
+	@Override
+	public JSONObject queryEmpAttShift(String userId, String startTime, String endTime,String flag) throws MessageException {
+		if(StringUtils.isBlank(userId) || StringUtils.isBlank(startTime) || StringUtils.isBlank(endTime))throw new MessageException("用户id为空或查询时间段为空！");
+		JSONObject jsonObject = new JSONObject();
+		try {
+			Map<String,Object> dataMap = new HashMap<String,Object>();
+			Date startDate = TimeUtil.parseAnyDate(startTime);
+			if("30".equals(flag)){
+				List<String> dataList = new ArrayList<String>();
+				Date endDate = TimeUtil.dateAdd(startDate, TimeUtil.UNIT_MONTH, 1);
+				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId,TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(startDate), TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
+				for(AttShiftBean attShiftBean : attShiftList)
+					dataList.add(attShiftBean.getName());
+				dataMap.put("monData", dataList);
+			}else {
+				//开始上班时间
+				List<Double> startList = new ArrayList<Double>();
+				//上班时长
+				List<Double> timeList = new ArrayList<Double>();
+				//下班时间
+				List<String> endList = new ArrayList<String>();
+				
+				Date endDate = TimeUtil.dateAdd(TimeUtil.parseAnyDate(endTime), TimeUtil.UNIT_DAY, 1);
+				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, startTime, endTime);
+				for(AttShiftBean attShiftBean : attShiftList) {
+					double sTime = 0.0;	//工作开始时间
+					String eTime = "0 - 0";
+					double t = 0;
+					Date staTime = TimeUtil.parseAnyDate(attShiftBean.getStartTime());
+					Date enTime = TimeUtil.parseAnyDate(attShiftBean.getEndTime());
+					if("2".equals(attShiftBean.getType())) {
+						//2：休息
+					}else {
+						//1：工作
+						sTime = TimeUtil.getHourHex(staTime);
+						//判断是否是跨日工作
+						if(enTime.getTime() == staTime.getTime() || enTime.getTime() < staTime.getTime()) {
+							//工作时长 = 结束时间 + 1天 - 开始时间
+							enTime = TimeUtil.dateAdd(enTime, TimeUtil.UNIT_DAY, 1);
+							//eTime = "0 - ".concat(TimeUtil.getHourStr(enTime));
+							double d = TimeUtil.getHourHex(enTime);
+							eTime = "0 - ".concat(String.valueOf(d));
+							t = TimeUtil.DateDiffHours(staTime,enTime) - d;
+						}else {
+							//不跨日工作
+							t = TimeUtil.DateDiffHours(staTime,enTime);
+						}
+					}
+					startList.add(sTime);
+					timeList.add(t);
+					endList.add(eTime);
+				}
+				dataMap.put("startTime", startList);
+				dataMap.put("timeList", timeList);
+				dataMap.put("endTime",endList);
+				dataMap.put("realData", attShiftList);
+			}
+			jsonObject.put(Constant.Result.RETDATA, dataMap);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryAllEmpAttShift(String begDate,String endDate) throws MessageException {
+		List<Map<String,Object>> list = null;
+		try {
+			list = kqParamSetDao.queryAllEmpAttShift(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.parseAnyDate(begDate)), TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(endDate), TimeUtil.UNIT_DAY, 1)));
+			for(Map<String, Object> map : list) {
+				if(map.get("SHIFTDATE") != null) 
+					map.put("SHIFTDATE", TimeUtil.getDateYYYY_MM_DD_HH_MM(TimeUtil.parseAnyDate(String.valueOf(map.get("SHIFTDATE")))));
+				if(map.get("STARTTIME") != null) 
+					map.put("STARTTIME", TimeUtil.getDateYYYY_MM_DD_HH_MM(TimeUtil.parseAnyDate(String.valueOf(map.get("STARTTIME")))));
+				if(map.get("ENDTIME") != null)
+					map.put("ENDTIME", TimeUtil.getDateYYYY_MM_DD_HH_MM(TimeUtil.parseAnyDate(String.valueOf(map.get("ENDTIME")))));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public void updateEmpAttShift(String id) throws MessageException {
+		//kqParamSetDao.deleteAttPeopleShift(id);
+		kqParamSetDao.updateAttShift(id,"1");
+	}
+}
+/*
+ * private static Map<String,List<DepartmentBean>> dptMap = new HashMap<String,List<DepartmentBean>>();
+	
+	private static Set<String> keySet = new HashSet<String>();
+	
+	public void queryDpt(String pid) {
+		List<DepartmentBean> departmentList = queryDepartmentByPId(pid);
+		for(DepartmentBean departmentBean : departmentList) {
+			List<DepartmentBean> dptList = dptMap.get("PID_"+departmentBean.getParentID());
+			if(dptList != null) {
+				dptList.add(departmentBean);
+			}else { 
+				dptList = new ArrayList<DepartmentBean>();
+				dptList.add(departmentBean);
+				dptMap.put("PID_"+departmentBean.getParentID(),dptList);
+			}	
+			queryDpt(departmentBean.getID());
+		}
+	}
+ */
+/*
+ List<Map<String,Object>> oneList = new ArrayList<Map<String,Object>>();
 		List<DepartmentBean> departmentList = queryDepartmentByPId("0");
 		for(DepartmentBean departmentBean : departmentList) {
 			//第一层
@@ -216,17 +387,21 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 			beanMap.put("sonDep", twoList);//子部门
 			oneList.add(beanMap);
 		}
-		return oneList;
-	}
-	
-	public List<DepartmentBean> queryDepartmentByPId(String pId){
-		return kqParamSetDao.queryDepartmentByPId(pId);
-	}
-	
-	public List<EmployeeBasicBean> queryEmployeeBasic(String departmentId,String state){
-		return kqParamSetDao.queryEmployeeBasic(departmentId, state);
-	}
-
-	
-	
-}
+ */
+/*
+				Date targetDate =  TimeUtil.dateAdd(startDate, TimeUtil.UNIT_DAY, 7);
+				//判断是否同月
+				if(TimeUtil.dateEqualsDate(startDate,targetDate,2)) {
+					//同月
+					//取当前月第一天
+					startDate = TimeUtil.getFirstDayOfMonth(startDate);
+					//下月
+					endDate = TimeUtil.dateAdd(startDate, TimeUtil.UNIT_MONTH, 1);
+				}else {
+					//不同月
+					//下月第一天
+					startDate = TimeUtil.getFirstDayOfMonth(targetDate);
+					endDate = TimeUtil.dateAdd(startDate, TimeUtil.UNIT_MONTH, 1);
+				}
+ */
+ 

@@ -26,6 +26,27 @@ public class TimeUtil {
     public final static String YYYY$M$DD = "yyyy/M/dd";
     public final static String YYYY_MM_D = "yyyy-MM-d";
     public final static String YYYY$MM$D = "yyyy/MM/d";
+    //星期一:Monday（Mon.）
+    public final static String MONDAY = "星期一";
+    public final static String WEEK_MON = "周一";
+    //星期二：Tuesday（Tues.）
+    public final static String TUESDAY = "星期二";
+    public final static String WEEK_TUES = "周二";
+    //星期三：Wednesday（Wed.）
+    public final static String WEDNESDAY = "星期三";
+    public final static String WEEK_WEDNES = "周三";
+    //星期四：Thursday（Thur./Thurs.）
+    public final static String THURSDAY = "星期四";
+    public final static String WEEK_THURS = "周四";
+    //星期五：Friday（Fri.）
+    public final static String FRIDAY = "星期五";
+    public final static String WEEK_FRI = "周五";
+    //星期六：Saturday（Sat.）
+    public final static String SATURDAY = "星期六";
+    public final static String WEEK_SAT = "周六";
+    //星期日：Sunday（Sun.）
+    public final static String SUNDAY = "星期日";
+    public final static String WEEK_SUN = "周日";
 
     private static SimpleDateFormat sdf_YYYY = new SimpleDateFormat(YYYY);
     private static SimpleDateFormat sdf_MM= new SimpleDateFormat(MM);
@@ -40,7 +61,10 @@ public class TimeUtil {
     private static SimpleDateFormat sdf_YYYY_MM_D = new SimpleDateFormat(YYYY_MM_D);
     private static SimpleDateFormat sdf_YYYY$MM$DD = new SimpleDateFormat(YYYY$MM$DD);
     private static SimpleDateFormat sdf_YYYY_MM_DD = new SimpleDateFormat(YYYY_MM_DD);
+    private static SimpleDateFormat sdf_EEEE = new SimpleDateFormat("EEEE");
+    
 
+    private static SimpleDateFormat sdf_YYYY_MM_DD_HH_MM = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static SimpleDateFormat sdf_YYYY_MM_DD_HH_MM_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static SimpleDateFormat sdf_YYYYMMDDHHMMSSSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
     private static SimpleDateFormat sdf_YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -64,6 +88,9 @@ public class TimeUtil {
     public final static int UNIT_HOUR = Calendar.HOUR;
     public final static int UNIT_MINUTE = Calendar.MINUTE;
     public final static int UNIT_SECOND = Calendar.SECOND;
+    //24进制小时
+    public final static int UNIT_HOUR_OF_DAY = Calendar.HOUR_OF_DAY;
+    
 
 
 
@@ -92,7 +119,57 @@ public class TimeUtil {
         return days;
 
     }
+    
+    /**
+     * @desc:计算相差多少小时
+     * @param:
+     * @return: int
+     * @Create at: 2019-05-06
+     * @author:  dx
+     * @version: 1.0
+     */
+    public synchronized static double DateDiffHours(Date begDate,Date endDate){
+        //得到两个日期相差的小时数
+        double days = 0;
+        //容错处理
+        if(begDate == null || endDate == null) return days;
+        
+        long nd = 1000 * 24 * 60 * 60;//每天毫秒数
 
+        long nh = 1000 * 60 * 60;//每小时毫秒数
+
+        long nm = 1000 * 60;//每分钟毫秒数
+
+        long diff = endDate.getTime() - begDate.getTime(); // 获得两个时间的毫秒时间差异
+
+        long day = diff / nd;   // 计算差多少天
+
+        double hour = diff % nd / nh; // 计算差多少小时
+
+        double min = diff % nd % nh / nm;  // 计算差多少分钟
+        
+        double d = day > 0 ? day * 24 : 0;
+        
+        double m = min > 0 ? (min / 60) : 0;
+        
+        return (double)Math.round((d + hour + m) * 10) / 10;
+    }
+
+    /**
+     * @desc:获取时间小时制（例8：30为8.5）
+     * @param:
+     * @return: double
+     * @Create at: 2019-05-07
+     * @author:  dx
+     * @version: 1.0
+     */
+    public static synchronized double getHourHex(Date date) {
+    	if(date == null)return 0;
+    	calendar.setTime(date);
+    	double h = calendar.get(UNIT_HOUR_OF_DAY);
+    	double m = calendar.get(UNIT_MINUTE);
+    	return (double)Math.round((h + (m > 0 ? m / 60 : 0)) * 10) / 10;
+    }
 
     /**
      * 返回日期增减
@@ -448,6 +525,18 @@ public class TimeUtil {
         return date==null?_NULLSTR:sdf_YYYY_MM_DD_HH_MM_SS.format(date);
 
     }
+    
+    /**
+     * @desc:获取年月日时分（例：2018-01-01 08:30:00 -> 2018-01-01 08:30）
+     * @param:
+     * @return: String
+     * @Create at: 2019-05-08
+     * @author:  dx
+     * @version: 1.0
+     */
+    public static synchronized String getDateYYYY_MM_DD_HH_MM(Date date) {
+        return date==null?_NULLSTR:sdf_YYYY_MM_DD_HH_MM.format(date);
+    }
 
     /*
     * yyyyMMdd
@@ -744,6 +833,32 @@ public class TimeUtil {
         if(StringUtils.isBlank(yearMonth) || yearMonth.length() != 6) throw new MessageException("传入年月参数异常！");
         return Integer.parseInt(getDayStr(dateAdd(dateAdd(parseAnyDate(yearMonth.concat("01")), UNIT_MONTH, 1), UNIT_DAY, -1)));
     }
+    
+    /**
+     * @desc:判断2个时间是否同年，同月或同时（注:判断月时不比较年，时与月类似）
+     * @param:date1:时间1
+     * @param:date2：时间2
+     * @param:flag（1判断是否同年，2判断是否同月，3判断是否同时）
+     * @return: boolean
+     * @Create at: 2019-05-07
+     * @author:  dx
+     * @version: 1.0
+     */
+    public synchronized static boolean dateEqualsDate(Date date1,Date date2,int flag){
+    	if(date1 == null || date2 == null)return false;
+    	calendar.setTime(date1);
+    	Calendar calendar2 = Calendar.getInstance();
+    	calendar2.setTime(date2);		
+    	//判断2个时间是否同年
+    	if(flag == 1)
+    		return calendar.get(UNIT_YEAR) == calendar2.get(UNIT_YEAR);
+    	//判断2个时间是否同月
+    	else if(flag == 2)
+    		return calendar.get(UNIT_MONTH) == calendar2.get(UNIT_MONTH);
+    	//判断2个时间是否同时
+    	else
+    		return calendar.get(UNIT_HOUR) == calendar2.get(UNIT_HOUR);
+    }
 
     /**
      * @Description:日期是当年的第几天
@@ -764,5 +879,37 @@ public class TimeUtil {
         return  days;
     }
 
-
+    /**
+     * @desc:日期是（星期几，周几）
+     * @param:date（时间）
+     * @param：type【返回类型：1或null返回星期几，其他返回周几】
+     * @return: String
+     * @Create at: 2019-05-06
+     * @author:  dx
+     * @version: 1.0
+     */
+    public synchronized static String getWeekOfDate(Date date,String type) {
+    	String[] weekDays = null;
+    	if(StringUtils.isBlank(type) || "1".equals(type)) {
+    		weekDays = new String[]{SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
+    	}else { 
+    		weekDays = new String[]{WEEK_SUN, WEEK_MON, WEEK_TUES, WEEK_WEDNES, WEEK_THURS, WEEK_FRI, WEEK_SAT};
+    	}
+    	calendar.setTime(date);
+		int w = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+		if (w < 0)w = 0;
+		return weekDays[w];
+    }
+    
+    /**
+     * @desc:日期是星期几
+     * @param:
+     * @return: String
+     * @Create at: 2019-05-06
+     * @author:  dx
+     * @version: 1.0
+     */
+    public synchronized static String getWeekOfDate(Date date) {
+    	return sdf_EEEE.format(date);
+    }
 }

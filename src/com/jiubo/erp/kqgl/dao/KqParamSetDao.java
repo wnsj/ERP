@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
+import com.jiubo.erp.kqgl.bean.AttShiftBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
 import com.jiubo.erp.kqgl.bean.PositionDataBean;
@@ -103,4 +104,16 @@ public interface KqParamSetDao {
 	
 	//查询所属部门员工
 	public List<EmployeeBasicBean> queryEmployeeBasic(@Param("departmentId")String departmentId,@Param("state")String state);
+	
+	//查询具体员工的排班计划
+	public List<AttShiftBean> queryAttShift(@Param("userId")String userId,@Param("startTime")String startTime,@Param("endTime")String endTime);
+	
+	//查询全部员工的排班计划
+	public List<Map<String,Object>> queryAllEmpAttShift(@Param("begDate")String begDate,@Param("endDate")String endDate);
+	
+	//删除排班计划关系
+	//public void deleteAttPeopleShift(String id);
+	
+	//删除员工的排班计划(逻辑删除)
+	public void updateAttShift(@Param("id")String id,@Param("isDelete")String isDelete);
 }

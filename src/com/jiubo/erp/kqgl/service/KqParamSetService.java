@@ -3,6 +3,7 @@ package com.jiubo.erp.kqgl.service;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
@@ -293,9 +294,39 @@ public interface KqParamSetService {
 	 * @author:  dx
 	 * @version: 1.0
 	 */
-	public List<Map<String,Object>> queryDepartmentEmployee();
+	public List<DepartmentBean> queryDepartmentEmployee()throws MessageException;
 	
+	/**
+	 * @desc:查询具体员工的排班计划
+	 * @param:
+	 * @return: JSONObject
+	 * @Create at: 2019-05-07
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public JSONObject queryEmpAttShift(String userId,String startTime,String endTime,String flag)throws MessageException;
 	
+	/**
+	 * @desc:查询全部员工的排班计划
+	 * @param:
+	 * @return: List<Map<String,Object>>
+	 * @Create at: 2019-05-07
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public List<Map<String,Object>> queryAllEmpAttShift(String begDate,String endDate)throws MessageException;
+	
+	/**
+	 * @desc:删除员工的排班计划
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-07
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void updateEmpAttShift(String id)throws MessageException;
+	
+	public void test();
 }
 //班次类别
 //public List<AttShift> queryAttShift();
