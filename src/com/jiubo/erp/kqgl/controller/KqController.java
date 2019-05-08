@@ -131,7 +131,7 @@ private KqParamSetService kpService;
 		    		pRecord.setYear(kqInfoResult.getShiftDate().substring(0, 4));
 			    	pRecord.setMonth(kqInfoResult.getShiftDate().substring(5, 7)); 
 			    	pRecord.setDay(kqInfoResult.getShiftDate().substring(8, 10));
-			    	pRecord.setUserId(kqInfoResult.getuId());
+			    	pRecord.setAccountId(kqInfoResult.getAccountId());
 //					System.out.println("打卡参数"+pRecord.getYear()+"-"+pRecord.getMonth()+"-"+pRecord.getDay());
 					
 					List<PunchRecord> prList = this.service.selectPunchRecordList(pRecord);
@@ -143,8 +143,8 @@ private KqParamSetService kpService;
 						kqInfoResult.setLastTimeState(completAfterKQInfo(pRecord.getMaxAttTime(), kqInfoResult.getStartTime(), kqInfoResult.getEndTime()));
 						
 					}else {
-						kqInfoResult.setFirstTimeState("上班未打卡");
-						kqInfoResult.setLastTimeState("下班未打卡");
+						kqInfoResult.setFirstTimeState("旷工");
+						kqInfoResult.setLastTimeState("旷工");
 					}
 		    	
 				}else {
@@ -249,7 +249,7 @@ private KqParamSetService kpService;
 		e.printStackTrace();
 	}
 	 if (ToolClass.compare_date(mTime, ToolClass.strDateTimeShiftStr(endTime, -absentEnd))<=0) {
-		return "下班打卡异常";
+		return "打卡异常";
 	}else if (ToolClass.compare_date(mTime, ToolClass.strDateTimeShiftStr(endTime, -absentEnd))>0 &&
 			ToolClass.compare_date(mTime, ToolClass.strDateTimeShiftStr(endTime, -lateEnd))<=0) {
 		 return "旷工";
@@ -389,15 +389,33 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults,List<D
  @ResponseBody
  @RequestMapping(value="/singleKQList")
  private List<KqInfoResult> singleKQList(HttpServletRequest request,HttpServletResponse response) {
-	
-	 try {
-//	     List<KqInfoResult> kqList = this.service.selectKqInfoList(request);
-	     return null;
-	} catch (Exception e) {
-		e.printStackTrace();
-		ResponseMessageUtils.responseMessage(response, "查询错误,请重试!");
-		return null;
-	}
+	 KqInfoResult kqParam = new KqInfoResult();
+		Map<String, String> mapList = ToolClass.mapShiftStr(request);
+		
+			
+		kqParam.setAccountName(mapList.get("accountName"));
+		kqParam.setStartDate(mapList.get("beginData"));
+		kqParam.setEndDate(mapList.get("endData"));
+		
+		if (kqParam.getStartDate().equals("")) {
+			kqParam.setStartDate(ToolClass.inquirNowDate());
+		}
+		if (kqParam.getEndDate().equals("")) {
+			kqParam.setEndDate(ToolClass.inquirNowDate());
+		}
+		
+		List<KqInfoResult> kqInfoRes = this.service.searchKqInfoList(kqParam);
+		 System.out.println("---班型测试kqInfoRes----"+kqInfoRes.size()+kqParam.getEndDate()+kqParam.getStartDate());
+		 
+		 //查询班次数据为空时执行，返回基本信息
+		 if (kqInfoRes.size()<1) {
+			 kqInfoRes=this.service.selectKqInfoList(kqParam);
+			 System.out.println("kqInfoRes:"+kqInfoRes.size());
+			 return kqInfoRes;
+		}else {
+			kqInfoRes = kquClassTime(kqInfoRes);
+			return kqInfoRes;
+		}
 }
 
 
@@ -487,7 +505,7 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults,List<D
   				}else {
   					String upStatus=ryKQ.getFirstTimeState();
   					String downStatus=ryKQ.getLastTimeState();
-  					
+  					System.out.println("upStatus:"+upStatus+"downStatus:"+downStatus);
   					if (upStatus.equals("迟到")) {
   						ry.setRyLaterTimes(String.valueOf(Integer.valueOf(ry.getRyLaterTimes())+1));
   					}
@@ -504,10 +522,10 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults,List<D
   						ry.setRyDownPA(String.valueOf(Integer.valueOf(ry.getRyDownPA())+1));
   					}
   					if (upStatus.equals("正常")) {
-  						ry.setRyOnPA(String.valueOf(Integer.valueOf(ry.getRyOnPA())+1));
+  						ry.setRyOnNomalPA(String.valueOf(Integer.valueOf(ry.getRyOnNomalPA())+1));
   					}
   					if (downStatus.equals("正常")) {
-  						ry.setRyDownPA(String.valueOf(Integer.valueOf(ry.getRyDownPA())+1));
+  						ry.setRyDownNomalPA(String.valueOf(Integer.valueOf(ry.getRyDownNomalPA())+1));
   					}
   				}
   				

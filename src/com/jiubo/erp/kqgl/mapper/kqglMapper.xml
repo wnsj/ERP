@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   a.ID AS uId,
 	   a.Name AS name,
 	   a.JobNum AS jobNum,
+	   c.Account_Name AS accountName,
 	   b.Name AS departname,
 	   b.ID AS departId,
 	   d.Position_Name AS positionName
@@ -33,6 +34,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      		<if test="jobNum!=null and jobNum!=''">
        		    AND a.JobNum=#{jobNum}
      		</if>
+     		<if test="accountName!=null and accountName!=''">
+       		    AND c.Account_Name=#{accountName}
+     		</if>
      		AND a.JobNum != '0'
    	</trim>
 	  	 
@@ -44,9 +48,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   DISTINCT 
 	   a.ID AS uId,
 	   a.Name AS name,
+	   c.Account_Name AS accountName,
 	   a.JobNum AS jobNum,
 	   b.Name AS departname,
 	   b.ID AS departId,
+	   a.Account AS accountId,
 	   d.Position_Name AS positionName,
 	   f.Name AS classTimeName,
 	   f.Type AS classTimeType,
@@ -59,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 INNER JOIN T_Department b ON a.Department_ID=b.ID 
 		 INNER JOIN Account_Data c  ON a.Account=c.Account_ID 
 		 INNER JOIN Position_Data d ON c.Position_ID=d.Position_ID
-		 INNER JOIN T_Att_PeopleShift e ON e.UserID = a.ID
+		 INNER JOIN T_Att_PeopleShift e ON e.UserID = a.Account
 		 INNER JOIN T_Att_Shift f ON e.ShiftID=f.ID
 	<trim prefix="WHERE" prefixOverrides="AND | OR">
      		<if test="name!=null and name!=''">
@@ -73,6 +79,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      		</if>
      		<if test="jobNum!=null and jobNum!=''">
        		    AND a.JobNum=#{jobNum}
+     		</if>
+     		<if test="accountName!=null and accountName!=''">
+       		    AND c.Account_Name=#{accountName}
      		</if>
      		<if test="startDate!=null and startDate!=''">
     		    AND f.ShiftDate&gt;=#{startDate} 
@@ -88,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="selectClassTimeList" parameterType="com.jiubo.erp.kqgl.vo.ClassTime" resultType="com.jiubo.erp.kqgl.vo.ClassTime">
 	SELECT 
 	   DISTINCT 
-	   	a.UserID AS userId,
+	   	a.UserID AS accountId,
 	   	b.ShiftDate AS ctshiftDate,
 	   	b.StartTime AS ctStartDate,
 	   	b.EndTime As ctEndDate
@@ -100,7 +109,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		    AND b.ShiftDate=#{ctEndDate} OR b.ShiftDate BETWEEN #{ctStartDate} AND #{ctEndDate}
 		</if>
      		<if test="userId!=null and userId!=''">
-       		    AND a.UserID=#{userId}
+       		    AND a.UserID=#{accountId}
      		</if>
    	</trim>
 </select>
@@ -123,8 +132,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      		<if test="day!=null and day!=''">
        		    AND b.Day=#{day}
      		</if>
-     		<if test="userId!=null and userId!=''">
-       		    AND a.Userid=#{userId}
+     		<if test="accountId!=null and accountId!=''">
+       		    AND a.Userid=#{accountId}
      		</if>
    	</trim>
 		 

@@ -4,7 +4,7 @@ package com.jiubo.erp.kqgl.vo;
 public class PunchRecord {
 	
 
-	private String userId;
+	private String accountId;//使用的账户ID
 	private String maxAttTime;
 	private String minAttTime;
 	private String year;
@@ -15,11 +15,19 @@ public class PunchRecord {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String toString() {
-		return "PunchRecord [userId=" + userId + ", maxAttTime=" + maxAttTime + ", minAttTime=" + minAttTime + ", year="
-				+ year + ", month=" + month + ", day=" + day + "]";
+	
+
+	public String getAccountId() {
+		return accountId;
 	}
+
+
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
+
 
 	public String getMaxAttTime() {
 		return maxAttTime;
@@ -69,12 +77,4 @@ public class PunchRecord {
 		this.day = day;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	
 }
