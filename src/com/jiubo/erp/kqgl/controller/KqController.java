@@ -575,26 +575,26 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults,List<D
 //    	}
 //    }
 //     
-//     
-//     /**
-//      * 部门考勤考勤的全部信息
-//      * @param request
-//      * @param response
-//      * @return
-//      */
-//      @ResponseBody
-//      @RequestMapping(value="/departKQList")
-//      private List<KqInfoResult> departKQList(HttpServletRequest request,HttpServletResponse response) {
-//     	
-//     	 try {
+     
+     /**
+      * 部门考勤考勤的全部信息
+      * @param request
+      * @param response
+      * @return
+      */
+      @ResponseBody
+      @RequestMapping(value="/departKQList")
+      private List<KqInfoResult> departKQList1(HttpServletRequest request,HttpServletResponse response) {
+     	
+     	 try {
 //     	     List<KqInfoResult> kqList = this.service.selectKqInfoList(request);
-//     	     return kqList;
-//     	} catch (Exception e) {
-//     		e.printStackTrace();
-//     		ResponseMessageUtils.responseMessage(response, "查询错误,请重试!");
-//     		return null;
-//     	}
-//     }
+     	     return null;
+     	} catch (Exception e) {
+     		e.printStackTrace();
+     		ResponseMessageUtils.responseMessage(response, "查询错误,请重试!");
+     		return null;
+     	}
+     }
 //      
 //      
 //      /**
