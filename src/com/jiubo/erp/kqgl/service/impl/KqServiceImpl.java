@@ -49,7 +49,7 @@ public class KqServiceImpl implements KqService {
 	@Override
 	public List<DepartKQ> selectDepartKqInfoList() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.dao.selectDepartKqInfoList();
 	}
 
 	@Override
@@ -57,6 +57,9 @@ public class KqServiceImpl implements KqService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	
 	
 	
 	
@@ -162,6 +165,8 @@ public class KqServiceImpl implements KqService {
 		// TODO Auto-generated method stub
 		return dao.addRuleTypeInfo(bean);
 	}
+
+	
 
 	
 
