@@ -260,7 +260,7 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 				List<String> endList = new ArrayList<String>();
 				
 				Date endDate = TimeUtil.dateAdd(TimeUtil.parseAnyDate(endTime), TimeUtil.UNIT_DAY, 1);
-				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, startTime, endTime);
+				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, startTime, TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
 				for(AttShiftBean attShiftBean : attShiftList) {
 					double sTime = 0.0;	//工作开始时间
 					String eTime = "0 - 0";
