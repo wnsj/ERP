@@ -140,7 +140,8 @@ public class ZpglController {
 	 * @author:  dx
 	 * @version: 1.0
 	 */
-	//
+	//http://127.0.0.1:8080/Erp/zpglController/addRecruitData
+	//参数：{name:'小强',/*姓名（必填）*/sex:'男',birth:'2012-10-01'/*生日*/,idNum:'42187752136255245'/*身份证*/,phone:'110'/*手机*/,mail:'123456@qq.com'/*邮箱*/,qq:'123456'/*qq*/,address:'地球'/*现在地址*/,homeAddress:'地球村'/*家庭地址*/,homeTown:'地球省'/*籍贯*/,accountProp:'农村'/*户口性质*/,ploitical:'团员'/*政治面貌*/,marital:'未婚'/*婚姻*/,nationality:'汉族'/*民族*/,height:'170'/*身高*/,weight:'100'/*体重*/,bloodType:'A'/*血型*/,education:'大专'/*学历*/,school:'地球学校'/*毕业院校*/,graduation:'2016-06-01'/*毕业时间*/,profession:'软件技术'/*专业*/,atSchool:'0'/*是否在校*/,workCompany:'地球公司'/*工作单位*/,workexp:'2'/*相关经验*/,certificate:'OAT'/*技能证书*/,channel:'3'/*应聘渠道（必填）*/,position:'3'/*职位（必填）*/,department:'2'/*部门（必填）*/,wages:'100000'/*期望薪资*/,interviewer:'面试官'/*面试官*/,recruitDate:'2016-01-01'/*面试时间（必填）*/,invitationDate:'2016-01-02'/*邀约时间（必填）*/,score:'60'/*成绩*/,isQualified:'待定'/*是否合格*/,isPay:'0'/*报销路费*/,remark:'备注'/*备注*/,updateAccount:'2020'/*修改人账户id*/}
 	@ResponseBody
 	@RequestMapping(value="/addRecruitData",method = {RequestMethod.POST})
 	public JSONObject addRecruitData(HttpServletRequest request,HttpServletResponse response){
@@ -174,6 +175,8 @@ public class ZpglController {
 	 * @author:  dx
 	 * @version: 1.0
 	 */
+	//http://127.0.0.1:8080/Erp/zpglController/updateRecruitData
+	//参数：{id:5/*（必填）*/,name:'小强9',/*姓名（必填）*/sex:'女',birth:'2012-10-09'/*生日*/,idNum:'42187752136255249'/*身份证*/,phone:'1109'/*手机*/,mail:'1234569@qq.com'/*邮箱*/,qq:'1234569'/*qq*/,address:'地球9'/*现在地址*/,homeAddress:'地球村9'/*家庭地址*/,homeTown:'地球省9'/*籍贯*/,accountProp:'农村9'/*户口性质*/,ploitical:'团员9'/*政治面貌*/,marital:'未婚9'/*婚姻*/,nationality:'汉族9'/*民族*/,height:'1709'/*身高*/,weight:'1009'/*体重*/,bloodType:'A9'/*血型*/,education:'大专9'/*学历*/,school:'地球学校9'/*毕业院校*/,graduation:'2016-06-09'/*毕业时间*/,profession:'软件技术9'/*专业*/,atSchool:'1'/*是否在校*/,workCompany:'地球公司9'/*工作单位*/,workexp:'29'/*相关经验*/,certificate:'OAT9'/*技能证书*/,channel:'9'/*应聘渠道（必填）*/,position:'9'/*职位（必填）*/,department:'9'/*部门（必填）*/,wages:'100009'/*期望薪资*/,interviewer:'面试官9'/*面试官*/,recruitDate:'2016-01-09'/*面试时间（必填）*/,invitationDate:'2016-01-09'/*邀约时间（必填）*/,score:'69'/*成绩*/,isQualified:'合格'/*是否合格*/,isPay:'1'/*报销路费*/,remark:'备注9'/*备注*/}
 	@ResponseBody
 	@RequestMapping(value="/updateRecruitData",method = {RequestMethod.POST})
 	public JSONObject updateRecruitData(HttpServletRequest request,HttpServletResponse response){
@@ -215,7 +218,7 @@ public class ZpglController {
 	       String retMsg = Constant.Result.SUCCESS_MSG;
 		   try {
 			   String id = MapUtil.getStringIgnoreCase(requestMap, "id", MapUtil.NOT_NULL);
-		  	   zpglService.deleteRecruitChannel(id);
+		  	   zpglService.updateRecruitData(id);
 		   }catch (MessageException e){
 		        retCode = Constant.Result.ERROR;
 		        retMsg = e.getMessage();
