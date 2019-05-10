@@ -120,8 +120,8 @@ public class EmpServiceImpl implements EmpService {
 	/**
 	 * 初始化离职原因列表
 	 */
-	public List<LeaveResign> initLeaveList(){
-		List<LeaveResign> lrList = this.dao.selectLeaveList();
+	public List<LeaveResign> initLeaveList(LeaveResign lr){
+		List<LeaveResign> lrList = this.dao.selectLeaveList(lr);
 		return lrList;
 	}
 	
@@ -237,5 +237,28 @@ public class EmpServiceImpl implements EmpService {
 	public List<PositionShift> selectShiftInfo(PositionShift pShift) {
 		List<PositionShift> psList = this.dao.selectShiftInfo(pShift); 
 		return psList;
+	}
+
+	
+	/**
+	 * 
+	 */
+	public Integer updateLeaveReason(LeaveResign lResign) {
+		// TODO Auto-generated method stub
+		return this.dao.updateLeaveReason(lResign);
+	}
+
+
+	@Override
+	public Integer deleteLeaveReason(LeaveResign lResign) {
+		// TODO Auto-generated method stub
+		return this.dao.deleteLeaveReason(lResign);
+	}
+
+
+	@Override
+	public Integer addLeaveReason(LeaveResign lResign) {
+		// TODO Auto-generated method stub
+		return this.dao.addLeaveReason(lResign);
 	}
 }

@@ -15,26 +15,35 @@ public class QueryResult {
 	private String ResignDate;//离职日期
 	private String State;//聘用状态，离职还是在职
 	private String projectId;//项目id
+	private String projectName;//项目名字
 	private String departId;//部门id
 	private String accountId;//账户ID
+	private String resignType;//离职类型
+	private String resignReasonId;//离职原因id
+	private String resignName;//离职原因
 	
 	public QueryResult() {
 		super();
 	}
-	public String getAccountId() {
-		return accountId;
+	
+	
+
+	public String getProjectName() {
+		return projectName;
 	}
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
+
+
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
-	public String getDepartId() {
-		return departId;
-	}
-	public void setDepartId(String departId) {
-		this.departId = departId;
-	}
+
+
+
 	public QueryResult(String id, String jobNum, String name, String sex, String departName, String positionName,
-			String eRPAaccount, String birth, String entryDate, String positiveDate, String resignDate, String state) {
+			String eRPAaccount, String birth, String entryDate, String positiveDate, String resignDate, String state,
+			String projectId, String departId, String accountId, String resignType, String resignReasonId,
+			String resignName) {
 		super();
 		this.id = id;
 		JobNum = jobNum;
@@ -48,6 +57,47 @@ public class QueryResult {
 		PositiveDate = positiveDate;
 		ResignDate = resignDate;
 		State = state;
+		this.projectId = projectId;
+		this.departId = departId;
+		this.accountId = accountId;
+		this.resignType = resignType;
+		this.resignReasonId = resignReasonId;
+		this.resignName = resignName;
+	}
+
+
+
+	public String getResignReasonId() {
+		return resignReasonId;
+	}
+
+	public void setResignReasonId(String resignReasonId) {
+		this.resignReasonId = resignReasonId;
+	}
+
+	public String getResignType() {
+		return resignType;
+	}
+	public void setResignType(String resignType) {
+		this.resignType = resignType;
+	}
+	public String getResignName() {
+		return resignName;
+	}
+	public void setResignName(String resignName) {
+		this.resignName = resignName;
+	}
+	public String getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+	public String getDepartId() {
+		return departId;
+	}
+	public void setDepartId(String departId) {
+		this.departId = departId;
 	}
 	
 	public String getProjectId() {

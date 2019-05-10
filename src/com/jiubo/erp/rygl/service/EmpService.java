@@ -39,7 +39,7 @@ public interface EmpService {
 	public List<Nation>	initNationList();
 	
 	//初始化离职原因列表
-	public List<LeaveResign> initLeaveList();
+	public List<LeaveResign> initLeaveList(LeaveResign lr);
 	
 	//根据部门名称查询部门
 	public List<DepartmentBean> selectUserDepId(DepartmentBean depName);
@@ -73,9 +73,18 @@ public interface EmpService {
 	//更新用户的详细信息
 	Integer updataDetialInfo(UserInfo userInfo);
 	
-	
 	//插入家庭信息
 	public boolean insertUserFmInfo(UserFamily userFmInfo);
+	
 	//查询调动信息
 	public List<PositionShift> selectShiftInfo(PositionShift pShift);
+	
+	//更新离职原因
+	Integer updateLeaveReason(LeaveResign lResign);
+	
+	//删除离职原因
+	Integer deleteLeaveReason(LeaveResign lResign);
+	
+	//添加离职原因
+	Integer addLeaveReason(LeaveResign lResign);
 }

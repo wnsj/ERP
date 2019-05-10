@@ -12,7 +12,14 @@ public class QueryParam {
 	private String startDate; // 入职日期
 	private String endDate; // 入职日期
 	private String birth; // 生日月份
-	
+	private String resignType;//离职类型
+	private String resignReasonId;//离职原因id
+	private String enterStartDate;//入职开始时间
+	private String enterEndDate;//入职结束时间
+	private String leaveStartDate;//离职开始时间
+	private String leaveEndDate;//离职结束时间
+	private String zzStartDate;//转正开始时间
+	private String zzEndDate;//转正结束时间
 	
 
 	//搜索内容  工号、姓名、职位、项目组
@@ -29,9 +36,82 @@ public class QueryParam {
 	private int currentPage=1;
 
 	private int records=30;
+	
+	
+	
+	/**
+	 * 构造方法
+	 */
+	public QueryParam() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getEnterStartDate() {
+		return enterStartDate;
+	}
+
+	public void setEnterStartDate(String enterStartDate) {
+		this.enterStartDate = enterStartDate;
+	}
+
+	public String getEnterEndDate() {
+		return enterEndDate;
+	}
+
+	public void setEnterEndDate(String enterEndDate) {
+		this.enterEndDate = enterEndDate;
+	}
+
+	public String getLeaveStartDate() {
+		return leaveStartDate;
+	}
+
+	public void setLeaveStartDate(String leaveStartDate) {
+		this.leaveStartDate = leaveStartDate;
+	}
+
+	public String getLeaveEndDate() {
+		return leaveEndDate;
+	}
+
+	public void setLeaveEndDate(String leaveEndDate) {
+		this.leaveEndDate = leaveEndDate;
+	}
+
+	public String getZzStartDate() {
+		return zzStartDate;
+	}
+
+	public void setZzStartDate(String zzStartDate) {
+		this.zzStartDate = zzStartDate;
+	}
+
+	public String getZzEndDate() {
+		return zzEndDate;
+	}
+
+	public void setZzEndDate(String zzEndDate) {
+		this.zzEndDate = zzEndDate;
+	}
 
 	public int getCurrentPage() {
 		return currentPage;
+	}
+
+	public String getResignType() {
+		return resignType;
+	}
+
+	public void setResignType(String resignType) {
+		this.resignType = resignType;
+	}
+
+	public String getResignReasonId() {
+		return resignReasonId;
+	}
+
+	public void setResignReasonId(String resignReasonId) {
+		this.resignReasonId = resignReasonId;
 	}
 
 	public void setCurrentPage(int currentPage) {

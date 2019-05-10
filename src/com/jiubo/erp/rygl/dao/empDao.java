@@ -23,7 +23,7 @@ public interface empDao {
 	
 	List<QueryResult> searchEmplist(QueryParam param);
 	
-	List<LeaveResign> selectLeaveList();
+	List<LeaveResign> selectLeaveList(LeaveResign lr);
 	
 	List<QueryFamilyResult> searchFamilyList(QueryParam param);
 
@@ -53,5 +53,12 @@ public interface empDao {
 	
 	List<PositionShift> selectShiftInfo(PositionShift pShift);
 
+	
+	Integer updateLeaveReason(LeaveResign lResign);
+	
+	Integer deleteLeaveReason(LeaveResign lResign);
+	
+	Integer addLeaveReason(LeaveResign lResign);
+	
 	
 }
