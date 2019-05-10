@@ -603,7 +603,7 @@ public class KqParamSetController {
 		 * @author:  dx
 		 * @version: 1.0
 		 */
-		//
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/queryDepartment
 		@ResponseBody
 		@RequestMapping(value="/queryDepartment",method = {RequestMethod.POST})
 		public JSONObject queryDepartment(HttpServletRequest request,HttpServletResponse response) {
@@ -1113,29 +1113,4 @@ public class KqParamSetController {
 			        return result;
 			  } 
 		}
-		
-		@ResponseBody
-		@RequestMapping(value="/test",method = {RequestMethod.GET,RequestMethod.POST})
-		public JSONObject test(String positionTypeName,String id,HttpServletRequest request){
-			   JSONObject result = new JSONObject();
-		       String retCode = Constant.Result.SUCCESS;
-		       String retMsg = Constant.Result.SUCCESS_MSG;
-		       try {
-//		    	   List<Map<String,Object>> list = KqParamSetService.queryDepartmentEmployee();
-//		    	   KqParamSetService.test();
-		    	   result.put(Constant.Result.RETDATA, KqParamSetService.queryDepartmentEmployee());
-		    	   if(false)throw new MessageException("参数接收失败！");
-			   }catch (MessageException e){
-			        retCode = Constant.Result.ERROR;
-			        retMsg = e.getMessage();
-			   }catch (Exception e){
-			        retCode = Constant.Result.ERROR;
-			        retMsg = Constant.Result.ERROR_MSG;
-			        log.error(Constant.Result.RETMSG,e);
-			  }finally {
-			        result.put(Constant.Result.RETCODE, retCode);
-			        result.put(Constant.Result.RETMSG, retMsg);
-			        return result;
-			  } 
-		};
 }
