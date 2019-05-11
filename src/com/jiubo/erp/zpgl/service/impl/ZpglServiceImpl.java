@@ -12,6 +12,8 @@ import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.common.TimeUtil;
 import com.jiubo.erp.zpgl.bean.RecruitChannelBean;
 import com.jiubo.erp.zpgl.bean.RecruitDataBean;
+import com.jiubo.erp.zpgl.bean.ZpPlanBean;
+import com.jiubo.erp.zpgl.bean.ZpPublishBean;
 import com.jiubo.erp.zpgl.dao.ZpglDao;
 import com.jiubo.erp.zpgl.service.ZpglService;
 import com.quicksand.push.ToolClass;
@@ -88,6 +90,71 @@ public class ZpglServiceImpl implements ZpglService {
 		recruitDataBean.setUpdateDate(ToolClass.inquirNowDateTime());
 		zpglDao.addRecruitData(recruitDataBean);
 	}
-	
-	
+
+	@Override
+	public List<ZpPlanBean> queryZpPlan(ZpPlanBean zpPlanBean) throws MessageException {
+		if(StringUtils.isBlank(zpPlanBean.getBegDate()) || StringUtils.isBlank(zpPlanBean.getEndDate()))throw new MessageException("查询时间（begDate或endDate）为空！");
+		try {
+			zpPlanBean.setBegDate(TimeUtil.getYearMonthStr(TimeUtil.parseAnyDate(zpPlanBean.getBegDate())));
+			zpPlanBean.setEndDate(TimeUtil.getYearMonthStr(TimeUtil.dateAdd(TimeUtil.parseAnyDate(zpPlanBean.getEndDate()), TimeUtil.UNIT_MONTH, 1)));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return zpglDao.queryZpPlan(zpPlanBean);
+	}
+
+	@Override
+	public void addZpPlan(ZpPlanBean zpPlanBean)throws MessageException {
+		if(StringUtils.isBlank(zpPlanBean.getPosition()))throw new MessageException("职位不能为空！");
+		if(StringUtils.isBlank(zpPlanBean.getPlanDate()))throw new MessageException("计划月份不能为空！");
+		zpglDao.addZpPlan(zpPlanBean);
+	}
+
+	@Override
+	public void deleteZpPlan(String id)throws MessageException {
+		zpglDao.deleteZpPlan(id);
+	}
+
+	@Override
+	public void updateZpPlan(ZpPlanBean zpPlanBean)throws MessageException  {
+		if(StringUtils.isBlank(zpPlanBean.getPlanId()))throw new MessageException("招聘信息id为空！");
+		if(StringUtils.isBlank(zpPlanBean.getPosition()))throw new MessageException("职位不能为空！");
+		if(StringUtils.isBlank(zpPlanBean.getPlanDate()))throw new MessageException("计划月份不能为空！");
+		zpglDao.updateZpPlan(zpPlanBean);
+	}
+
+	@Override
+	public List<ZpPublishBean> queryZpPublish(ZpPublishBean zpPublishBean) throws MessageException {
+		if(StringUtils.isBlank(zpPublishBean.getBegDate()) || StringUtils.isBlank(zpPublishBean.getEndDate()))throw new MessageException("查询时间（begDate，endDate）为空！");
+		try {
+			zpPublishBean.setEndDate(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(zpPublishBean.getEndDate()), TimeUtil.UNIT_DAY, 1)));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return zpglDao.queryZpPublish(zpPublishBean);
+	}
+
+	@Override
+	public void addZpPublish(ZpPublishBean zpPublishBean) throws MessageException {
+		if(StringUtils.isBlank(zpPublishBean.getChannel()))throw new MessageException("招聘渠道不能为空！");
+		if(StringUtils.isBlank(zpPublishBean.getPosition()))throw new MessageException("招聘职位不能为空！");
+		if(StringUtils.isBlank(zpPublishBean.getPublishDate()))throw new MessageException("发布日期不能为空！");
+		if(StringUtils.isBlank(zpPublishBean.getPublishNum()) || Integer.parseInt(zpPublishBean.getPublishNum()) <= 0)throw new MessageException("发布人数为空或小于等于0！");
+		zpglDao.addZpPublish(zpPublishBean);
+	}
+
+	@Override
+	public void deleteZpPublish(String id) throws MessageException {
+		zpglDao.deleteZpPublish(id);
+	}
+
+	@Override
+	public void updateZpPublish(ZpPublishBean zpPublishBean) throws MessageException {
+		if(StringUtils.isBlank(zpPublishBean.getPublishId()))throw new MessageException("招聘信息id不能为空！");
+		if(StringUtils.isBlank(zpPublishBean.getChannel()))throw new MessageException("招聘渠道不能为空！");
+		if(StringUtils.isBlank(zpPublishBean.getPosition()))throw new MessageException("招聘职位不能为空！");
+		if(StringUtils.isBlank(zpPublishBean.getPublishDate()))throw new MessageException("发布日期不能为空！");
+		if(StringUtils.isBlank(zpPublishBean.getPublishNum()) || Integer.parseInt(zpPublishBean.getPublishNum()) <= 0)throw new MessageException("发布人数为空或小于等于0！");
+		zpglDao.updateZpPublish(zpPublishBean);
+	}
 }

@@ -147,7 +147,93 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE ID = #{id}
 	</update>
 	
+	<!-- 查询招聘计划 -->
+	<select id="queryZpPlan" parameterType="com.jiubo.erp.zpgl.bean.ZpPlanBean" resultType="com.jiubo.erp.zpgl.bean.ZpPlanBean">
+		SELECT A.PLAN_ID, A.DEPARTMENT,B.NAME DEPARTMENTNAME, A.POSITION,C.POSITION_NAME POSITIONNAME, A.LACKNUM, A.PLANNUM, A.PHONENUM, A.PLANDATE
+		FROM ZP_PLAN A 
+		LEFT JOIN  T_DEPARTMENT B ON A.DEPARTMENT = B.ID 
+		LEFT JOIN  POSITION_DATA C ON A.POSITION = C.POSITION_ID
+		<where>
+			<if test="begDate != null and begDate != ''">
+				AND YEAR(PLANDATE) * 100 + MONTH(PLANDATE) >= #{begDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				<![CDATA[ AND YEAR(PLANDATE) * 100 + MONTH(PLANDATE) < #{endDate}]]>
+			</if>
+			<if test=" department != null and department != ''">
+				AND A.DEPARTMENT = #{department}
+			</if>
+			<if test="position != null and position != ''">
+				AND C.POSITION_ID = #{position}
+			</if>
+		</where>
+	</select>
 	
+	<!-- 添加招聘计划 -->
+	<insert id="addZpPlan" parameterType="com.jiubo.erp.zpgl.bean.ZpPlanBean">
+		INSERT INTO ZP_PLAN (DEPARTMENT, POSITION, LACKNUM, PLANNUM, PHONENUM, PLANDATE)
+		VALUES(#{department},#{position},#{lackNum},#{planNum},#{phoneNum},#{planDate})
+	</insert>
+	
+	<!-- 删除招聘计划 -->
+	<delete id="deleteZpPlan">
+		DELETE FROM ZP_PLAN WHERE PLAN_ID = #{id}
+	</delete>
+	
+	<!-- 修改招聘计划 -->
+	<update id="updateZpPlan" parameterType="com.jiubo.erp.zpgl.bean.ZpPlanBean">
+		UPDATE ZP_PLAN
+		SET 
+			DEPARTMENT = #{department}
+			, POSITION = #{position}
+			, LACKNUM = #{lackNum}
+			, PLANNUM = #{planNum}
+			, PHONENUM = #{phoneNum}
+			, PLANDATE = #{planDate}
+		WHERE PLAN_ID = #{planId}
+	</update>
+	
+	<!-- 查询招聘发布信息 -->
+	<select id="queryZpPublish" parameterType="com.jiubo.erp.zpgl.bean.ZpPublishBean" resultType="com.jiubo.erp.zpgl.bean.ZpPublishBean">
+		SELECT A.PUBLISH_ID,A.CHANNEL,B.RECRUITCHANNEL_NAME CHANNELNAME,A.POSITION,
+			C.POSITION_NAME,A.PUBLISHNUM, A.PHONENUM, A.PUBLISHDATE
+		FROM ZP_PUBLISH A,ZP_RECRUITCHANNEL B,POSITION_DATA C
+		WHERE A.CHANNEL = B.RECRUITCHANNEL_ID AND A.POSITION = C.POSITION_ID 
+		<if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
+			AND A.PUBLISHDATE >= #{begDate} 
+			<![CDATA[ AND A.PUBLISHDATE < #{endDate} ]]>
+		</if>
+		<if test="channel != null and channel != ''">
+			AND A.CHANNEL = #{channel}
+		</if>
+		<if test="position != null and position != ''">
+			AND A.POSITION = #{position}
+		</if>
+	</select>
+	
+	<!-- 添加招聘发布信息 -->
+	<insert id="addZpPublish" parameterType="com.jiubo.erp.zpgl.bean.ZpPublishBean">
+		INSERT INTO ZP_PUBLISH (CHANNEL, POSITION, PUBLISHNUM, PHONENUM, PUBLISHDATE)
+		VALUES(#{channel},#{position},#{publishNum},#{phoneNum},#{publishDate})
+	</insert>
+	
+	<!-- 删除招聘发布信息 -->
+	<delete id="deleteZpPublish">
+		DELETE FROM ZP_PUBLISH
+		WHERE PUBLISH_ID = #{id}
+	</delete>
+	
+	<!-- 修改招聘发布信息 -->
+	<update id="updateZpPublish" parameterType="com.jiubo.erp.zpgl.bean.ZpPublishBean">
+		UPDATE ZP_PUBLISH
+		SET 
+			CHANNEL = #{channel}
+			, POSITION = #{position}
+			, PUBLISHNUM = #{publishNum}
+			, PHONENUM = #{phoneNum}
+			, PUBLISHDATE = #{publishDate}
+		WHERE PUBLISH_ID = #{publishId}
+	</update>
 </mapper>
 
 <!-- <select id="queryRecruitDataTest" resultType="com.jiubo.erp.zpgl.bean.RecruitDataBean">
