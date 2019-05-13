@@ -25,12 +25,22 @@ public class KqInfoResult {
 	private String firstTime;//上班第一次打开时间
 	private String lastTime;//下班最后一次打开时间
 	private String status;//状态，暂时没有使用这个参数
+	private String YYYYMMDD;//给查询对象添加时间参数
 	
 	
+
 	public KqInfoResult() {
 		// TODO Auto-generated constructor stub
 	}
 	
+	
+	public String getYYYYMMDD() {
+		return YYYYMMDD;
+	}
+
+	public void setYYYYMMDD(String yYYYMMDD) {
+		YYYYMMDD = yYYYMMDD;
+	}
 	public String getAccountId() {
 		return accountId;
 	}

@@ -995,7 +995,6 @@ public class KqParamSetController {
 		       String retCode = Constant.Result.SUCCESS;
 		       String retMsg = Constant.Result.SUCCESS_MSG;
 		       try {
-		    	   System.out.println("queryDepartmentEmployee"+KqParamSetService.queryDepartmentEmployee().size());
 		    	   result.put(Constant.Result.RETDATA, KqParamSetService.queryDepartmentEmployee());
 			   }catch (MessageException e){
 			        retCode = Constant.Result.ERROR;

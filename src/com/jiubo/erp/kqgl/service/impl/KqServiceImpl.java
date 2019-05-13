@@ -11,6 +11,7 @@ import com.jiubo.erp.kqgl.bean.AttLeaveTypeBean;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
 import com.jiubo.erp.kqgl.bean.AttShiftGroupBean;
 import com.jiubo.erp.kqgl.bean.AttShiftScheduleBean;
+import com.jiubo.erp.kqgl.bean.PersonalKQBean;
 import com.jiubo.erp.kqgl.bean.PositionDataBean;
 import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.dao.kqglDao;
@@ -58,117 +59,20 @@ public class KqServiceImpl implements KqService {
 		return null;
 	}
 	
-	
-	
-	
-	
-	
-	
-	@Override
-	public List<PositionTypeBean> selectPositionTypeList() {
-		// TODO Auto-generated method stub
-		return dao.selectPositionTypeList();
-	}
-	
 	@Override
 	public List<PunchRecord> selectPunchRecordList(PunchRecord pRecord){
 		
 		return dao.selectPunchRecordList(pRecord);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jiubo.erp.kqgl.service.KqService#kqTableInfoList(com.jiubo.erp.kqgl.bean.PersonalKQBean)
+	 */
 	@Override
-	public int updatePositionType(PositionTypeBean bean) {
+	public List<KqInfoResult> kqTableInfoList(KqInfoResult kr) {
 		// TODO Auto-generated method stub
-		return dao.updatePositionType(bean);
-	}
-
-	@Override
-	public int DeletePositionType(PositionTypeBean bean) {
-		// TODO Auto-generated method stub
-		return dao.DeletePositionType(bean);
-	}
-
-	@Override
-	public int addPositionType(PositionTypeBean bean) {
-		// TODO Auto-generated method stub
-		return dao.addPositionType(bean);
-	}
-
-	@Override
-	public List<PositionResultInfo> selectPositionInfo() {
-		// TODO Auto-generated method stub
-		return dao.selectPositionInfo();
-	}
-
-	@Override
-	public int addPositionInfo(PositionDataBean input) {
-		// TODO Auto-generated method stub
-		return dao.addPositionInfo(input);
-	}
-
-	@Override
-	public List<AttShiftGroupBean> selectAttshiftGroupList() {
-		// TODO Auto-generated method stub
-		return dao.selectAttshiftGroupList();
-	}
-
-	@Override
-	public int addAttshiftGroup(AttShiftGroupBean input) {
-		// TODO Auto-generated method stub
-		return dao.addAttShiftGroup(input);
-	}
-
-	@Override
-	public List<AttLeaveTypeBean> selectAttLeaveTypelist() {
-		// TODO Auto-generated method stub
-		return dao.selectAttLeaveTypelist();
-	}
-
-	@Override
-	public int addAttLeaveType(AttLeaveTypeBean bean) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public List<DepartmentBean> selectDepartMentInfo() {
-		// TODO Auto-generated method stub
-		return dao.selectDepartMentInfo();
-	}
-
-	@Override
-	public int addDeapartment(DepartmentBean input) {
-		// TODO Auto-generated method stub
-		return dao.addDeapartment(input);
-	}
-
-	@Override
-	public List<ScheduleQueryResult> selectScheduleResult() {
-		// TODO Auto-generated method stub
-		return dao.selectScheduleResult();
-	}
-
-	@Override
-	public int addAttShiftSchedule(AttShiftScheduleBean ShiftSchedule) {
-		// TODO Auto-generated method stub
-		return dao.addAttShiftSchedule(ShiftSchedule);
-	}
-
-	@Override
-	public List<AttRuleTypeBean> selectRultTypeInfo() {
-		// TODO Auto-generated method stub
-		return dao.selectRultTypeInfo();
-	}
-
-	@Override
-	public int addRuleTypeInfo(AttRuleTypeBean bean) {
-		// TODO Auto-generated method stub
-		return dao.addRuleTypeInfo(bean);
+		return this.dao.kqTableInfoList(kr);
 	}
 
 	
-
-	
-
-
 }

@@ -2,8 +2,6 @@ package com.jiubo.erp.common;
 
 
 import org.apache.commons.lang.StringUtils;
-
-import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -77,6 +75,7 @@ public class TimeUtil {
     private static SimpleDateFormat sdf_YYYYMM01 = new SimpleDateFormat("yyyyMM01");
 
     private static SimpleDateFormat sdf_HH_MM_SS = new SimpleDateFormat("HH:mm:ss");
+    
 
     //静态日历对象
     private static Calendar calendar = Calendar.getInstance();
@@ -170,7 +169,7 @@ public class TimeUtil {
     	double m = calendar.get(UNIT_MINUTE);
     	return (double)Math.round((h + (m > 0 ? m / 60 : 0)) * 10) / 10;
     }
-
+  
     /**
      * 返回日期增减
      * */
@@ -218,7 +217,7 @@ public class TimeUtil {
     /**
      * 返回月日字符串
      * @param date
-     * @param concat 月日字符串格式,如5.1 or 5-1
+     * @param concat，concat1，concat2 月日字符串格式,如5.1 or 5-1 or 5月1日
      * @return
      * @throws Exception
      *
@@ -229,6 +228,15 @@ public class TimeUtil {
         concat = concat == null ? _NULLSTR : concat;
         return (calendar.get(Calendar.MONTH) + 1)+concat+calendar.get(Calendar.DAY_OF_MONTH);
     }
+    
+    public static  synchronized String getMMDDString(Date date,String concat1,String concat2)throws Exception{
+        if(date==null) return _NULLSTR;
+        calendar.setTime(date);
+        concat1 = concat1 == null ? _NULLSTR : concat1;
+        concat2 = concat2 == null ? _NULLSTR : concat2;
+        return (calendar.get(Calendar.MONTH) + 1)+concat1+calendar.get(Calendar.DAY_OF_MONTH)+concat2;
+    }
+    
     /*
      * 获取年字符串
      * */
@@ -538,9 +546,14 @@ public class TimeUtil {
         return date==null?_NULLSTR:sdf_YYYY_MM_DD_HH_MM.format(date);
     }
 
-    /*
-    * yyyyMMdd
-    * */
+    /**
+     * 获取到时间字符串中的时间 HH:MM:SS
+     * @param date
+     * @return
+     * @return 返回值类型  String
+     * @author 作者 mwl
+     * @date   时间 2019年5月11日下午2:40:38
+     */
     public static synchronized String getDateHH_MM_SS(Date date) {
 
         return date==null?_NULLSTR:sdf_HH_MM_SS.format(date);
