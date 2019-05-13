@@ -71,5 +71,9 @@ public interface ZpglDao {
 	//修改请假信息
 	//public void updateAttLeaveBean(AttLeaveBean attLeaveBean);
 	
+	
+	
+	
+	
 	//public List<RecruitDataBean> queryRecruitDataTest(@Param("name")String name);
 }

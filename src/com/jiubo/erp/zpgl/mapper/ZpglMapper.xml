@@ -265,6 +265,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 	</select>
 	-->
+	
+	
+	
 </mapper>
 
 <!-- <select id="queryRecruitDataTest" resultType="com.jiubo.erp.zpgl.bean.RecruitDataBean">
