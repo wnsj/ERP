@@ -1,20 +1,24 @@
 package com.jiubo.erp.common;
 
 
-import org.apache.commons.lang.StringUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 public class TimeUtil {
 
-    public static ThreadLocal<Long> local = new ThreadLocal<Long>();
     public final static String _NULLSTR = "";
     public final static String YYYY = "yyyy";
     public final static String MM = "MM";
     public final static String DD = "DD";
     public final static String YYYYMM = "yyyyMM";
+    public final static String YYYY_MM = "yyyy-MM";
+    public final static String YYYY$MM = "yyyy/MM";
     public final static String YYYYMMDD = "yyyyMMdd";
     public final static String YYYY$MM$DD = "yyyy/MM/dd";
     public final static String YYYY_MM_DD = "yyyy-MM-dd";
@@ -24,7 +28,7 @@ public class TimeUtil {
     public final static String YYYY$M$DD = "yyyy/M/dd";
     public final static String YYYY_MM_D = "yyyy-MM-d";
     public final static String YYYY$MM$D = "yyyy/MM/d";
-    //星期一:Monday（Mon.）
+	 //星期一:Monday（Mon.）
     public final static String MONDAY = "星期一";
     public final static String WEEK_MON = "周一";
     //星期二：Tuesday（Tues.）
@@ -59,23 +63,22 @@ public class TimeUtil {
     private static SimpleDateFormat sdf_YYYY_MM_D = new SimpleDateFormat(YYYY_MM_D);
     private static SimpleDateFormat sdf_YYYY$MM$DD = new SimpleDateFormat(YYYY$MM$DD);
     private static SimpleDateFormat sdf_YYYY_MM_DD = new SimpleDateFormat(YYYY_MM_DD);
-    private static SimpleDateFormat sdf_EEEE = new SimpleDateFormat("EEEE");
-    
-
-    private static SimpleDateFormat sdf_YYYY_MM_DD_HH_MM = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static SimpleDateFormat sdf_YYYY_MM_DD_HH_MM_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static SimpleDateFormat sdf_YYYYMMDDHHMMSSSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
     private static SimpleDateFormat sdf_YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
     private static SimpleDateFormat sdf_YYMMDDHHMMSS = new SimpleDateFormat("yyMMddHHmmss");
+    private static SimpleDateFormat sdf_YYMMDD = new SimpleDateFormat("yyMMdd");
     private static SimpleDateFormat sdf_YYYY_MM_DD_HH_MM_SS_SSS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private static SimpleDateFormat sdf_YYYY$MM$DD$HH$MM$SS = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private static SimpleDateFormat sdf_YYYY$MM$DD$HH$MM$SS$SSS = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-
-
     private static SimpleDateFormat sdf_YYYYMM01 = new SimpleDateFormat("yyyyMM01");
-
     private static SimpleDateFormat sdf_HH_MM_SS = new SimpleDateFormat("HH:mm:ss");
-    
+
+    private static SimpleDateFormat sdf_EEEE = new SimpleDateFormat("EEEE");
+    private static SimpleDateFormat sdf_YYYY_MM_DD_HH_MM = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private static SimpleDateFormat sdf_YYYY_MM = new SimpleDateFormat(YYYY_MM);
+    private static SimpleDateFormat sdf_YYYY$MM = new SimpleDateFormat(YYYY$MM);
+
 
     //静态日历对象
     private static Calendar calendar = Calendar.getInstance();
@@ -87,11 +90,8 @@ public class TimeUtil {
     public final static int UNIT_HOUR = Calendar.HOUR;
     public final static int UNIT_MINUTE = Calendar.MINUTE;
     public final static int UNIT_SECOND = Calendar.SECOND;
-    //24进制小时
+	 //24进制小时
     public final static int UNIT_HOUR_OF_DAY = Calendar.HOUR_OF_DAY;
-    
-
-
 
     /**
      * 返回日期增减
@@ -118,61 +118,13 @@ public class TimeUtil {
         return days;
 
     }
-    
-    /**
-     * @desc:计算相差多少小时
-     * @param:
-     * @return: int
-     * @Create at: 2019-05-06
-     * @author:  dx
-     * @version: 1.0
-     */
-    public synchronized static double DateDiffHours(Date begDate,Date endDate){
-        //得到两个日期相差的小时数
-        double days = 0;
-        //容错处理
-        if(begDate == null || endDate == null) return days;
-        
-        long nd = 1000 * 24 * 60 * 60;//每天毫秒数
 
-        long nh = 1000 * 60 * 60;//每小时毫秒数
 
-        long nm = 1000 * 60;//每分钟毫秒数
 
-        long diff = endDate.getTime() - begDate.getTime(); // 获得两个时间的毫秒时间差异
+   /**
+    * 返回日期增减
+    * */
 
-        long day = diff / nd;   // 计算差多少天
-
-        double hour = diff % nd / nh; // 计算差多少小时
-
-        double min = diff % nd % nh / nm;  // 计算差多少分钟
-        
-        double d = day > 0 ? day * 24 : 0;
-        
-        double m = min > 0 ? (min / 60) : 0;
-        
-        return (double)Math.round((d + hour + m) * 10) / 10;
-    }
-
-    /**
-     * @desc:获取时间小时制（例8：30为8.5）
-     * @param:
-     * @return: double
-     * @Create at: 2019-05-07
-     * @author:  dx
-     * @version: 1.0
-     */
-    public static synchronized double getHourHex(Date date) {
-    	if(date == null)return 0;
-    	calendar.setTime(date);
-    	double h = calendar.get(UNIT_HOUR_OF_DAY);
-    	double m = calendar.get(UNIT_MINUTE);
-    	return (double)Math.round((h + (m > 0 ? m / 60 : 0)) * 10) / 10;
-    }
-  
-    /**
-     * 返回日期增减
-     * */
     public static synchronized Date dateAdd(Date targetDate,int unit,int num){
         if(targetDate == null) return targetDate;
         calendar.setTime(targetDate);
@@ -198,6 +150,7 @@ public class TimeUtil {
 
     }
 
+
     /*
    * 获取年月字符串
    * */
@@ -206,7 +159,6 @@ public class TimeUtil {
         calendar.setTime(date);
         return String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
     }
-
 
     public static synchronized String getHourStr(Date date) throws ParseException{
         if(date==null) return _NULLSTR;
@@ -222,7 +174,7 @@ public class TimeUtil {
      * @throws Exception
      *
      */
-    public static  synchronized String getMMDDStr(Date date,String concat)throws Exception{
+    public static synchronized String getMMDDStr(Date date,String concat)throws Exception{
         if(date==null) return _NULLSTR;
         calendar.setTime(date);
         concat = concat == null ? _NULLSTR : concat;
@@ -251,46 +203,46 @@ public class TimeUtil {
     * 获取季度
     * */
     public static synchronized int getQuarter(Date date) throws ParseException {
-        int season = 0;
-        if(date==null) return season;
-        calendar.setTime(date);
-        int month = calendar.get(Calendar.MONTH);
-        switch (month) {
-            case Calendar.JANUARY:
-            case Calendar.FEBRUARY:
-            case Calendar.MARCH:
-                season = 1;
-                break;
-            case Calendar.APRIL:
-            case Calendar.MAY:
-            case Calendar.JUNE:
-                season = 2;
-                break;
-            case Calendar.JULY:
-            case Calendar.AUGUST:
-            case Calendar.SEPTEMBER:
-                season = 3;
-                break;
-            case Calendar.OCTOBER:
-            case Calendar.NOVEMBER:
-            case Calendar.DECEMBER:
-                season = 4;
-                break;
-            default:
-                break;
-        }
-        return season;
+            int season = 0;
+            if(date==null) return season;
+            calendar.setTime(date);
+            int month = calendar.get(Calendar.MONTH);
+            switch (month) {
+                case Calendar.JANUARY:
+                case Calendar.FEBRUARY:
+                case Calendar.MARCH:
+                    season = 1;
+                    break;
+                case Calendar.APRIL:
+                case Calendar.MAY:
+                case Calendar.JUNE:
+                    season = 2;
+                    break;
+                case Calendar.JULY:
+                case Calendar.AUGUST:
+                case Calendar.SEPTEMBER:
+                    season = 3;
+                    break;
+                case Calendar.OCTOBER:
+                case Calendar.NOVEMBER:
+                case Calendar.DECEMBER:
+                    season = 4;
+                    break;
+                default:
+                    break;
+            }
+            return season;
 
     }
 
     /*
     * 获取月的第一天
     * */
-    public static synchronized Date getFirstDayOfMonth(Date date) throws ParseException {
+   public static synchronized Date getFirstDayOfMonth(Date date) throws ParseException {
 
-        return  date==null?null:sdf_YYYYMMDD.parse(sdf_YYYYMM01.format(date));
+       return  date==null?null:sdf_YYYYMMDD.parse(sdf_YYYYMM01.format(date));
 
-    }
+   }
 
     /*
      * 获取月的最后一天,注意时间是0点
@@ -302,24 +254,24 @@ public class TimeUtil {
     }
 
 
-    public static synchronized Date parseDateYYYYMMDDHHMMSSSSS(String date) throws ParseException {
+   public static synchronized Date parseDateYYYYMMDDHHMMSSSSS(String date) throws ParseException {
 
-        java.util.Date time = (date==null?null:sdf_YYYYMMDDHHMMSSSSS.parse(date));
+         Date time = (date==null?null:sdf_YYYYMMDDHHMMSSSSS.parse(date));
 
-        return time;
+         return time;
 
-    }
+   }
 
 
-    public static synchronized String getDateYYYYMMDDHHMMSSSSS(Date date) {
+   public static synchronized String getDateYYYYMMDDHHMMSSSSS(Date date) {
 
-        return date==null?_NULLSTR:sdf_YYYYMMDDHHMMSSSSS.format(date);
+       return date==null?_NULLSTR:sdf_YYYYMMDDHHMMSSSSS.format(date);
 
-    }
+   }
 
     public static synchronized Date parseDateYYYY$MM$DD$HH$MM$SS$SSS(String date) throws ParseException {
 
-        java.util.Date time = (date==null?null:sdf_YYYY$MM$DD$HH$MM$SS$SSS.parse(date));
+        Date time = (date==null?null:sdf_YYYY$MM$DD$HH$MM$SS$SSS.parse(date));
 
         return time;
 
@@ -334,7 +286,7 @@ public class TimeUtil {
 
     public static synchronized Date parseDateYYYY$MM$DD$HH$MM$SS(String date) throws ParseException {
 
-        java.util.Date time = (date==null?null:sdf_YYYY$MM$DD$HH$MM$SS.parse(date));
+        Date time = (date==null?null:sdf_YYYY$MM$DD$HH$MM$SS.parse(date));
 
         return time;
 
@@ -348,7 +300,7 @@ public class TimeUtil {
 
     public static synchronized Date parseDateYYYYMMDDHHMMSS(String date) throws ParseException {
 
-        java.util.Date time =  (date==null?null:sdf_YYYYMMDDHHMMSS.parse(date));
+        Date time =  (date==null?null:sdf_YYYYMMDDHHMMSS.parse(date));
 
         return time;
 
@@ -362,13 +314,25 @@ public class TimeUtil {
     }
 
 
+    public static synchronized String getDateYYMMDDHHMMSS(Date date) {
+
+        return date==null?_NULLSTR:sdf_YYMMDDHHMMSS.format(date);
+
+    }
+
+    public static synchronized String getDateYYMMDD(Date date) {
+
+        return date==null?_NULLSTR:sdf_YYMMDD.format(date);
+
+    }
+
     /*
     *
     * yyyy-MM-dd HH:mm:ss.SSS
     * */
     public static synchronized Date parseDateYYYY_MM_DD_HH_MM_SS_SSS(String date) throws ParseException {
 
-        java.util.Date time = (date==null?null:sdf_YYYY_MM_DD_HH_MM_SS_SSS.parse(date));
+        Date time = (date==null?null:sdf_YYYY_MM_DD_HH_MM_SS_SSS.parse(date));
 
         return time;
 
@@ -389,7 +353,7 @@ public class TimeUtil {
     * */
     public static synchronized Date parseDateYYYYMMDD(String date) throws ParseException {
 
-        java.util.Date time = (date==null?null:sdf_YYYYMMDD.parse(date));
+        Date time = (date==null?null:sdf_YYYYMMDD.parse(date));
 
         return time;
 
@@ -411,7 +375,7 @@ public class TimeUtil {
     * */
     public static synchronized Date parseDateYYYY$MM$DD(String date) throws ParseException {
 
-        java.util.Date time = (date==null?null:sdf_YYYY$MM$DD.parse(date));
+        Date time = (date==null?null:sdf_YYYY$MM$DD.parse(date));
 
         return time;
 
@@ -432,7 +396,7 @@ public class TimeUtil {
 * */
     public static synchronized Date parseDateYYYY_MM_DD(String date) throws ParseException {
 
-        java.util.Date time = (date==null?null:sdf_YYYY_MM_DD.parse(date));
+        Date time = (date==null?null:sdf_YYYY_MM_DD.parse(date));
 
         return time;
 
@@ -454,11 +418,18 @@ public class TimeUtil {
     * */
     public static synchronized Date parseAnyDate(String date) throws ParseException {
 
-        java.util.Date time = null;
+        Date time = null;
 
         if(StringUtils.isBlank(date)) return null;
-
-        if(date.length() == 8){
+        if (date.length() == 6){
+            time = sdf_YYYYMM.parse(date);
+        }else if(date.length() == 7) {
+        	try {
+        		time = sdf_YYYY_MM.parse(date);
+        	}catch (Exception e) {
+        		time = sdf_YYYY$MM.parse(date);
+			}
+        }else if(date.length() == 8){
             try{
                 time = sdf_YYYY_M_D.parse(date);
             }catch (Exception e1){
@@ -518,7 +489,7 @@ public class TimeUtil {
 
     public static synchronized Date parseDateYYYY_MM_DD_HH_MM_SS(String date) throws ParseException {
 
-        java.util.Date time = (date==null?null:sdf_YYYY_MM_DD_HH_MM_SS.parse(date));
+        Date time = (date==null?null:sdf_YYYY_MM_DD_HH_MM_SS.parse(date));
 
         return time;
 
@@ -532,18 +503,6 @@ public class TimeUtil {
 
         return date==null?_NULLSTR:sdf_YYYY_MM_DD_HH_MM_SS.format(date);
 
-    }
-    
-    /**
-     * @desc:获取年月日时分（例：2018-01-01 08:30:00 -> 2018-01-01 08:30）
-     * @param:
-     * @return: String
-     * @Create at: 2019-05-08
-     * @author:  dx
-     * @version: 1.0
-     */
-    public static synchronized String getDateYYYY_MM_DD_HH_MM(Date date) {
-        return date==null?_NULLSTR:sdf_YYYY_MM_DD_HH_MM.format(date);
     }
 
     /**
@@ -745,154 +704,18 @@ public class TimeUtil {
     }
 
 
-    /*
-    * 获取上期时间天数
-    * */
-    public static int getBeforeDaysForLastTerm(Date begin,Date end) throws ParseException {
+    public static void sleepSeconds(long seconds){
 
-        begin = TimeUtil.parseDateYYYY$MM$DD(TimeUtil.getDateYYYY$MM$DD(begin));
-        end = TimeUtil.parseDateYYYY$MM$DD(TimeUtil.getDateYYYY$MM$DD(end));
+        try {
+            Thread.currentThread().sleep(1000*seconds);
+        } catch (InterruptedException e) {
 
-        if(begin.getTime() > end.getTime()) return 7;
-        Date tempDate = dateAdd(begin, UNIT_DAY, 6);
-
-        if(tempDate.getTime() > end.getTime()) return 7;
-
-        tempDate = dateAdd(begin,UNIT_DAY,30);
-
-        if(tempDate.getTime() > end.getTime())
-            return  differentDays(dateAdd(begin, UNIT_MONTH, -1),begin);
-
-        return differentDays(dateAdd(begin, UNIT_YEAR, -1),begin);
-
-    }
-
-    public static  void start() {
-
-        local.set(System.currentTimeMillis());
-
-    }
-
-
-    public static String stop(){
-
-        return getTimeCHStr(System.currentTimeMillis() - local.get());
-
-
-    }
-
-
-    public static synchronized String getDateYYMMDDHHMMSS(Date date) {
-
-        return date==null?_NULLSTR:sdf_YYMMDDHHMMSS.format(date);
-
-    }
-
-
-    /**
-     * @Description:
-     * @param: stype 1.起始时间 2.结束日期
-     * @return:
-     * @author Gaodongdong
-     * @createDate: 2018-11-29 16:06
-     * @modifyDate: 2018-11-29 16:06
-     */
-    public static synchronized Object parseReportDate(String dateStr,int stype) throws Exception {
-
-        Object retObj = null;
-        int length = dateStr.trim().length();
-
-        switch (length){
-            case 4:
-                retObj = stype == 1?Long.parseLong(dateStr):Long.parseLong(dateStr)+1;
-                break;
-            case 7:
-                dateStr = dateStr.concat("-01");
-                retObj = Long.parseLong(TimeUtil.getYearMonthStr(stype == 1?TimeUtil.parseAnyDate(dateStr):TimeUtil.dateAdd(TimeUtil.parseAnyDate(dateStr),TimeUtil.UNIT_MONTH,1)));
-                break;
-            case 10:
-                retObj = stype == 1?TimeUtil.parseAnyDate(dateStr):TimeUtil.dateAdd(TimeUtil.parseAnyDate(dateStr),TimeUtil.UNIT_DAY,1);
-                break;
-           default:
-               retObj = stype == 1?TimeUtil.parseAnyDate(dateStr):TimeUtil.dateAdd(TimeUtil.parseAnyDate(dateStr),TimeUtil.UNIT_DAY,1);
-            break;
         }
-       return retObj;
-    }
-    
-    
-    /**
-     * @Description:入参年份有多少天
-     * @param:
-     * @return: 
-     * @author Gaodongdong
-     * @createDate: 2018-12-25 19:06
-     * @modifyDate: 2018-12-25 19:06
-     */
-    public synchronized static int getYearDays(String year) throws Exception {
-        if(StringUtils.isBlank(year) || year.length() != 4) throw new MessageException("传入年参数异常！");
-        return Integer.parseInt(getDayStr(dateAdd(parseDateYYYYMMDD(year.concat("0301")), UNIT_DAY, -1))) + 337;
+
     }
 
-    /**
-     * @Description:入参月份有多少天
-     * @param:
-     * @return:
-     * @author Gaodongdong
-     * @createDate: 2018-12-25 19:06
-     * @modifyDate: 2018-12-25 19:06
-     */
-    public synchronized static int getYearMonthDays(String yearMonth) throws Exception {
-        if(StringUtils.isBlank(yearMonth) || yearMonth.length() != 6) throw new MessageException("传入年月参数异常！");
-        return Integer.parseInt(getDayStr(dateAdd(dateAdd(parseAnyDate(yearMonth.concat("01")), UNIT_MONTH, 1), UNIT_DAY, -1)));
-    }
-    
-    /**
-     * @desc:判断2个时间是否同年，同月或同时（注:判断月时不比较年，时与月类似）
-     * @param:date1:时间1
-     * @param:date2：时间2
-     * @param:flag（1判断是否同年，2判断是否同月，3判断是否同时）
-     * @return: boolean
-     * @Create at: 2019-05-07
-     * @author:  dx
-     * @version: 1.0
-     */
-    public synchronized static boolean dateEqualsDate(Date date1,Date date2,int flag){
-    	if(date1 == null || date2 == null)return false;
-    	calendar.setTime(date1);
-    	Calendar calendar2 = Calendar.getInstance();
-    	calendar2.setTime(date2);		
-    	//判断2个时间是否同年
-    	if(flag == 1)
-    		return calendar.get(UNIT_YEAR) == calendar2.get(UNIT_YEAR);
-    	//判断2个时间是否同月
-    	else if(flag == 2)
-    		return calendar.get(UNIT_MONTH) == calendar2.get(UNIT_MONTH);
-    	//判断2个时间是否同时
-    	else
-    		return calendar.get(UNIT_HOUR) == calendar2.get(UNIT_HOUR);
-    }
 
-    /**
-     * @Description:日期是当年的第几天
-     * @param:
-     * @return:
-     * @author Gaodongdong
-     * @createDate: 2018-12-27 13:57
-     * @modifyDate: 2018-12-27 13:57
-     */
-    public synchronized static int getYearDayNumber(Date date) throws Exception {
-        int yearMonth = Integer.parseInt(TimeUtil.getYearMonthStr(date));
-        int yearMonthBeg = Integer.parseInt(TimeUtil.getYearStr(date).concat("01"));
-        int days = 0;
-        for(int i = yearMonthBeg;i< yearMonth;i++){
-            days += getYearMonthDays(String.valueOf(i));
-        }
-        days += Integer.parseInt(getDayStr(date));
-        return  days;
-    }
-
-    /**
+/**
      * @desc:日期是（星期几，周几）
      * @param:date（时间）
      * @param：type【返回类型：1或null返回星期几，其他返回周几】
@@ -924,5 +747,95 @@ public class TimeUtil {
      */
     public synchronized static String getWeekOfDate(Date date) {
     	return sdf_EEEE.format(date);
+    }
+	
+	
+	 /**
+     * @desc:判断2个时间是否同年，同月或同时（注:判断月时不比较年，时与月类似）
+     * @param:date1:时间1
+     * @param:date2：时间2
+     * @param:flag（1判断是否同年，2判断是否同月，3判断是否同时）
+     * @return: boolean
+     * @Create at: 2019-05-07
+     * @author:  dx
+     * @version: 1.0
+     */
+    public synchronized static boolean dateEqualsDate(Date date1,Date date2,int flag){
+    	if(date1 == null || date2 == null)return false;
+    	calendar.setTime(date1);
+    	Calendar calendar2 = Calendar.getInstance();
+    	calendar2.setTime(date2);		
+    	//判断2个时间是否同年
+    	if(flag == 1)
+    		return calendar.get(UNIT_YEAR) == calendar2.get(UNIT_YEAR);
+    	//判断2个时间是否同月
+    	else if(flag == 2)
+    		return calendar.get(UNIT_MONTH) == calendar2.get(UNIT_MONTH);
+    	//判断2个时间是否同时
+    	else
+    		return calendar.get(UNIT_HOUR) == calendar2.get(UNIT_HOUR);
+    }
+	
+	  /**
+     * @desc:计算相差多少小时
+     * @param:
+     * @return: int
+     * @Create at: 2019-05-06
+     * @author:  dx
+     * @version: 1.0
+     */
+    public synchronized static double DateDiffHours(Date begDate,Date endDate){
+        //得到两个日期相差的小时数
+        double days = 0;
+        //容错处理
+        if(begDate == null || endDate == null) return days;
+        
+        long nd = 1000 * 24 * 60 * 60;//每天毫秒数
+
+        long nh = 1000 * 60 * 60;//每小时毫秒数
+
+        long nm = 1000 * 60;//每分钟毫秒数
+
+        long diff = endDate.getTime() - begDate.getTime(); // 获得两个时间的毫秒时间差异
+
+        long day = diff / nd;   // 计算差多少天
+
+        double hour = diff % nd / nh; // 计算差多少小时
+
+        double min = diff % nd % nh / nm;  // 计算差多少分钟
+        
+        double d = day > 0 ? day * 24 : 0;
+        
+        double m = min > 0 ? (min / 60) : 0;
+        
+        return (double)Math.round((d + hour + m) * 10) / 10;
+    }
+
+    /**
+     * @desc:获取时间小时制（例8：30为8.5）
+     * @param:
+     * @return: double
+     * @Create at: 2019-05-07
+     * @author:  dx
+     * @version: 1.0
+     */
+    public static synchronized double getHourHex(Date date) {
+    	if(date == null)return 0;
+    	calendar.setTime(date);
+    	double h = calendar.get(UNIT_HOUR_OF_DAY);
+    	double m = calendar.get(UNIT_MINUTE);
+    	return (double)Math.round((h + (m > 0 ? m / 60 : 0)) * 10) / 10;
+    }
+    
+    /**
+     * @desc:获取年月日时分（例：2018-01-01 08:30:00 -> 2018-01-01 08:30）
+     * @param:
+     * @return: String
+     * @Create at: 2019-05-08
+     * @author:  dx
+     * @version: 1.0
+     */
+    public static synchronized String getDateYYYY_MM_DD_HH_MM(Date date) {
+        return date==null?_NULLSTR:sdf_YYYY_MM_DD_HH_MM.format(date);
     }
 }

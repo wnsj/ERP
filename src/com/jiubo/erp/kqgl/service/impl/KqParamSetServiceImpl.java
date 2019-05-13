@@ -257,13 +257,13 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 				//上班时长
 				List<Double> timeList = new ArrayList<Double>();
 				//下班时间
-				List<String> endList = new ArrayList<String>();
+				List<Double> endList = new ArrayList<Double>();
 				
 				Date endDate = TimeUtil.dateAdd(TimeUtil.parseAnyDate(endTime), TimeUtil.UNIT_DAY, 1);
-				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, startTime, endTime);
+				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, startTime, TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
 				for(AttShiftBean attShiftBean : attShiftList) {
 					double sTime = 0.0;	//工作开始时间
-					String eTime = "0 - 0";
+					double eTime = 0;
 					double t = 0;
 					Date staTime = TimeUtil.parseAnyDate(attShiftBean.getStartTime());
 					Date enTime = TimeUtil.parseAnyDate(attShiftBean.getEndTime());
@@ -278,7 +278,7 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 							enTime = TimeUtil.dateAdd(enTime, TimeUtil.UNIT_DAY, 1);
 							//eTime = "0 - ".concat(TimeUtil.getHourStr(enTime));
 							double d = TimeUtil.getHourHex(enTime);
-							eTime = "0 - ".concat(String.valueOf(d));
+							eTime = (double)(0 - d);
 							t = TimeUtil.DateDiffHours(staTime,enTime) - d;
 						}else {
 							//不跨日工作

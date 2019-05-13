@@ -1019,7 +1019,7 @@ public class KqParamSetController {
 		 * @version: 1.0
 		 */
 		@ResponseBody
-		@RequestMapping(value="/queryEmpAttShift",method = {RequestMethod.GET,RequestMethod.POST})
+		@RequestMapping(value="/queryEmpAttShift",method = {RequestMethod.POST})
 		public JSONObject queryEmpAttShift(HttpServletRequest request){
 			   JSONObject result = new JSONObject();
 		       String retCode = Constant.Result.SUCCESS;
@@ -1056,7 +1056,7 @@ public class KqParamSetController {
 		 */
 		//http://127.0.0.1:8080/Erp/kqParamSetContr/queryAllEmpAttShift?begDate=2017-02-01&endDate=2017-02-01
 		@ResponseBody
-		@RequestMapping(value="/queryAllEmpAttShift",method = {RequestMethod.GET,RequestMethod.POST})
+		@RequestMapping(value="/queryAllEmpAttShift",method = {RequestMethod.POST})
 		public JSONObject queryAllEmpAttShift(HttpServletRequest request){
 			   JSONObject result = new JSONObject();
 		       String retCode = Constant.Result.SUCCESS;
