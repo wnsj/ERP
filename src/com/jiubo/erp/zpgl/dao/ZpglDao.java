@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.jiubo.erp.common.MessageException;
+import com.jiubo.erp.wzbg.bean.AttLeaveBean;
 import com.jiubo.erp.zpgl.bean.RecruitChannelBean;
 import com.jiubo.erp.zpgl.bean.RecruitDataBean;
 import com.jiubo.erp.zpgl.bean.ZpPlanBean;
@@ -61,6 +62,14 @@ public interface ZpglDao {
 	//修改招聘发布信息
 	public void updateZpPublish(ZpPublishBean zpPublishBean);
 	
+	//查询请假信息
+	public List<AttLeaveBean> queryAttLeaveBean(AttLeaveBean attLeaveBean);
+	
+	//添加请假信息
+	public void addAttLeaveBean(AttLeaveBean attLeaveBean);
+	
+	//修改请假信息
+	public void updateAttLeaveBean(AttLeaveBean attLeaveBean);
 	
 	//public List<RecruitDataBean> queryRecruitDataTest(@Param("name")String name);
 }
