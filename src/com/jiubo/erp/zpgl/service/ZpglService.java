@@ -21,6 +21,16 @@ public interface ZpglService {
 	public List<RecruitChannelBean> queryRecruitChannel()throws MessageException;
 	
 	/**
+	 * @desc:添加招聘渠道
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-13
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void addRecruitChannel(RecruitChannelBean recruitChannelBean)throws MessageException;
+		
+	/**
 	 * @desc:删除招聘渠道
 	 * @param:
 	 * @return: void
@@ -29,6 +39,16 @@ public interface ZpglService {
 	 * @version: 1.0
 	 */
 	public void deleteRecruitChannel(String id)throws MessageException;
+	
+	/**
+	 * @desc:修改招聘渠道
+	 * @param:
+	 * @return: void
+	 * @Create at: 2019-05-13
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public void updateRecruitChannel(RecruitChannelBean recruitChannelBean)throws MessageException;
 	
 	/**
 	 * @desc:查询面试信息

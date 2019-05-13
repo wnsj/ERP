@@ -10,11 +10,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM ZP_RECRUITCHANNEL
 	</select>
 	
+	<!-- 添加招聘渠道 -->
+	<insert id="addRecruitChannel" parameterType="com.jiubo.erp.zpgl.bean.RecruitChannelBean">
+		INSERT INTO ZP_RECRUITCHANNEL (RECRUITCHANNEL_NAME)
+		VALUES(#{recruitChannelName})
+	</insert>
+	
 	<!-- 删除招聘渠道 -->
 	<delete id="deleteRecruitChannel">
 		DELETE FROM ZP_RECRUITCHANNEL
 		WHERE RECRUITCHANNEL_ID = #{id}
 	</delete>
+	
+	<!-- 修改招聘渠道 -->
+	<update id="updateRecruitChannel" parameterType="com.jiubo.erp.zpgl.bean.RecruitChannelBean">
+		UPDATE ZP_RECRUITCHANNEL
+		SET 
+			RECRUITCHANNEL_NAME = #{recruitChannelName}
+		WHERE RECRUITCHANNEL_ID = #{recruitChannelId}
+	</update>
 	
 	<!-- 查询面试信息 -->
 	<select id="queryRecruitData" parameterType="com.jiubo.erp.zpgl.bean.RecruitDataBean" resultType="com.jiubo.erp.zpgl.bean.RecruitDataBean">

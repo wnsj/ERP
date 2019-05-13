@@ -22,6 +22,7 @@ import com.jiubo.erp.common.Constant;
 import com.jiubo.erp.common.MapUtil;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.kqgl.controller.KqParamSetController;
+import com.jiubo.erp.zpgl.bean.RecruitChannelBean;
 import com.jiubo.erp.zpgl.bean.RecruitDataBean;
 import com.jiubo.erp.zpgl.bean.ZpPlanBean;
 import com.jiubo.erp.zpgl.bean.ZpPublishBean;
@@ -70,6 +71,40 @@ public class ZpglController {
 	}
 	
 	/**
+	 * @desc:添加招聘渠道
+	 * @param:
+	 * @return: JSONObject
+	 * @Create at: 2019-05-13
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	//http://127.0.0.1:8080/Erp/zpglController/addRecruitChannel?recruitChannelName=Boss
+	@ResponseBody
+	@RequestMapping(value="/addRecruitChannel",method = {RequestMethod.POST})
+	public JSONObject addRecruitChannel(HttpServletRequest request,HttpServletResponse response){
+		   JSONObject result = new JSONObject();
+	       String retCode = Constant.Result.SUCCESS;
+	       String retMsg = Constant.Result.SUCCESS_MSG;
+		   try {
+			   String str = ToolClass.getStrFromInputStream(request);
+	    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
+	    	   RecruitChannelBean recruitChannelBean = MapUtil.transJsonStrToObjectIgnoreCase(str,RecruitChannelBean.class);
+		  	   zpglService.addRecruitChannel(recruitChannelBean);
+		   }catch (MessageException e){
+		        retCode = Constant.Result.ERROR;
+		        retMsg = e.getMessage();
+		   }catch (Exception e){
+		        retCode = Constant.Result.ERROR;
+		        retMsg = Constant.Result.ERROR_MSG;
+		        log.error(Constant.Result.RETMSG,e);
+		  }finally {
+		        result.put(Constant.Result.RETCODE, retCode);
+		        result.put(Constant.Result.RETMSG, retMsg);
+		        return result;
+		  }
+	}
+		
+	/**
 	 * @desc:删除招聘渠道
 	 * @param:
 	 * @return: JSONObject
@@ -87,6 +122,39 @@ public class ZpglController {
 		   try {
 			    String id = MapUtil.getStringIgnoreCase(requestMap, "id", MapUtil.NOT_NULL);
 		  	    zpglService.deleteRecruitChannel(id);
+		   }catch (MessageException e){
+		        retCode = Constant.Result.ERROR;
+		        retMsg = e.getMessage();
+		   }catch (Exception e){
+		        retCode = Constant.Result.ERROR;
+		        retMsg = Constant.Result.ERROR_MSG;
+		        log.error(Constant.Result.RETMSG,e);
+		  }finally {
+		        result.put(Constant.Result.RETCODE, retCode);
+		        result.put(Constant.Result.RETMSG, retMsg);
+		        return result;
+		  }
+	}
+	
+	/**
+	 * @desc:修改招聘渠道
+	 * @param:
+	 * @return: JSONObject
+	 * @Create at: 2019-05-13
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	@ResponseBody
+	@RequestMapping(value="/updateRecruitChannel",method = {RequestMethod.POST})
+	public JSONObject updateRecruitChannel(HttpServletRequest request,HttpServletResponse response){
+		   JSONObject result = new JSONObject();
+	       String retCode = Constant.Result.SUCCESS;
+	       String retMsg = Constant.Result.SUCCESS_MSG;
+		   try {
+			   String str = ToolClass.getStrFromInputStream(request);
+	    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
+	    	   RecruitChannelBean recruitChannelBean = MapUtil.transJsonStrToObjectIgnoreCase(str,RecruitChannelBean.class);
+		  	   zpglService.updateRecruitChannel(recruitChannelBean);
 		   }catch (MessageException e){
 		        retCode = Constant.Result.ERROR;
 		        retMsg = e.getMessage();

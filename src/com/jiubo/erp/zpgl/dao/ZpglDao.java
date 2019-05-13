@@ -16,8 +16,14 @@ public interface ZpglDao {
 	//查询招聘渠道
 	public List<RecruitChannelBean> queryRecruitChannel();
 	
+	//添加招聘渠道
+	public void addRecruitChannel(RecruitChannelBean recruitChannelBean);
+	
 	//删除招聘渠道
 	public void deleteRecruitChannel(String id);
+	
+	//修改招聘渠道
+	public void updateRecruitChannel(RecruitChannelBean recruitChannelBean);
 	
 	//查询面试信息
 	public List<RecruitDataBean> queryRecruitData(RecruitDataBean recruitDataBean);

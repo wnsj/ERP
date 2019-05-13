@@ -157,4 +157,16 @@ public class ZpglServiceImpl implements ZpglService {
 		if(StringUtils.isBlank(zpPublishBean.getPublishNum()) || Integer.parseInt(zpPublishBean.getPublishNum()) <= 0)throw new MessageException("发布人数为空或小于等于0！");
 		zpglDao.updateZpPublish(zpPublishBean);
 	}
+
+	@Override
+	public void addRecruitChannel(RecruitChannelBean recruitChannelBean) throws MessageException {
+		if(StringUtils.isBlank(recruitChannelBean.getRecruitChannelName()))throw new MessageException("招聘渠道名不能为空！");
+		zpglDao.addRecruitChannel(recruitChannelBean);
+	}
+
+	@Override
+	public void updateRecruitChannel(RecruitChannelBean recruitChannelBean) throws MessageException {
+		if(StringUtils.isBlank(recruitChannelBean.getRecruitChannelId()) || StringUtils.isBlank(recruitChannelBean.getRecruitChannelName()))throw new MessageException("招聘渠道id或 招聘渠道名不能为空！");
+		zpglDao.updateRecruitChannel(recruitChannelBean);
+	}
 }
