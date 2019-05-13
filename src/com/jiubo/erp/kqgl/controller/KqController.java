@@ -668,6 +668,12 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults,List<D
 			}
 			
 			
+			
+			
+			
+			
+			
+			
 			List<PersonalKQBean> rykqLsit = new ArrayList<>();
 			
 			List<KqInfoResult> kqInfoRes=this.service.selectKqInfoList(kqr);

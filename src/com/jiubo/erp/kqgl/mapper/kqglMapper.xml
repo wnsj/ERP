@@ -169,7 +169,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			left JOIN T_Att_Shift j ON i.ShiftID=j.ID
 			<trim prefix="WHERE" prefixOverrides="AND | OR">
 				<if test="startDate!=null and startDate!='' and endDate!=null and endDate!=''">
-		    		    AND j.ShiftDate &gt;= #{startDate} AND b.ShiftDate &lt;= #{endDate}
+		    		    AND j.ShiftDate &gt;= #{startDate} AND j.ShiftDate &lt;= #{endDate}
 				</if>
 	   		</trim>
 	   		) k
