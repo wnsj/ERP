@@ -63,13 +63,13 @@ public interface ZpglDao {
 	public void updateZpPublish(ZpPublishBean zpPublishBean);
 	
 	//查询请假信息
-	public List<AttLeaveBean> queryAttLeaveBean(AttLeaveBean attLeaveBean);
+	//public List<AttLeaveBean> queryAttLeaveBean(AttLeaveBean attLeaveBean);
 	
 	//添加请假信息
-	public void addAttLeaveBean(AttLeaveBean attLeaveBean);
+	//public void addAttLeaveBean(AttLeaveBean attLeaveBean);
 	
 	//修改请假信息
-	public void updateAttLeaveBean(AttLeaveBean attLeaveBean);
+	//public void updateAttLeaveBean(AttLeaveBean attLeaveBean);
 	
 	//public List<RecruitDataBean> queryRecruitDataTest(@Param("name")String name);
 }

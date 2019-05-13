@@ -249,7 +249,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE PUBLISH_ID = #{publishId}
 	</update>
 	
-	<!-- 查询请假信息 -->
+	<!-- 查询请假信息 
 	<select id="queryAttLeaveBean" parameterType="com.jiubo.erp.wzbg.bean.AttLeaveBean" resultType="com.jiubo.erp.wzbg.bean.AttLeaveBean">
 		SELECT A.ID, A.USERID, A.JOBNUM,C.NAME EMPNAME, A.LEAVETYPEID,B.NAME LEAVENAME, A.STARTTIME, A.ENDTIME, A.TOTLETIME, 
 		A.TOTLEDATE, A.REASON, A.APPLICANT, A.APPLIDATE, A.VERIFIER, A.VERIFYDATE, A.STATUS, A.ISDELETE, A.CREATEDATE, A.CREATOR
@@ -263,8 +263,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND C.NAME LIKE 
 			</if>
 		</where>
-		
 	</select>
+	-->
 </mapper>
 
 <!-- <select id="queryRecruitDataTest" resultType="com.jiubo.erp.zpgl.bean.RecruitDataBean">
