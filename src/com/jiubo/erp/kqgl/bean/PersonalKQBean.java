@@ -1,9 +1,11 @@
 package com.jiubo.erp.kqgl.bean;
 
+import java.util.List;
 import java.util.Map;
 
 public class PersonalKQBean {
 	
+	private String ryKQId;//人员考勤ID
 	private String ryKQName;//人员考勤名称
 	private String ryJobNum;//工号
 	private String ryDepartKQName;//部门名称
@@ -19,20 +21,36 @@ public class PersonalKQBean {
 	private String ryRestDays;//休息天数
 	private String ryOverTimesDays;//加班天数
 	
-	private Map<String, String> punchTime;//个人的班次和打卡时间的集合
+	private List<Map<String, String>>  punchTime;//个人的班次和打卡时间的
+	
+	
 	public PersonalKQBean() {
 		// TODO Auto-generated constructor stub
 	}
 	
 	
-	public Map<String, String> getPunchTime() {
+
+	public String getRyKQId() {
+		return ryKQId;
+	}
+	public void setRyKQId(String ryKQId) {
+		this.ryKQId = ryKQId;
+	}
+
+	public List<Map<String, String>> getPunchTime() {
 		return punchTime;
 	}
 
 
-	public void setPunchTime(Map<String, String> punchTime) {
+
+
+
+	public void setPunchTime(List<Map<String, String>> punchTime) {
 		this.punchTime = punchTime;
 	}
+
+
+
 
 
 	public String getRyKQName() {

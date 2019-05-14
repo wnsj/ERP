@@ -28,6 +28,7 @@ public class TimeUtil {
     public final static String YYYY$M$DD = "yyyy/M/dd";
     public final static String YYYY_MM_D = "yyyy-MM-d";
     public final static String YYYY$MM$D = "yyyy/MM/d";
+    public final static String MM_DD = "MM月dd日";
 	 //星期一:Monday（Mon.）
     public final static String MONDAY = "星期一";
     public final static String WEEK_MON = "周一";
@@ -54,6 +55,7 @@ public class TimeUtil {
     private static SimpleDateFormat sdf_MM= new SimpleDateFormat(MM);
     private static SimpleDateFormat sdf_YYYYMM = new SimpleDateFormat(YYYYMM);
     private static SimpleDateFormat sdf_DD= new SimpleDateFormat(DD);
+    private static SimpleDateFormat sdf_MM_DD= new SimpleDateFormat(MM_DD);
     private static SimpleDateFormat sdf_YYYYMMDD = new SimpleDateFormat(YYYYMMDD);
     private static SimpleDateFormat sdf_YYYY$M$D = new SimpleDateFormat(YYYY$M$D);
     private static SimpleDateFormat sdf_YYYY_M_D = new SimpleDateFormat(YYYY_M_D);
@@ -411,7 +413,13 @@ public class TimeUtil {
 
     }
 
+    
+    public static synchronized String getDateMM_DD(Date date) {
 
+        return date==null?_NULLSTR:sdf_MM_DD.format(date);
+
+    }
+    
     /*
     *
     * yyyy/MM/dd

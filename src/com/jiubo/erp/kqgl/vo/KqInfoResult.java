@@ -7,6 +7,7 @@ public class KqInfoResult {
 	private String name;//姓名
 	private String accountId;//账号ID
 	private String accountName;//账号
+	private String projectId;
 	private String jobNum;//工号
 	private String departname;//部门
 	private String departId;//部门id
@@ -34,6 +35,15 @@ public class KqInfoResult {
 	}
 	
 	
+	
+	public String getProjectId() {
+		return projectId;
+	}
+
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
 	public String getYYYYMMDD() {
 		return YYYYMMDD;
 	}

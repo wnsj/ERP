@@ -5,16 +5,18 @@ package com.jiubo.erp.kqgl.controller;
 import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
-
-
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -661,25 +663,22 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults,List<D
 			kqr = MapUtil.transJsonStrToObjectIgnoreCase(str, KqInfoResult.class);
 			
 			if (kqr.getStartDate().equals("")) {
-				kqr.setStartDate(ToolClass.inquirNowDate()+" "+"00:00:00.000");
+				kqr.setStartDate(ToolClass.inquirNowDate());
 			}
 			if (kqr.getEndDate().equals("")) {
-				kqr.setEndDate(ToolClass.inquirNowDate()+" "+"23:59:59.000");
+				kqr.setEndDate(ToolClass.inquirNowDate());
 			}
+			kqr.setStartDate(kqr.getStartDate()+" "+"00:00:00.000");
+			kqr.setEndDate(kqr.getEndDate()+" "+"23:59:59.000");
 			
-			
-			
-			
-			
-			
-			
-			
+			System.out.println("kqTableList：：："+kqr.getStartDate());
 			List<PersonalKQBean> rykqLsit = new ArrayList<>();
 			
 			List<KqInfoResult> kqInfoRes=this.service.selectKqInfoList(kqr);
 			 System.out.println("kqTableList+kqInfoRes:"+kqInfoRes.size());
 			 for (KqInfoResult kqInfoResult : kqInfoRes) {
 				PersonalKQBean pKqBean = new PersonalKQBean();
+				pKqBean.setRyKQId(kqInfoResult.getuId());
 				pKqBean.setRyKQName(kqInfoResult.getName());
 				pKqBean.setRyPositionKQName(kqInfoResult.getDepartname());
 				pKqBean.setRyJobNum(kqInfoResult.getJobNum());
@@ -737,17 +736,21 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults,List<D
   public List<PersonalKQBean> selectKqTableInfo(List<KqInfoResult> kqInfoResults,List<PersonalKQBean> rykqLsit) {
 	  	
 	  	for (PersonalKQBean ry : rykqLsit) {
+	  		List<Map<String, String>> ryList = new ArrayList<>();
+			Map<String, String> ryMap;
 	  		for (KqInfoResult ryKQ : kqInfoResults) {
-	  			if (ryKQ.getName().equals(ry.getRyKQName())) {
-	  				Map<String, String> ryMap = ry.getPunchTime();
+	  			ryMap = new HashMap<>();
+	  			if (ryKQ.getuId().equals(ry.getRyKQId())) {
+	  				
   					String upAndDownTime;
-	  				if (ryKQ.getClassTimeType().equals("2")) {
+	  				if (!StringUtils.isEmpty(ryKQ.getClassTimeType()) && ryKQ.getClassTimeType().equals("2")) {
 	  					upAndDownTime = ryKQ.getClassTimeName();
 	  					try {
-		  						if (ryKQ.getShiftDate()!=null) {
-		  							upAndDownTime = TimeUtil.getDateHH_MM_SS(TimeUtil.parseDateYYYY_MM_DD_HH_MM_SS_SSS(ryKQ.getFirstTime()))+TimeUtil.getDateHH_MM_SS(TimeUtil.parseDateYYYY_MM_DD_HH_MM_SS_SSS(ryKQ.getEndTime()));
-		  							ryMap.put(TimeUtil.getMMDDString(TimeUtil.parseDateYYYY_MM_DD_HH_MM_SS_SSS(ryKQ.getShiftDate()), "月", "日"), upAndDownTime);
+		  						if (upAndDownTime==null) {
+		  							upAndDownTime = "";
 								}
+		  						ryMap.put("dateTime", TimeUtil.getDateMM_DD(TimeUtil.parseDateYYYY_MM_DD(ryKQ.getYYYYMMDD())));
+		  						ryMap.put("punchTime",upAndDownTime);
 	  						} catch (ParseException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -755,17 +758,19 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults,List<D
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-	  				}else {
+	  				}else if (!StringUtils.isEmpty(ryKQ.getClassTimeType()) && ryKQ.getClassTimeType().equals("1")) {
+					
 	  					String upStatus=ryKQ.getFirstTimeState();
 	  					String downStatus=ryKQ.getLastTimeState();
 	  					try {
 	  						if (ryKQ.getShiftDate()!=null) {
 								if (ryKQ.getFirstTime()!=null) {
-		  							upAndDownTime = TimeUtil.getDateHH_MM_SS(TimeUtil.parseDateYYYY_MM_DD_HH_MM_SS_SSS(ryKQ.getFirstTime()))+TimeUtil.getDateHH_MM_SS(TimeUtil.parseDateYYYY_MM_DD_HH_MM_SS_SSS(ryKQ.getEndTime()));
+		  							upAndDownTime = TimeUtil.getDateHH_MM_SS(TimeUtil.parseDateYYYY_MM_DD_HH_MM_SS_SSS(ryKQ.getFirstTime()))+"-"+TimeUtil.getDateHH_MM_SS(TimeUtil.parseDateYYYY_MM_DD_HH_MM_SS_SSS(ryKQ.getEndTime()));
 								}else {
 									upAndDownTime = "当日未打卡";
 								}
-								ryMap.put(TimeUtil.getMMDDString(TimeUtil.parseDateYYYY_MM_DD_HH_MM_SS_SSS(ryKQ.getShiftDate()), "月", "日"), upAndDownTime);
+								ryMap.put("dateTime", TimeUtil.getDateMM_DD(TimeUtil.parseDateYYYY_MM_DD(ryKQ.getYYYYMMDD())));
+		  						ryMap.put("punchTime",upAndDownTime);
 							}
 						} catch (ParseException e) {
 							// TODO Auto-generated catch block
@@ -787,10 +792,26 @@ public List<DepartKQ> selectDepartKqInfo(List<KqInfoResult> kqInfoResults,List<D
 	  					if (upStatus.equals("打卡异常") || downStatus.equals("打卡异常")) {
 	  						ry.setRyOnPA(String.valueOf(Integer.valueOf(ry.getRyOnPA())+1));
 	  					}
-	  				}
-	  				
+	  				}else {
+	  					upAndDownTime = ryKQ.getClassTimeName();
+	  					try {
+		  						if (upAndDownTime==null) {
+		  							upAndDownTime = "未排班";
+								}
+		  						ryMap.put("dateTime", TimeUtil.getDateMM_DD(TimeUtil.parseDateYYYY_MM_DD(ryKQ.getYYYYMMDD())));
+		  						ryMap.put("punchTime",upAndDownTime);
+	  						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+	  				ryList.add(ryMap);
 	  			}
 	  		}
+	  		ry.setPunchTime(ryList);
 	  	}
 	  	
 	  	return rykqLsit;
