@@ -190,8 +190,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE POSITION_ID = #{Position_ID}
 	</update>
 	
+	<resultMap type="com.jiubo.erp.kqgl.bean.PositionTypeBean" id="positionTypeMap">
+		<result column="POSITIONTYPE_ID" property="PositionType_ID"/>
+		<result column="POSITIONTYPE_NAME" property="PositionType_Name"/>
+	</resultMap>
+	
 	<!-- 查询岗位类型 -->
-	<select id="queryPositionType" resultType="com.jiubo.erp.kqgl.bean.PositionTypeBean">
+	<select id="queryPositionType" resultMap="positionTypeMap">
 		SELECT POSITIONTYPE_ID, POSITIONTYPE_NAME
 		FROM POSITION_TYPE
 	</select>
@@ -239,12 +244,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		]]>
 	</select>
 	
-	<!-- 查询全部员工的排班计划 -->
+	<!-- 查询全部员工的排班计划AND C.STATE = 1 -->
 	<select id="queryAllEmpAttShift" resultType="java.util.Map">
 		<![CDATA[ 
 			SELECT C.NAME EMPNAME,C.JOBNUM,B.ID, B.NAME,B.SHIFTDATE, B.STARTTIME, B.ENDTIME, B.COLORVALUE, B.TYPE, B.ISDELETE
 			FROM T_ATT_PEOPLESHIFT A,T_ATT_SHIFT B,T_EMPLOYEE_BASIC C
-			WHERE A.USERID = C.ACCOUNT AND A.SHIFTID = B.ID AND B.ISDELETE = 0 AND C.STATE = 1 AND B.STARTTIME >= #{begDate} AND B.ENDTIME < #{endDate}
+			WHERE A.USERID = C.ACCOUNT AND A.SHIFTID = B.ID AND B.ISDELETE = 0  AND B.STARTTIME >= #{begDate} AND B.ENDTIME < #{endDate}
 		]]>
 	</select>
 	
