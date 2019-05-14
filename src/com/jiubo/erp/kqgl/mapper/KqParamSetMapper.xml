@@ -190,8 +190,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE POSITION_ID = #{Position_ID}
 	</update>
 	
+	<resultMap type="com.jiubo.erp.kqgl.bean.PositionTypeBean" id="positionTypeMap">
+		<result column="POSITIONTYPE_ID" property="PositionType_ID"/>
+		<result column="POSITIONTYPE_NAME" property="PositionType_Name"/>
+	</resultMap>
+	
 	<!-- 查询岗位类型 -->
-	<select id="queryPositionType" resultType="com.jiubo.erp.kqgl.bean.PositionTypeBean">
+	<select id="queryPositionType" resultMap="positionTypeMap">
 		SELECT POSITIONTYPE_ID, POSITIONTYPE_NAME
 		FROM POSITION_TYPE
 	</select>
