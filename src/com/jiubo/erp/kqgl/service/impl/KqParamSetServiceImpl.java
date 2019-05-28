@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.Constant;
+import com.jiubo.erp.common.MapUtil;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.common.TimeUtil;
 import com.jiubo.erp.kqgl.bean.AttRuleTypeBean;
@@ -185,16 +186,18 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 	}
 
 	@Override
-	public List<DepartmentBean> queryDepartmentEmployee() {
+	public List<DepartmentBean> queryDepartmentEmployee(boolean flag,boolean flag2) {
 		//查询父级目录
 		List<DepartmentBean> departmentList = queryDepartmentByPId("0");
 		Iterator<DepartmentBean> iterator = departmentList.iterator();
 		for(;iterator.hasNext();) {
 			DepartmentBean departmentBean = iterator.next();
 			//查询子目录
-			departmentBean.setChildren(getChildren(departmentBean.getID(),true));
+			departmentBean.setChildren(getChildren(departmentBean.getID(),flag,flag2));
 			//查询部门下的员工
-			departmentBean.setEmployeeList(queryEmployeeBasic(true,departmentBean.getID(),"1"));
+			departmentBean.setEmployeeList(queryEmployeeBasic(flag,departmentBean.getID(),"1"));
+			//查询部门下的岗位
+			departmentBean.setPositionDataList(queryPositionDataByDeptId(departmentBean.getID(),flag2));
 		}
 		return departmentList;
 	}
@@ -209,29 +212,36 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 	}
 	
 	//获取所有子目录
-	private List<DepartmentBean> getChildren(String pId,boolean flag) {
+	private List<DepartmentBean> getChildren(String pId,boolean flag,boolean flag2) {
 		List<DepartmentBean> list = new ArrayList<DepartmentBean>();
 		List<DepartmentBean> departmentList = queryDepartmentByPId(pId);
 		Iterator<DepartmentBean> iterator = departmentList.iterator();
 		for(;iterator.hasNext();) {
 			DepartmentBean departmentBean = iterator.next();
 			//递归查询子目录
-			departmentBean.setChildren(getChildren(departmentBean.getID(),flag));
+			departmentBean.setChildren(getChildren(departmentBean.getID(),flag,flag2));
 			//查询部门下的员工
 			departmentBean.setEmployeeList(queryEmployeeBasic(flag,departmentBean.getID(),"1"));
+			//查询部门下的岗位
+			departmentBean.setPositionDataList(queryPositionDataByDeptId(departmentBean.getID(),flag2));
 			list.add(departmentBean);
 		}
 		return list;
 	}
 	
-
+	//查询部门下的职位
+	public List<PositionDataBean> queryPositionDataByDeptId(String deptId,boolean flag){
+		if(flag)return kqParamSetDao.queryPositionDataByDeptId(deptId);
+		return new ArrayList<PositionDataBean>();
+	}
+	
 	@Override
 	public void test() {
 		List<DepartmentBean> list = new ArrayList<DepartmentBean>();
 		//父级目录
 		List<DepartmentBean> departmentList = queryDepartmentByPId("0");
 		for(DepartmentBean departmentBean : departmentList) {
-			departmentBean.setChildren(getChildren(departmentBean.getID(),true));
+			//departmentBean.setChildren(getChildren(departmentBean.getID(),true));
 			list.add(departmentBean);
 		}
 		System.out.println(JSON.toJSONString(list));
@@ -321,9 +331,19 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 	}
 
 	@Override
-	public void updateEmpAttShift(String id) throws MessageException {
+	public void updateEmpAttShift(Map<String,Object> paraMap) throws MessageException {
 		//kqParamSetDao.deleteAttPeopleShift(id);
-		kqParamSetDao.updateAttShift(id,"1");
+		String begDate = null;
+		String endDate = null;  
+		try {
+			begDate = MapUtil.getString(paraMap, "begDate", MapUtil.NOT_NULL);
+			endDate = MapUtil.getString(paraMap, "endDate", MapUtil.NOT_NULL);
+			endDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(endDate), TimeUtil.UNIT_DAY, 1));
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new MessageException(e.getMessage());
+		}
+		kqParamSetDao.updateAttShift(begDate,endDate);
 	}
 }
 /*
@@ -403,5 +423,24 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 					startDate = TimeUtil.getFirstDayOfMonth(targetDate);
 					endDate = TimeUtil.dateAdd(startDate, TimeUtil.UNIT_MONTH, 1);
 				}
+ */
+/*
+ * public List<DepartmentBean> queryDepartmentByLevel(int level)throws
+ * MessageException{ //查询父级目录 List<DepartmentBean> departmentList =
+ * queryDepartmentByPId("0"); if(level == 1) {
+ * 
+ * }else if(level == 2) { for(DepartmentBean departmentBean : departmentList) {
+ * departmentBean.setChildren(queryDepartmentByPId(departmentBean.getID())); }
+ * }else if(level == 3) { for(DepartmentBean departmentBean : departmentList) {
+ * List<DepartmentBean> beanList = queryDepartmentByPId(departmentBean.getID());
+ * for(DepartmentBean depBean : beanList) {
+ * depBean.setChildren(queryDepartmentByPId(depBean.getID())); }
+ * departmentBean.setChildren(beanList); } }else if(level == 4) {
+ * for(DepartmentBean departmentBean : departmentList) { List<DepartmentBean>
+ * beanList = queryDepartmentByPId(departmentBean.getID()); for(DepartmentBean
+ * depBean : beanList) { List<DepartmentBean> list =
+ * queryDepartmentByPId(depBean.getID()); for(DepartmentBean b : list) {
+ * b.setChildren(queryDepartmentByPId(b.getID())); } depBean.setChildren(list);
+ * } departmentBean.setChildren(beanList); } } return departmentList; }
  */
  

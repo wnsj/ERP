@@ -260,10 +260,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	 -->
 	
-	<!-- 删除排班计划关系 -->
-	<update id="updateAttShift">
+	<!-- 删除排班计划关系 
 		UPDATE T_ATT_SHIFT
 		SET ISDELETE = #{isDelete}
 		WHERE ID = #{id}
+	-->
+	<update id="updateAttShift">
+		DELETE FROM T_ATT_SHIFT
+		WHERE STARTTIME >= #{begDate} AND STARTTIME &lt; #{endDate}
 	</update>
+	
+	<resultMap type="com.jiubo.erp.kqgl.bean.PositionDataBean" id="positionDataMap">
+		<result column="POSITION_ID" property="Position_ID"/>
+		<result column="POSITION_NAME" property="Position_Name"/>
+	</resultMap>
+	<!-- 查询部门下的岗位 -->
+	<select id="queryPositionDataByDeptId" resultMap="positionDataMap">
+		SELECT A.DEPARTMENT_ID,B.POSITION_ID,C.POSITION_NAME 
+		FROM T_EMPLOYEE_BASIC A,ACCOUNT_DATA B,POSITION_DATA C
+		WHERE A.ACCOUNT = B.ACCOUNT_ID AND B.POSITION_ID = C.POSITION_ID AND A.DEPARTMENT_ID = #{deptId}
+		GROUP BY A.DEPARTMENT_ID,B.POSITION_ID,C.POSITION_NAME
+	</select>
 </mapper>
