@@ -288,13 +288,14 @@ public interface KqParamSetService {
 	
 	/**
 	 * @desc:查询部门及部门下的员工
-	 * @param:
+	 * @param:flag,是否加载员工
+	 * @param:flag2,是否加载部门下的岗位
 	 * @return: Map<String,Object>
 	 * @Create at: 2019-05-04
 	 * @author:  dx
 	 * @version: 1.0
 	 */
-	public List<DepartmentBean> queryDepartmentEmployee()throws MessageException;
+	public List<DepartmentBean> queryDepartmentEmployee(boolean flag,boolean flag2)throws MessageException;
 	
 	/**
 	 * @desc:查询具体员工的排班计划
@@ -324,7 +325,27 @@ public interface KqParamSetService {
 	 * @author:  dx
 	 * @version: 1.0
 	 */
-	public void updateEmpAttShift(String id)throws MessageException;
+	public void updateEmpAttShift(Map<String,Object> paraMap)throws MessageException;
+	
+	/**
+	 * @desc:根据部门等级查询部门
+	 * @param:
+	 * @return: List<DepartmentBean>
+	 * @Create at: 2019-05-17
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	//public List<DepartmentBean> queryDepartmentByLevel(int level)throws MessageException;
+	
+	/**
+	 * @desc:查询部门下的岗位
+	 * @param:
+	 * @return: List<PositionDataBean>
+	 * @Create at: 2019-05-24
+	 * @author:  dx
+	 * @version: 1.0
+	 */
+	public List<PositionDataBean> queryPositionDataByDeptId(String deptId,boolean flag)throws MessageException;
 	
 	public void test();
 }

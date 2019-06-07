@@ -115,5 +115,8 @@ public interface KqParamSetDao {
 	//public void deleteAttPeopleShift(String id);
 	
 	//删除员工的排班计划(逻辑删除)
-	public void updateAttShift(@Param("id")String id,@Param("isDelete")String isDelete);
+	public void updateAttShift(@Param("begDate")String begDate,@Param("endDate")String endDate);
+	
+	//查询部门下的岗位
+	public List<PositionDataBean> queryPositionDataByDeptId(String deptId);
 }

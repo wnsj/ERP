@@ -169,9 +169,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询职位 -->
 	<select id="queryPositionData" resultType="java.util.Map">
-		SELECT A.POSITION_ID, A.POSITION_NAME, A.POSITIONTYPE_ID,(CASE A.ISPOINT WHEN 1 THEN '是' ELSE '' END) ISPOINT,B.POSITIONTYPE_NAME 
-		FROM  POSITION_DATA A,POSITION_TYPE B
-		WHERE A.POSITIONTYPE_ID = B.POSITIONTYPE_ID
+		SELECT A.POSITION_ID, A.POSITION_NAME, A.POSITIONTYPE_ID,(CASE A.ISPOINT WHEN 1 THEN '是' ELSE '' END) ISPOINT,ISNULL(B.POSITIONTYPE_NAME,'') POSITIONTYPE_NAME
+		FROM  POSITION_DATA A LEFT JOIN POSITION_TYPE B
+		ON A.POSITIONTYPE_ID = B.POSITIONTYPE_ID
 	</select>
 	
 	<!-- 增加职位 -->
@@ -260,10 +260,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	 -->
 	
-	<!-- 删除排班计划关系 -->
-	<update id="updateAttShift">
+	<!-- 删除排班计划关系 
 		UPDATE T_ATT_SHIFT
 		SET ISDELETE = #{isDelete}
 		WHERE ID = #{id}
+	-->
+	<update id="updateAttShift">
+		DELETE FROM T_ATT_SHIFT
+		WHERE STARTTIME >= #{begDate} AND STARTTIME &lt; #{endDate}
 	</update>
+	
+	<resultMap type="com.jiubo.erp.kqgl.bean.PositionDataBean" id="positionDataMap">
+		<result column="POSITION_ID" property="Position_ID"/>
+		<result column="POSITION_NAME" property="Position_Name"/>
+	</resultMap>
+	<!-- 查询部门下的岗位 -->
+	<select id="queryPositionDataByDeptId" resultMap="positionDataMap">
+		SELECT A.DEPARTMENT_ID,B.POSITION_ID,C.POSITION_NAME 
+		FROM T_EMPLOYEE_BASIC A,ACCOUNT_DATA B,POSITION_DATA C
+		WHERE A.ACCOUNT = B.ACCOUNT_ID AND B.POSITION_ID = C.POSITION_ID AND A.DEPARTMENT_ID = #{deptId}
+		GROUP BY A.DEPARTMENT_ID,B.POSITION_ID,C.POSITION_NAME
+	</select>
 </mapper>

@@ -995,7 +995,7 @@ public class KqParamSetController {
 		       String retCode = Constant.Result.SUCCESS;
 		       String retMsg = Constant.Result.SUCCESS_MSG;
 		       try {
-		    	   result.put(Constant.Result.RETDATA, KqParamSetService.queryDepartmentEmployee());
+		    	   result.put(Constant.Result.RETDATA, KqParamSetService.queryDepartmentEmployee(true,false));
 			   }catch (MessageException e){
 			        retCode = Constant.Result.ERROR;
 			        retMsg = e.getMessage();
@@ -1028,7 +1028,6 @@ public class KqParamSetController {
 		    	   String str = ToolClass.getStrFromInputStream(request);
 		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
 		    	   JSONObject jsObj = JSONObject.parseObject(str);
-		    	   //KqParamSetService.queryEmpAttShift("217", "2017-01-02", "2017-01-08", "");
 		    	   if(jsObj.get("userId") == null || jsObj.get("startTime") == null || jsObj.get("endTime") == null)
 		    		   throw new MessageException("userId,startTime或endTime为空！");
 		    	   result = KqParamSetService.queryEmpAttShift(jsObj.getString("userId"), jsObj.getString("startTime"), jsObj.getString("endTime"), jsObj.getString("flag"));
@@ -1090,16 +1089,17 @@ public class KqParamSetController {
 		 * @author:  dx
 		 * @version: 1.0
 		 */
-		//http://127.0.0.1:8080/Erp/kqParamSetContr/updateEmpAttShift?id=301201
+		//http://127.0.0.1:8080/Erp/kqParamSetContr/updateEmpAttShift?begDate=2019-01-01&endDate=2018-01-01
 		@ResponseBody
 		@RequestMapping(value="/updateEmpAttShift",method = {RequestMethod.POST})
-		public JSONObject updateEmpAttShift(@RequestBody Map<String,Object> requestMap) {
+		public JSONObject updateEmpAttShift(@RequestBody String params) {
 			  JSONObject result = new JSONObject();
 		       String retCode = Constant.Result.SUCCESS;
 		       String retMsg = Constant.Result.SUCCESS_MSG;
 		       try {
-		    	   String id = MapUtil.getStringIgnoreCase(requestMap, "id", MapUtil.NOT_NULL);
-		    	   KqParamSetService.updateEmpAttShift(id);
+		    	   if(StringUtils.isBlank(params))throw new MessageException("参数接收失败！");
+				   Map<String,Object> requestMap = JSONObject.parseObject(params, Map.class);
+		    	   KqParamSetService.updateEmpAttShift(requestMap);
 			   }catch (MessageException e){
 			        retCode = Constant.Result.ERROR;
 			        retMsg = e.getMessage();
@@ -1112,5 +1112,67 @@ public class KqParamSetController {
 			        result.put(Constant.Result.RETMSG, retMsg);
 			        return result;
 			  } 
+		}
+		
+		/**
+		 * @desc:查询部门下的职位
+		 * @param:
+		 * @return: JSONObject
+		 * @Create at: 2019-05-24
+		 * @author:  dx
+		 * @version: 1.0
+		 */
+		@ResponseBody
+		@RequestMapping(value="/queryDepartmentPosition",method = {RequestMethod.POST})
+		public JSONObject queryDepartmentPosition(HttpServletRequest request){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+		       try {
+		    	   String params = ToolClass.getStrFromInputStream(request);
+		    	   if(StringUtils.isBlank(params)) {
+		    		   result.put(Constant.Result.RETDATA, KqParamSetService.queryDepartmentEmployee(false,true));
+		    	   }else {
+		    		   Map<String,Object> requestMap = JSONObject.parseObject(params, Map.class);
+		    		   result.put(Constant.Result.RETDATA, KqParamSetService.queryPositionDataByDeptId(MapUtil.getString(requestMap, "deptId", MapUtil.NOT_NULL), true));
+		    	   }
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  } 
+		};
+		
+		@ResponseBody
+		@RequestMapping(value="/test",method = {RequestMethod.POST})
+		public JSONObject queryZzryReport(@RequestBody String params){
+			   JSONObject result = new JSONObject();
+		       String retCode = Constant.Result.SUCCESS;
+		       String retMsg = Constant.Result.SUCCESS_MSG;
+			   try {
+				   if(StringUtils.isBlank(params))throw new MessageException("参数接收失败！");
+				   Map<String,Object> requestMap = JSONObject.parseObject(params, Map.class);
+				   int level = MapUtil.getInt(requestMap, "level", MapUtil.NOT_NULL);
+			  	   //result.put(Constant.Result.RETDATA,KqParamSetService.queryDepartmentByLevel(level));
+				   if(false)throw new MessageException("");
+			   }catch (MessageException e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = e.getMessage();
+			   }catch (Exception e){
+			        retCode = Constant.Result.ERROR;
+			        retMsg = Constant.Result.ERROR_MSG;
+			        log.error(Constant.Result.RETMSG,e);
+			  }finally {
+			        result.put(Constant.Result.RETCODE, retCode);
+			        result.put(Constant.Result.RETMSG, retMsg);
+			        return result;
+			  }
 		}
 }
