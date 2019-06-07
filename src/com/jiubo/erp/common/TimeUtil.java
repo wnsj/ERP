@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.hp.hpl.sparta.xpath.ThisNodeTest;
+
 public class TimeUtil {
 
     public final static String _NULLSTR = "";
@@ -348,7 +350,24 @@ public class TimeUtil {
         return date==null?_NULLSTR:sdf_YYYY_MM_DD_HH_MM_SS_SSS.format(date);
 
     }
+    
+    /**
+     * 字符串日期转化带时间的字符串日期   YYYY-MM-DD->YYYY-MM-DD HH:MM:SS.SSS
+     * @param date
+     * @return
+     * @throws ParseException
+     * @return 返回值类型  Date
+     * @author 作者 mwl
+     * @date   时间 2019年6月7日下午2:05:40
+     */
+    public static synchronized String YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(String dateTime) throws ParseException {
+    	
+    	Date time = parseAnyDate(dateTime);
+		
+    	return getDateYYYY_MM_DD_HH_MM_SS_SSS(time);
 
+    }
+    
     /*
     *
     * yyyyMMdd

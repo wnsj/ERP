@@ -16,9 +16,16 @@ public class QueryFamilyResult {
 	private String resignReason;//离职原因
 	private String uAccountId;//ERP账号id
 	private String uAccountName;//ERP账号id
+	private String type;//add，modify 添加或者修改
 	
 	public String getuAccountName() {
 		return uAccountName;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	public void setuAccountName(String uAccountName) {
 		this.uAccountName = uAccountName;

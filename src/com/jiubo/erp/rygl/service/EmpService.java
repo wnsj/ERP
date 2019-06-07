@@ -24,7 +24,7 @@ public interface EmpService {
 	List<QueryResult> initEmpList(QueryParam param,HttpServletRequest request) throws Exception;
 	
 	//家庭成员列表初始化
-	List<QueryFamilyResult> initFamilList(QueryParam param,HttpServletRequest request)throws Exception;
+	List<QueryFamilyResult> initFamilList(QueryFamilyResult param)throws Exception;
 	
 	//初始化部门列表
 	List<DepartmentBean> initDepartList(DepartmentBean dbp);
@@ -45,7 +45,7 @@ public interface EmpService {
 	public List<DepartmentBean> selectUserDepId(DepartmentBean depName);
 	
 	//模糊查询家庭列表
-	public List<QueryFamilyResult> familyfuzzyQuery(QueryParam param, HttpServletRequest request) throws Exception;
+	public List<QueryFamilyResult> familyfuzzyQuery(QueryFamilyResult param) throws Exception;
 	
 	//查询账户信息
 	public List<Account> selectAccountList(Account account);
@@ -69,12 +69,16 @@ public interface EmpService {
 	
 	
 	//插入用户的详细信息
-	public boolean insertUserDetailInfo(UserInfo userInfo);
+	public Integer insertUserDetailInfo(UserInfo userInfo);
 	//更新用户的详细信息
 	Integer updataDetialInfo(UserInfo userInfo);
 	
 	//插入家庭信息
-	public boolean insertUserFmInfo(UserFamily userFmInfo);
+	public Integer insertUserFmInfo(QueryFamilyResult qfr);
+	
+	//更新家庭信息
+	public Integer updatafamilyInfo(QueryFamilyResult qfr);
+	
 	
 	//查询调动信息
 	public List<PositionShift> selectShiftInfo(PositionShift pShift);

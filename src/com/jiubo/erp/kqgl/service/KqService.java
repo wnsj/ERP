@@ -36,4 +36,7 @@ public interface KqService {
 		
 		//考勤报表
 		List<KqInfoResult> kqTableInfoList(KqInfoResult kr);
+		
+		//考勤报表统计
+		List<KqInfoResult> kqTableCountList(KqInfoResult kr);
 }

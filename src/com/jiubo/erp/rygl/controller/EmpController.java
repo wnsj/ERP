@@ -3,7 +3,6 @@ package com.jiubo.erp.rygl.controller;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.record.PageBreakRecord.Break;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -26,15 +26,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
+
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
 import com.jiubo.erp.common.Constant;
 import com.jiubo.erp.common.MapUtil;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.common.Position;
+import com.jiubo.erp.common.TimeUtil;
 import com.jiubo.erp.erpLogin.util.ResponseMessageUtils;
-import com.jiubo.erp.kqgl.controller.KqParamSetController;
-import com.jiubo.erp.kqgl.vo.Vacation;
+
 import com.jiubo.erp.rygl.bean.DepartmentBean;
 import com.jiubo.erp.rygl.bean.ProjectDataBean;
 import com.jiubo.erp.rygl.service.EmpService;
@@ -49,10 +51,8 @@ import com.jiubo.erp.rygl.vo.UserFamily;
 import com.jiubo.erp.rygl.vo.UserInfo;
 import com.quicksand.push.ToolClass;
 
-import lombok.val;
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+
+
 
 @Controller
 @RequestMapping("/search")
@@ -77,7 +77,7 @@ public class EmpController {
 	@RequestMapping(value = "/allList")
 	public JSONObject allList(HttpServletResponse response, HttpServletRequest request) {
 		QueryParam qp = new QueryParam();
-
+		
 		JSONObject result = new JSONObject();
 		String retCode = Constant.Result.SUCCESS;
 		String retMsg = Constant.Result.SUCCESS_MSG;
@@ -224,102 +224,36 @@ public class EmpController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("finally")
 	@ResponseBody
 	@RequestMapping(value = "/fmList")
-	public List<QueryFamilyResult> fmList(HttpServletResponse response, HttpServletRequest request) throws Exception {
+	public JSONObject fmList(HttpServletResponse response, HttpServletRequest request) throws Exception {
 
-		QueryParam qParam = new QueryParam();
-		Map<String, String> mapList = ToolClass.mapShiftStr(request);
-		qParam.setChName(mapList.get("chName"));
-		qParam.setEmpName(mapList.get("empName"));
-		qParam.setShBirth(mapList.get("shBirth"));
-
-		String chName = qParam.getChName();
-		String empName = qParam.getEmpName();
-		String shBirth = qParam.getShBirth();
-
-		Integer shBirthInt = Integer.valueOf(shBirth);
-		List<QueryFamilyResult> fmList = this.service.familyfuzzyQuery(qParam, request);
-
-		List<QueryFamilyResult> fmListCource = this.service.familyfuzzyQuery(qParam, request);
-		List<QueryFamilyResult> fmListRes = new ArrayList<>();
-
-		if (fmListCource.size() > 0) {
-
-			if (empName != null & chName != null & shBirthInt > 0) {
-				for (QueryFamilyResult fmListCour : fmListCource) {
-					String birth = fmListCour.getBirth().substring(6, 7);
-					int birthInt = Integer.valueOf(birth);
-					if (fmListCour.getJobnum().contains(empName) || fmListCour.getName().contains(empName)) {
-						if (fmListCour.getChname().contains(chName)) {
-							if (shBirthInt == birthInt) {
-								fmListRes.add(fmListCour);
-							}
-						}
-					}
-				}
-			} else if (empName != null & chName != null & shBirthInt == 0) {
-				for (QueryFamilyResult fmListCour : fmListCource) {
-					if (fmListCour.getJobnum().contains(empName) || fmListCour.getName().contains(empName)) {
-						if (fmListCour.getChname().contains(chName)) {
-							// System.out.println("-------2-12个条件----"+fmListRes.size());
-							fmListRes.add(fmListCour);
-						}
-					}
-				}
-			} else if (shBirthInt > 0 & empName != null) {
-				for (QueryFamilyResult fmListCour : fmListCource) {
-					String birth = fmListCour.getBirth().substring(6, 7);
-					int birthInt = Integer.valueOf(birth);
-					if (fmListCour.getChname().contains(chName)) {
-						if (shBirthInt == birthInt) {
-							// System.out.println("-------2-23个条件----"+fmListRes.size());
-							fmListRes.add(fmListCour);
-						}
-					}
-				}
-			} else if (chName != null & shBirthInt > 0) {
-				for (QueryFamilyResult fmListCour : fmListCource) {
-					String birth = fmListCour.getBirth().substring(6, 7);
-					int birthInt = Integer.valueOf(birth);
-					if (fmListCour.getJobnum().contains(empName) || fmListCour.getName().contains(empName)) {
-						if (shBirthInt > 0 & shBirthInt == birthInt) {
-							// System.out.println("------2-13个条件----"+fmListRes.size());
-							fmListRes.add(fmListCour);
-						}
-					}
-				}
-			} else if (empName != null & shBirthInt == 0) {
-				for (QueryFamilyResult fmListCour : fmListCource) {
-					if (fmListCour.getJobnum().contains(empName) || fmListCour.getName().contains(empName)) {
-						// System.out.println("------1-1个条件----"+fmListRes.size());
-						fmListRes.add(fmListCour);
-					}
-				}
-			}
-		} else if (chName != null & shBirthInt == 0) {
-			fmListCource = fmListRes;
-			fmListRes = new ArrayList<>();
-			for (QueryFamilyResult fmListCour : fmListCource) {
-				if (fmListCour.getChname().contains(chName)) {
-					// System.out.println("------1-2个条件----"+fmListRes.size());
-					fmListRes.add(fmListCour);
-				}
-			}
-		} else if (shBirthInt > 0) {
-			fmListCource = fmListRes;
-			fmListRes = new ArrayList<>();
-			for (QueryFamilyResult fmListCour : fmListCource) {
-				String birth = fmListCour.getBirth().substring(6, 7);
-				int birthInt = Integer.valueOf(birth);
-				if (shBirthInt == birthInt) {
-					// System.out.println("------1-3个条件----"+fmListRes.size());
-					fmListRes.add(fmListCour);
-				}
-			}
+		QueryFamilyResult qfr = new QueryFamilyResult();
+		
+		JSONObject result = new JSONObject();
+		String retCode = Constant.Result.SUCCESS;
+		String retMsg = Constant.Result.SUCCESS_MSG;
+		try {
+			List<QueryFamilyResult> fmList = new ArrayList<>();
+			String str = ToolClass.getStrFromInputStream(request);
+			if (StringUtils.isBlank(str))
+				throw new MessageException("参数接收失败！");
+			qfr = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryFamilyResult.class);
+			fmList = this.service.familyfuzzyQuery(qfr);
+			result.put("resData", fmList) ;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			log.error(Constant.Result.RETMSG, e);
+		} finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+			return result;
 		}
-		// System.out.println("------fmListRes----"+fmListRes.size());
-		return fmListRes;
 	}
 
 	/**
@@ -484,25 +418,25 @@ public class EmpController {
 	 * @param request
 	 * @return
 	 */
-	@ResponseBody
-	@RequestMapping(value = "/familyList")
-	public List<QueryFamilyResult> familyList(HttpServletResponse response, HttpServletRequest request) {
-		List<QueryFamilyResult> qfrList = new ArrayList<>();
-		QueryParam qParam = new QueryParam();
-		Map<String, String> mapList = ToolClass.mapShiftStr(request);
-		qParam.setChName(mapList.get("chName"));
-		qParam.setChName(mapList.get("empName"));
-		qParam.setChName(mapList.get("shBirth"));
-		try {
-			qfrList = this.service.initFamilList(qParam, request);
-			System.out.println("家庭人员列表" + qfrList.size());
-			return qfrList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResponseMessageUtils.responseMessage(response, "查询失败!");
-			return null;
-		}
-	}
+//	@ResponseBody
+//	@RequestMapping(value = "/familyList")
+//	public List<QueryFamilyResult> familyList(HttpServletResponse response, HttpServletRequest request) {
+//		List<QueryFamilyResult> qfrList = new ArrayList<>();
+//		QueryParam qParam = new QueryParam();
+//		Map<String, String> mapList = ToolClass.mapShiftStr(request);
+//		qParam.setChName(mapList.get("chName"));
+//		qParam.setChName(mapList.get("empName"));
+//		qParam.setChName(mapList.get("shBirth"));
+//		try {
+//			qfrList = this.service.initFamilList(qParam, request);
+//			System.out.println("家庭人员列表" + qfrList.size());
+//			return qfrList;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			ResponseMessageUtils.responseMessage(response, "查询失败!");
+//			return null;
+//		}
+//	}
 
 	/**
 	 * ------------------------------------------------------------------个人信息----------------------------------------------------------------------
@@ -519,7 +453,7 @@ public class EmpController {
 		UserInfo userInfo = new UserInfo();
 		Map<String, String> mapList = ToolClass.mapShiftStr(request);
 
-		userInfo.setUserId(Integer.valueOf(mapList.get("userId")));
+		userInfo.setId(Integer.valueOf(mapList.get("userId")));
 		uList = this.service.searchUBInfo(userInfo);
 
 		// 通过账号Id找账号的名字和职位的名字
@@ -575,21 +509,36 @@ public class EmpController {
 	 * @param request
 	 * @return
 	 */
+	@SuppressWarnings("finally")
 	@ResponseBody
 	@RequestMapping(value = "/singlefamilyList")
-	public List<QueryFamilyResult> singlefamilyList(HttpServletResponse response, HttpServletRequest request) {
-		List<QueryFamilyResult> qfrList = new ArrayList<>();
-		QueryFamilyResult qFResult = new QueryFamilyResult();
-		Map<String, String> mapList = ToolClass.mapShiftStr(request);
-		qFResult.setuAccountId(mapList.get("accountId"));
+	public JSONObject singlefamilyList(HttpServletResponse response, HttpServletRequest request) {
+		QueryFamilyResult qf = new QueryFamilyResult();
+		
+		JSONObject result = new JSONObject();
+		String retCode = Constant.Result.SUCCESS;
+		String retMsg = Constant.Result.SUCCESS_MSG;
 		try {
-			qfrList = this.service.singleFamilyList(qFResult);
-			System.out.println("家庭人员列表" + qfrList.size());
-			return qfrList;
+			List<QueryFamilyResult> qfrList = new ArrayList<>();
+			String str = ToolClass.getStrFromInputStream(request);
+			if (StringUtils.isBlank(str))
+				throw new MessageException("参数接收失败！");
+			qf = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryFamilyResult.class);
+			qfrList = this.service.singleFamilyList(qf);
+			result.put("resData", qfrList) ;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			log.error(Constant.Result.RETMSG, e);
+		} finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+			return result;
 		}
+		
 	}
 
 	/**
@@ -600,93 +549,263 @@ public class EmpController {
 	 * @param request
 	 * @return
 	 */
+	@SuppressWarnings("finally")
 	@ResponseBody
-	@RequestMapping(value = "/uUpdateUserInfo")
-	public void updateUserBaseInfo(HttpServletResponse response, HttpServletRequest request) {
-
-		UserInfo userInfo = new UserInfo();
-		Account account = new Account();
+	@RequestMapping(value = "/updateUserInfo")
+	public JSONObject updateUserInfo(HttpServletResponse response, HttpServletRequest request) {
+		
+		UserInfo ui = new UserInfo();
 		QueryFamilyResult qfr = new QueryFamilyResult();
-		System.out.println("进来了");
-		String string;
+		Map<String, String> resultMap = new HashMap<>(); 
+		
+		JSONObject result = new JSONObject();
+		String retCode = Constant.Result.SUCCESS;
+		String retMsg = Constant.Result.SUCCESS_MSG;
+		resultMap.put("message", "更新成功");
 		try {
-			string = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+			String string = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
 
-			JSONObject jsonData = JSONObject.fromObject(string);
+			JSONObject jsonData = JSONObject.parseObject(string);
+			JSONObject userBase,userDetail;
+			JSONArray userFamily;
+			
+			
+			
+			System.out.println("updateUserInfo:"+jsonData);
+			if (jsonData.containsKey("userBase")) {
+				
+				userBase = jsonData.getJSONObject("userBase");
+				ui= MapUtil.transJsonToObjectIgnoreCase(userBase, UserInfo.class);
+				Integer baseInfoInt = this.service.updataBaseInfo(ui);
+				if (baseInfoInt==1) {
+					resultMap.put("userBase", "1");
+				}else {
+					resultMap.put("message", "基础信息更新失败");
+				}
+				System.out.println("baseInfoInt:"+baseInfoInt);
+				resultMap.put("userBase", String.valueOf(baseInfoInt));
+			}
+			if (jsonData.containsKey("userDetail")) {
+				userDetail = jsonData.getJSONObject("userDetail");
+				if (!userDetail.isEmpty()) {
+					ui= MapUtil.transJsonToObjectIgnoreCase(userDetail, UserInfo.class);
+					System.out.println("userDetail:"+ui.getuIdNum());
+					Integer detailInfoInt = this.service.updataDetialInfo(ui);
+					if (detailInfoInt==1) {
+						resultMap.put("userDetail", "1");
+					}else {
+						resultMap.put("message", "详细信息更新失败");
+					}
+				}
+			}	
+			
 
-			System.out.println(jsonData);
-
-			userInfo.setUserId(Integer.valueOf(jsonData.getString("ID")));
-			userInfo.setuName(jsonData.getString("Name"));
-			userInfo.setuState(jsonData.getString("State"));
-			userInfo.setuSex(jsonData.getString("Sex"));
-			userInfo.setuBirth(jsonData.getString("Birth"));
-			userInfo.setuAccountId(jsonData.getString("Account_Id"));
-			userInfo.setuDepartment_id(jsonData.getString("DepartmentId"));
-			userInfo.setPositionId(jsonData.getString("PositionId"));
-			userInfo.setuEntryDte(jsonData.getString("EntryDate"));
-			userInfo.setuPositiveDate(jsonData.getString("PositiveDate"));
-			userInfo.setuResignDate(jsonData.getString("ResignDate"));
-			userInfo.setuResignType(jsonData.getString("ResignType"));
-			userInfo.setuRemark(jsonData.getString("Remark"));
-
-			// 详细信息
-			userInfo.setuIdNum(jsonData.getString("IDNum"));
-			userInfo.setuPloitical(jsonData.getString("ploitical"));
-			userInfo.setuHomeTown(jsonData.getString("homeTown"));
-			userInfo.setuNationality(jsonData.getString("nationality"));
-			userInfo.setuMarital(jsonData.getString("marital"));
-			userInfo.setuHomeAddress(jsonData.getString("homeAddress"));
-			userInfo.setuCurrentAddress(jsonData.getString("currentAddress"));
-			userInfo.setuDomicile(jsonData.getString("domicile"));
-			userInfo.setuAccountProp(jsonData.getString("accountProp"));
-
-			userInfo.setuSchools(jsonData.getString("schools"));
-			userInfo.setuEducation(jsonData.getString("education"));
-			userInfo.setuProfession(jsonData.getString("profession"));
-			userInfo.setuGraduation(jsonData.getString("graduation"));
-			userInfo.setuAtSchool(jsonData.getString("atSchool"));
-
-			userInfo.setuContact(jsonData.getString("contact"));
-			userInfo.setuEmergencyContact(jsonData.getString("emergencyContact"));
-			userInfo.setuEmergencyphone(jsonData.getString("emergencyPhone"));
-
-			userInfo.setuLicenseType(jsonData.getString("licenseType"));
-			userInfo.setuDrivingExpe(jsonData.getString("drivingExpe"));
-
-			// 提交家庭信息
-			if (jsonData.has("newFamilyNumList")) {
-				JSONArray jArr = jsonData.getJSONArray("newFamilyNumList");
-				for (int i = 0; i < jArr.size(); i++) {
-					qfr = new QueryFamilyResult();
-					qfr.setID(jArr.getJSONObject(i).getString("id"));
-					qfr.setuAccountId(userInfo.getuAccountId());
-					qfr.setAppellation(jArr.getJSONObject(i).getString("appellation"));
-					qfr.setChname(jArr.getJSONObject(i).getString("chname"));
-					qfr.setBirth(jArr.getJSONObject(i).getString("birth"));
-					qfr.setWorkadress(jArr.getJSONObject(i).getString("workadress"));
-					qfr.setPosition(jArr.getJSONObject(i).getString("position"));
-					qfr.setPhone(jArr.getJSONObject(i).getString("phone"));
-					qfr.setWechat(jArr.getJSONObject(i).getString("wechat"));
-					qfr.setFamAddress(jArr.getJSONObject(i).getString("famAddress"));
-					if (qfr.getID() == "") {
-						System.out.println("有一个新的家庭成员");
+			if (jsonData.containsKey("userFamily")) {
+				userFamily = jsonData.getJSONArray("userFamily");
+				resultMap.put("add", "1");
+				resultMap.put("modify", "1");
+				for (int i = 0; i < userFamily.size(); i++) {
+					JSONObject jsonObject = userFamily.getJSONObject(i);
+					qfr= MapUtil.transJsonToObjectIgnoreCase(jsonObject, QueryFamilyResult.class);
+					if (qfr.getType().equals("add")) {
+						Integer add = this.service.insertUserFmInfo(qfr);
+						if (add==0) {
+							resultMap.put("add", "0");
+							resultMap.put("message", "家庭成员添加失败");
+						}
+					}
+					if (qfr.getType().equals("modify")) {
+						Integer modify = this.service.updatafamilyInfo(qfr);
+						if (modify==0) {
+							resultMap.put("modify", "0");
+							resultMap.put("message", "家庭成员修改失败");
+						}
 					}
 				}
 			}
+			result.put("resData", resultMap);
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			log.error(Constant.Result.RETMSG, e);
+		} finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+			return result;
+		}
 
-			Integer baseInfoInt = this.service.updataBaseInfo(userInfo);
-			Integer detailInfoInt = this.service.updataDetialInfo(userInfo);
-			System.out.println("基础家庭成员" + baseInfoInt + "详细信息" + detailInfoInt);
-			if (baseInfoInt == 1 && detailInfoInt == 1) {
-				ResponseMessageUtils.responseMessage(response, "修改成功!");
-			} else {
-				ResponseMessageUtils.responseMessage(response, "修改失败!");
+	}
+	/**
+	 *  插入用户信息
+	 * @param response
+	 * @param request
+	 * @return
+	 * @return 返回值类型  JSONObject
+	 * @author 作者 mwl
+	 * @date   时间 2019年6月7日上午9:00:04
+	 */
+	@SuppressWarnings("finally")
+	@ResponseBody
+	@RequestMapping(value = "/insertUserInfo")
+	public JSONObject insertUserInfo(HttpServletResponse response, HttpServletRequest request) {
+		
+		UserInfo ui = new UserInfo();
+		Integer uId = 0;
+		Account account = new Account();
+		String accountId = "0";
+		QueryFamilyResult qfr = new QueryFamilyResult();
+		Map<String, String> resultMap = new HashMap<>(); 
+		
+		JSONObject result = new JSONObject();
+		String retCode = Constant.Result.SUCCESS;
+		String retMsg = Constant.Result.SUCCESS_MSG;
+		resultMap.put("message", "添加成功");
+		try {
+			String string = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+
+			JSONObject jsonData = JSONObject.parseObject(string);
+			JSONObject userBase,userDetail;
+			JSONArray userFamily;
+			
+			System.out.println("updateUserInfo:"+jsonData);
+			if (!jsonData.isEmpty()) {
+				if (jsonData.containsKey("userBase")) {
+					userBase = jsonData.getJSONObject("userBase");
+					if (!userBase.isEmpty()) {
+						ui= MapUtil.transJsonToObjectIgnoreCase(userBase, UserInfo.class);
+						
+						
+						UserInfo userInfo = new UserInfo();
+						userInfo.setJobNum(ui.getName());
+						List<UserInfo> uList = this.service.searchUBInfo(ui);
+						if (uList.size() > 0) {
+							resultMap.put("message", "姓名已存在");
+							result.put("resData", resultMap);
+							return result;
+						}
+						
+						userInfo = new UserInfo();
+						userInfo.setJobNum(ui.getJobNum());
+						List<UserInfo> jList = this.service.searchUBInfo(userInfo);
+						if (jList.size() > 0) {
+							resultMap.put("message", "工号已存在");
+							result.put("resData", resultMap);
+							return result;
+						}
+						
+						
+						account.setAccountName(ui.getErpaaccount());
+						List<Account> aList = this.service.selectAccountList(account);
+						if (aList.size() > 0) {
+							resultMap.put("message", "ERP账号已存在");
+							result.put("resData", resultMap);
+							return result;
+						} else {
+							account.setAccountName(ui.getErpaaccount());
+							account.setAccountPwd("123456");
+							account.setAccountState("在用");
+							account.setPositionId(ui.getPositionId());
+							Integer isSucess = this.service.insertAccountInfo(account);
+							resultMap.put("account", String.valueOf(isSucess));
+							if (isSucess == 1) {
+								aList = this.service.selectAccountList(account);
+								account = aList.get(0);
+								ui.setAccountId(account.getAccountId());
+								accountId = account.getAccountId();
+							}
+						}
+						String newDate = ToolClass.strDateTimeStr(new Date());
+						if (!StringUtils.isBlank(ui.getEntryDate())) {
+							System.out.println("setEntryDte"+ui.getEntryDate());
+							ui.setEntryDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ui.getEntryDate()));
+							System.out.println("setEntryDte"+ui.getEntryDate());
+						}
+						if (!StringUtils.isBlank(ui.getPositiveDate())) {
+							ui.setPositiveDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ui.getPositiveDate()));
+						}
+						if (!StringUtils.isBlank(ui.getResignDate())) {
+							ui.setResignDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ui.getResignDate()));
+						}
+						
+						ui.setCreateDate(newDate);
+						ui.setUpdateDate(newDate);
+						ui.setuAtSchool("0");
+						
+						
+						// 插入用户基本信息，在进行查询人员ID，在进行插入详细信息
+						Integer baseInt = this.service.insertUserInfo(ui);
+						if (baseInt==1) {
+							resultMap.put("userDetail", String.valueOf(baseInt));
+						}else {
+							resultMap.put("message", "基础信息插入失败");
+						}
+						List<UserInfo> userlist = this.service.searchUBInfo(ui);
+						uId = userlist.get(0).getId();
+						
+					}
+				}
+				
+				if (jsonData.containsKey("userDetail")) {
+					userDetail = jsonData.getJSONObject("userDetail");
+					
+					if (!userDetail.isEmpty()) {
+						ui= MapUtil.transJsonToObjectIgnoreCase(userDetail, UserInfo.class);
+						ui.setuEmployeeBasicID(uId);
+						System.out.println("userDetail+uId:"+ui.getuEmployeeBasicID());
+						if (uId != 0) {
+							Integer detailInfoInt = this.service.insertUserDetailInfo(ui);
+							if (detailInfoInt==1) {
+								resultMap.put("userDetail", String.valueOf(detailInfoInt));
+							}else {
+								resultMap.put("message", "详细信息插入失败");
+							}
+							
+						}
+					}
+				}	
+				
+
+				if (jsonData.containsKey("userFamily")) {
+					userFamily = jsonData.getJSONArray("userFamily");
+					resultMap.put("add", "1");
+					resultMap.put("modify", "1");
+					if (accountId.equals("0")) {
+						for (int i = 0; i < userFamily.size(); i++) {
+							JSONObject jsonObject = userFamily.getJSONObject(i);
+							qfr= MapUtil.transJsonToObjectIgnoreCase(jsonObject, QueryFamilyResult.class);
+							qfr.setuAccountId(accountId);
+							if (qfr.getType().equals("add")) {
+								Integer add = this.service.insertUserFmInfo(qfr);
+								if (add==0) {
+									resultMap.put("add", "0");
+									resultMap.put("message", "家庭信息添加失败");
+								}
+							}
+							if (qfr.getType().equals("modify")) {
+								Integer modify = this.service.updatafamilyInfo(qfr);
+								if (modify==0) {
+									resultMap.put("modify", "0");
+								}
+							}
+						}
+					}
+				}
 			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			result.put("resData", resultMap);
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			log.error(Constant.Result.RETMSG, e);
+		} finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+			return result;
 		}
 
 	}
@@ -714,11 +833,11 @@ public class EmpController {
 		try {
 			string = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
 
-			JSONObject jsonData = JSONObject.fromObject(string);
+			JSONObject jsonData = JSONObject.parseObject(string);
 
 			System.out.println("jsonData" + jsonData);
 
-			userInfo.setuName(jsonData.getString("Name"));
+			userInfo.setName(jsonData.getString("Name"));
 			List<UserInfo> uList = this.service.searchUBInfo(userInfo);
 
 			if (uList.size() > 0) {
@@ -727,7 +846,7 @@ public class EmpController {
 			}
 
 			userInfo = new UserInfo();
-			userInfo.setuName(jsonData.getString("JobNum"));
+			userInfo.setJobNum(jsonData.getString("JobNum"));
 			List<UserInfo> jList = this.service.searchUBInfo(userInfo);
 			if (jList.size() > 0) {
 				resultM.put("0", "工号已存在");
@@ -745,53 +864,18 @@ public class EmpController {
 				if (isSucess == 1) {
 					aList = this.service.selectAccountList(account);
 					account = aList.get(0);
-					userInfo.setuAccount(account.getAccountId());
+					userInfo.setAccountId(account.getAccountId());
 				}
 			}
 
-			userInfo.setuName(jsonData.getString("Name"));
-			userInfo.setuName(jsonData.getString("JobNum"));
-
-			// 基本信息
-			userInfo.setuSex(jsonData.getString("Sex"));
-			userInfo.setuDepartment_id(jsonData.getString("DepartmentId"));
-			userInfo.setuBirth(jsonData.getString("Birth"));
-
-			userInfo.setPositionId(jsonData.getString("PositionId"));
-			userInfo.setuEntryDte(jsonData.getString("EntryDate"));
-			userInfo.setuPositiveDate(jsonData.getString("PositiveDate"));
-			userInfo.setuResignDate(jsonData.getString("ResignDate"));
-			userInfo.setuRemark(jsonData.getString("Remark"));
-			// 详细信息
-			userInfo.setuIdNum(jsonData.getString("IDNum"));
-			userInfo.setuPloitical(jsonData.getString("ploitical"));
-			userInfo.setuHomeTown(jsonData.getString("homeTown"));
-			userInfo.setuNationality(jsonData.getString("nationality"));
-			userInfo.setuMarital(jsonData.getString("marital"));
-			userInfo.setuHomeAddress(jsonData.getString("homeAddress"));
-			userInfo.setuCurrentAddress(jsonData.getString("currentAddress"));
-			userInfo.setuDomicile(jsonData.getString("domicile"));
-			userInfo.setuAccountProp(jsonData.getString("accountProp"));
-
-			userInfo.setuSchools(jsonData.getString("schools"));
-			userInfo.setuEducation(jsonData.getString("education"));
-			userInfo.setuProfession(jsonData.getString("profession"));
-			userInfo.setuGraduation(jsonData.getString("graduation"));
-			userInfo.setuAtSchool(jsonData.getString("atSchool"));
-
-			userInfo.setuContact(jsonData.getString("contact"));
-			userInfo.setuEmergencyContact(jsonData.getString("emergencyContact"));
-			userInfo.setuEmergencyphone(jsonData.getString("emergencyPhone"));
-
-			userInfo.setuLicenseType(jsonData.getString("licenseType"));
-			userInfo.setuDrivingExpe(jsonData.getString("drivingExpe"));
+			
 
 			// 提交家庭信息
-			if (jsonData.has("newFamilyNumList")) {
+			if (jsonData.containsKey("newFamilyNumList")) {
 				JSONArray jArr = jsonData.getJSONArray("newFamilyNumList");
 				for (int i = 0; i < jArr.size(); i++) {
 					QueryFamilyResult qfr = new QueryFamilyResult();
-					qfr.setuAccountId(userInfo.getuAccountId());
+					qfr.setuAccountId(userInfo.getAccountId());
 					qfr.setAppellation(jArr.getJSONObject(i).getString("appellation"));
 					qfr.setChname(jArr.getJSONObject(i).getString("chname"));
 					qfr.setBirth(jArr.getJSONObject(i).getString("birth"));
@@ -804,21 +888,20 @@ public class EmpController {
 			}
 
 			String newDate = ToolClass.strDateTimeStr(new Date());
-			userInfo.setuCreateDate(newDate);
-			userInfo.setuUpdateDate(newDate);
+			userInfo.setCreateDate(newDate);
+			userInfo.setUpdateDate(newDate);
 			userInfo.setuAtSchool("0");
 
 			// 插入用户基本信息，在进行查询人员ID，在进行插入详细信息
 			this.service.insertUserInfo(userInfo);
 			List<UserInfo> userlist = this.service.searchUBInfo(userInfo);
-			Integer userId = userlist.get(0).getUserId();
+			Integer userId = userlist.get(0).getId();
 			String uid = String.valueOf(userId);
 			// System.out.println("---------人员ID-----------"+uid);
 
 			// 设置上传时间、上传的人
 			userInfo.setuEmployeeBasicID(Integer.valueOf(uid));
 
-			// System.out.println("---------人员ID-----------"+param.getuEmployeeBasicID());
 			this.service.insertUserDetailInfo(userInfo);
 			resultM.put("0", "成员插入成功");
 			return resultM;
@@ -873,15 +956,35 @@ public class EmpController {
 	 * @param request
 	 * @return
 	 */
+	@SuppressWarnings("finally")
 	@ResponseBody
 	@RequestMapping(value = "/positionShifts")
-	public List<PositionShift> positionShifts(HttpServletResponse response, HttpServletRequest request) {
-		Map<String, String> mapList = ToolClass.mapShiftStr(request);
+	public JSONObject positionShifts(HttpServletResponse response, HttpServletRequest request) {
 		PositionShift pShift = new PositionShift();
-		pShift.setAccountId(mapList.get("AccountId"));
-
-		List<PositionShift> psList = this.service.selectShiftInfo(pShift);
-		return psList;
+		
+		JSONObject result = new JSONObject();
+		String retCode = Constant.Result.SUCCESS;
+		String retMsg = Constant.Result.SUCCESS_MSG;
+		try {
+			List<PositionShift> psList = this.service.selectShiftInfo(pShift);
+			String str = ToolClass.getStrFromInputStream(request);
+			if (StringUtils.isBlank(str))
+				throw new MessageException("参数接收失败！");
+			pShift = MapUtil.transJsonStrToObjectIgnoreCase(str, PositionShift.class);
+			psList = this.service.selectShiftInfo(pShift);
+			result.put("resData", psList) ;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			log.error(Constant.Result.RETMSG, e);
+		} finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+			return result;
+		}
 	}
 
 	/**

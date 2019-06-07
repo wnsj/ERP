@@ -2,6 +2,7 @@ package com.jiubo.erp.rygl.vo;
 
 public class UserFamily {
 	//家庭成员表
+		private String id;
 		private String accountId;
 		private String name;
 		private String birthtay;
@@ -14,6 +15,12 @@ public class UserFamily {
 		
 		public UserFamily() {
 			// TODO Auto-generated constructor stub
+		}
+		public String getId() {
+			return id;
+		}
+		public void setId(String id) {
+			this.id = id;
 		}
 		/**
 		 * @return the accountIdName

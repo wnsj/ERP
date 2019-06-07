@@ -29,18 +29,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</trim>
 	</select>
 
-	<!-- 添加员工ERP账号 -->
-	<insert id="insertAccountInfo" parameterType="com.jiubo.erp.rygl.vo.Account">
-
-		INSERT INTO dbo.Account_Data
-
-		(Account_Name,Account_Pwd,Account_State,Position_ID,Account_Mac)
-
-		values
-
-		(#{accountName},#{accountPwd},#{accountState},#{positionId},#{accountMac})
-	</insert>
-
 	<!-- 获取民族列表 -->
 	<select id="selectNationList" resultType="com.jiubo.erp.rygl.vo.Nation">
 		SELECT
@@ -82,19 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		dbo.Resign_Reason.Reason_ID = #{reasonId}
 	</delete>
 
-	<!-- 添加离职原因 -->
-	<insert id="addLeaveReason" parameterType="com.jiubo.erp.rygl.vo.LeaveResign">
-		INSERT INTO dbo.Resign_Reason
-
-		(dbo.Resign_Reason.Reason_Name)
-
-		VALUES
-		(#{reasonName})
-
-	</insert>
-
-
-	<!-- 获取部门列表 -->
+	<!-- 查询     全部部门 -->
 	<select id="selectDepartList" parameterType="com.jiubo.erp.rygl.bean.DepartmentBean"
 		resultType="com.jiubo.erp.rygl.bean.DepartmentBean">
 		SELECT
@@ -111,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</trim>
 	</select>
 
-	<!-- 获取职位列表 -->
+	<!-- 查询     全部职位 -->
 	<select id="selectPositionList" resultType="com.jiubo.erp.rygl.vo.Position">
 		SELECT
 		dbo.Position_Data.Position_ID As positionId,
@@ -120,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		dbo.Position_Data
 	</select>
 
-	<!-- 获取项目列表 -->
+	<!-- 查询      全部项目 -->
 	<select id="selectProjectList" resultType="com.jiubo.erp.rygl.bean.ProjectDataBean">
 		SElECT
 		Project_ID AS ProjectID,
@@ -128,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM Project_Data
 	</select>
 
-	<!-- 初始化人员列表 -->
+	<!-- 查询      全部公司人员 -->
 	<select id="searchEmplist" parameterType="com.jiubo.erp.rygl.vo.QueryParam"
 		resultType="com.jiubo.erp.rygl.vo.QueryResult">
 		SELECT
@@ -142,7 +118,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		c.Position_Name AS positionName,
 		b.Account_Name AS ERPAaccount,
 		b.Account_ID AS accountId,
-		f.Project_Name AS projectName,
 		a.Birth AS birth,
 		a.EntryDate AS entryDate,
 		a.PositiveDate AS PositiveDate,
@@ -187,12 +162,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="birth!=null and birth!=''">
 				AND Month(a.Birth)=#{birth}
 			</if>
-			AND a.isDelete='0'
+			AND a.isDelete='0'AND b.Account_ID is not null
 		</trim>
 		ORDER BY a.ID
 	</select>
-	<!--AND a.State is not null AND a.isDelete != '1' AND a.JobNum !='0' -->
-	<!-- 家庭成员列表检索 -->
+	
+	<!--查询           全部家庭成员 -->
 	<select id="searchFamilyList" parameterType="com.jiubo.erp.rygl.vo.QueryParam"
 		resultType="com.jiubo.erp.rygl.vo.QueryFamilyResult">
 		SELECT
@@ -212,10 +187,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM
 		dbo.T_Employee_Basic a INNER JOIN
 		dbo.Account_Family b ON a.Account=b.Account_ID
-
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="name !=null and name !='' and jobnum !=null and jobnum !=''">
+				AND a.Name=#{name} or a.JobNum = #{jobnum}
+			</if>
+			<if test="chname !=null and chname !=''">
+				AND b.name=#{chname}
+			</if>
+			<if test="birth!=null and birth!=''">
+				AND Month(a.Birth)=#{birth}
+			</if>
+			AND a.isDelete='0' AND b.Account_ID is not null
+		</trim>
+		ORDER BY a.ID
 	</select>
 
-	<!-- 单个成员的家庭信息查询 -->
+	<!-- 查询        单个成员             家庭信息 -->
 	<select id="singleFamilyList" parameterType="com.jiubo.erp.rygl.vo.QueryFamilyResult"
 		resultType="com.jiubo.erp.rygl.vo.QueryFamilyResult">
 		SELECT
@@ -236,43 +223,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		Account_ID=#{uAccountId}
 	</select>
 
-	<!-- 搜索员工入职的基本信息 -->
+	<!-- 查询             员工入职           基本信息 -->
 	<select id="searchUBInfo" parameterType="com.jiubo.erp.rygl.vo.UserInfo"
 		resultType="com.jiubo.erp.rygl.vo.UserInfo">
 		SELECT
-		a.Name AS uName,
-		a.ID AS userId,
-		a.JobNum AS uJobNum,
-		a.Sex AS uSex,
-		a.Birth AS
-		uBirth,
-		a.Account AS uAccount,
+		a.Name AS name,
+		a.ID AS id,
+		a.JobNum AS jobNum,
+		a.Sex AS sex,
+		a.Birth AS birth,
+		a.Account AS accountId,
 		a.ID AS positionId,
-		a.EntryDate AS
-		uEntryDte,
-		a.PositiveDate AS uPositiveDate,
-		a.ResignDate AS uResignDate,
-		a.ResignType AS uResignType,
-		a.ResignReason AS uResignReason,
-		a.State AS
-		uState,
-		a.Remark AS uRemark
+		a.EntryDate AS entryDate,
+		a.PositiveDate AS positiveDate,
+		a.ResignDate AS resignDate,
+		a.ResignType AS resignType,
+		a.ResignReason AS resignReason,
+		a.State AS state,
+		a.Remark AS remark
 		FROM
 		dbo.T_Employee_Basic a
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="uName!=null and uName!=''">
-				AND a.Name=#{uName}
+			<if test="name !=null and name !=''">
+				AND a.Name=#{name}
 			</if>
-			<if test="uJobNum!=null and uJobNum!=''">
-				AND a.JobNum=#{uJobNum}
+			<if test="jobNum !=null and jobNum !=''">
+				AND a.JobNum=#{jobNum}
 			</if>
-			<if test="userId!=null and userId!=''">
-				AND a.ID=#{userId}
+			<if test="id!=null and id!=''">
+				AND a.ID=#{id}
 			</if>
 		</trim>
 	</select>
 
-	<!-- 搜索员工入职的详细信息 -->
+	<!-- 查询          员工入职                详细信息 -->
 	<select id="searchUDInfo" parameterType="com.jiubo.erp.rygl.vo.UserInfo"
 		resultType="com.jiubo.erp.rygl.vo.UserInfo">
 		SELECT
@@ -281,25 +265,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		a.HomeTown AS uHomeTown,
 		a.Nationality AS uNationality,
 		a.Marital AS uMarital,
-		a.HomeAddress AS
-		uHomeAddress,
+		a.HomeAddress AS uHomeAddress,
 		a.CurrentAddress AS uCurrentAddress,
-		a.Domicile AS
-		uDomicile,
+		a.Domicile AS uDomicile,
 		a.AccountProp AS uAccountProp,
 		a.Schools AS uSchools,
 		a.Education AS uEducation,
 		a.Profession AS uProfession,
-		a.Graduation AS
-		uGraduation,
+		a.Graduation AS uGraduation,
 		a.AtSchool AS uAtSchool,
 		a.Contact AS uContact,
 		a.EmergencyContact AS uEmergencyContact,
-		a.Emergencyphone AS
-		uEmergencyphone,
+		a.Emergencyphone AS uEmergencyphone,
 		a.LicenseType AS uLicenseType,
-		a.DrivingExpe AS
-		uDrivingExpe
+		a.DrivingExpe AS uDrivingExpe
 		FROM
 		dbo.T_Employee_Detial a
 		where
@@ -315,38 +294,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		Account_Name=#(uAccount)
 	</select>
 
-	<!-- 插入入职人员的基本信息 -->
+	<!-- 插入入职人员           基本信息 -->
 	<insert id="insertBaseInfo" parameterType="com.jiubo.erp.rygl.vo.UserInfo"
 		useGeneratedKeys="true" keyProperty="userid">
-		<!-- <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER"> 
-			SELECT currval('dbo.T_Employee_Basic_id_seq') </selectKey> -->
 		insert into
 		dbo.T_Employee_Basic
 		(Name,Sex,JobNum,Department_id,Birth,EntryDate,PositiveDate,ResignDate,Photo,CreateDate,
 		UpdateDate,IsDelete,State,CreateUser,Account,Remark,Parent_ID,ResignType,ResignReason)
 		values
-		(#{uName},#{uSex},#{uJobNum},#{uDepartment_id},#{uBirth},#{uEntryDte},#{uPositiveDate},
-		#{uResignDate},#{uPhoto},'2019-04-13
-		11:30:29:000',#{uUpdateDate},#{uIsDelete},#{uState},
-		#{uCreateUser},#{uAccount},#{uRemark},#{uParent_ID},#{uResignType},#{uResignReason})
+		(#{name},#{sex},#{jobNum},#{departId},#{birth},#{entryDate},#{positiveDate},
+		#{resignDate},#{photo},#{createDate},#{updateDate},#{isDelete},#{state},
+		#{createUser},#{accountId},#{remark},#{parentId},#{resignType},#{resignReason})
 	</insert>
+	
+	<!-- 插入入职人员            账户信息 -->
+	<insert id="insertAccountInfo" parameterType="com.jiubo.erp.rygl.vo.Account">
 
-	<!-- 更新员工的基本信息 -->
-	<update id="updataBaseInfo" parameterType="com.jiubo.erp.rygl.vo.UserInfo">
-		update
-		dbo.T_Employee_Basic
-		set
-		Name=#{uName},Sex=#{uSex},Department_id=#{uDepartment_id},Birth=#{uBirth},
-		EntryDate=#{uEntryDte},PositiveDate=#{uPositiveDate},ResignDate=#{uResignDate},Photo=#{uPhoto},
-		CreateDate='2019-04-13
-		11:30:29:000',UpdateDate=#{uUpdateDate},IsDelete=#{uIsDelete},State=#{uState},
-		CreateUser=#{uCreateUser},Account=#{uAccount},Remark=#{uRemark},Parent_ID=#{uParent_ID},
-		ResignType=#{uResignType},ResignReason=#{uResignReason}
-		where
-		ID=#{userId}
-	</update>
+		INSERT INTO Account_Data
 
-	<!-- 插入入职员工的详细信息 -->
+		(Account_Name,Account_Pwd,Account_State,Position_ID,Account_Mac)
+
+		values
+
+		(#{accountName},#{accountPwd},#{accountState},#{positionId},#{accountMac})
+	</insert>
+	
+
+	<!-- 插入入职员工               详细信息 -->
 	<insert id="insertDetailInfo" parameterType="com.jiubo.erp.rygl.vo.UserInfo">
 		insert into
 		dbo.T_Employee_Detial
@@ -358,8 +332,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		(#{uEmployeeBasicID},#{uIdNum},#{uPloitical},#{uContact},#{uHomeTown},#{uNationality},#{uMarital},#{uHomeAddress},
 		#{uCurrentAddress},#{uSchools},#{uEducation},#{uProfession},#{uGraduation},#{uEmergencyContact},#{uEmergencyphone},
 		#{uHeight},#{uWeight},#{uBloodType},#{uLicenseType},#{uDrivingExpe},#{uDomicile},#{uAccountProp},#{uAtSchool},
-		#{uCreateDate},#{uUpdateDate},#{uCreateUser},#{uRemark})
+		#{createDate},#{updateDate},#{createUser},#{remark})
+		
 	</insert>
+
+	<!-- 插入         员工入职           家庭信息 -->
+	<insert id="insertfamilyInfo" parameterType="com.jiubo.erp.rygl.vo.QueryFamilyResult">
+		insert into
+		Account_Family
+		(name,Birthday,appellation,workaddress,position,
+		phone,wechat,address)
+		values
+		(#{name},#{birth},#{appellation},#{workaddress},#{position},
+		#{phone},#{wechat},#{famAddress})
+		where
+		Account_ID=#{accountId}
+	</insert>
+	
+	
+	<!-- 插入        离职原因 -->
+	<insert id="addLeaveReason" parameterType="com.jiubo.erp.rygl.vo.LeaveResign">
+		INSERT INTO dbo.Resign_Reason
+
+		(dbo.Resign_Reason.Reason_Name)
+
+		VALUES
+		(#{reasonName})
+
+	</insert>
+	
+	<!-- 更新员工的基本信息 -->
+	<update id="updataBaseInfo" parameterType="com.jiubo.erp.rygl.vo.UserInfo">
+		update
+		T_Employee_Basic
+		set
+		Name=#{name},Sex=#{sex},Department_id=#{departId},Birth=#{birth},
+		EntryDate=#{entryDate},PositiveDate=#{positiveDate},ResignDate=#{resignDate},Photo=#{photo},
+		CreateDate='2019-04-13 11:30:29:000',UpdateDate=#{updateDate},IsDelete=#{isDelete},State=#{state},
+		CreateUser=#{createUser},Account=#{accountId},Remark=#{remark},Parent_ID=#{parentId},
+		ResignType=#{resignType},ResignReason=#{resignReason}
+		where
+		ID=#{id}
+	</update>
 
 	<!-- 更新员工的详细信息 -->
 	<update id="updataDetialInfo" parameterType="com.jiubo.erp.rygl.vo.UserInfo">
@@ -371,23 +385,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		Schools=#{uSchools},Education=#{uEducation},Profession=#{uProfession},Graduation=#{uGraduation},
 		EmergencyContact=#{uEmergencyContact},EmergencyPhone=#{uEmergencyphone},Height=#{uHeight},Weight=#{uWeight},
 		BloodType=#{uBloodType},LicenseType=#{uLicenseType},DrivingExpe=#{uDrivingExpe},Domicile=#{uDomicile},
-		AccountProp=#{uAccountProp},AtSchool=#{uAtSchool},CreateDate=#{uCreateDate},updateDate=#{uUpdateDate},
-		CreateUser=#{uCreateUser},Remark=#{uRemark}
+		AccountProp=#{uAccountProp},AtSchool=#{uAtSchool},CreateDate=#{createDate},updateDate=#{updateDate},
+		CreateUser=#{createUser},Remark=#{remark}
 		where
-		ID=#{userId}
+		Employee_basic_ID=#{uEmployeeBasicID}
 	</update>
 
-
-	<!-- 员工入职的家庭信息 -->
-	<insert id="insertfamilyInfo" parameterType="com.jiubo.erp.rygl.vo.UserFamily">
-		insert into
-		dbo.T_Employee_Basic
-		(Account_ID,name,Birthday,appellation,workaddress,position,
-		phone,wechat,address)
-		values
-		(#{accountId},#{name},#{birthday},#{appellation},#{workAddress},#{position},
-		#{phone},#{wechat},#{address})
-	</insert>
+	
+	<!-- 更新员工的家庭信息 -->
+	<update id="updatafamilyInfo" parameterType="com.jiubo.erp.rygl.vo.QueryFamilyResult">
+		update 
+		Account_Family
+		set
+		name=#{name},Birthday=#{birth},appellation=#{appellation},workaddress=#{workaddress},position=#{position},
+		phone=#{phone},wechat=#{wechat},address=#{famAddress}
+		where
+		Account_ID = #{accountId}
+		
+	</update>
 
 	<!-- 员工入职的调动信息 -->
 	<select id="selectShiftInfo" parameterType="com.jiubo.erp.rygl.vo.PositionShift"

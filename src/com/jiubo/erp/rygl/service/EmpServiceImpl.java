@@ -52,7 +52,7 @@ public class EmpServiceImpl implements EmpService {
 	 * QueryParam, com.jiubo.erp.common.PageParam)
 	 */
 	@Override
-	public List<QueryFamilyResult> initFamilList(QueryParam param, HttpServletRequest request) throws Exception {
+	public List<QueryFamilyResult> initFamilList(QueryFamilyResult param) throws Exception {
 		List<QueryFamilyResult> fmlist = this.dao.searchFamilyList(param);
 		
 		return fmlist;
@@ -65,7 +65,7 @@ public class EmpServiceImpl implements EmpService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<QueryFamilyResult> familyfuzzyQuery(QueryParam param, HttpServletRequest request) throws Exception {
+	public List<QueryFamilyResult> familyfuzzyQuery(QueryFamilyResult param) throws Exception {
 		List<QueryFamilyResult> fmlist = this.dao.searchFamilyList(param);
 	
 		return fmlist;
@@ -198,28 +198,34 @@ public class EmpServiceImpl implements EmpService {
 	 * @param userInfo
 	 * @return
 	 */
-	public boolean insertUserDetailInfo(UserInfo userInfo) {
-				
-		this.dao.insertDetailInfo(userInfo);
+	public Integer insertUserDetailInfo(UserInfo userInfo) {
 		
-		return true;
+		return this.dao.insertDetailInfo(userInfo);
 	}
 	
 	/**
 	 * 插入user的家庭信息
 	 */
-	public boolean insertUserFmInfo(UserFamily userFmInfo) {
-		this.dao.insertfamilyInfo(userFmInfo);
-		return true;
+	public Integer insertUserFmInfo(QueryFamilyResult qfr) {
+		
+		return this.dao.insertfamilyInfo(qfr);
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see com.jiubo.erp.rygl.service.EmpService#updatafamilyInfo(com.jiubo.erp.rygl.vo.QueryFamilyResult)
+	 */
+	@Override
+	public Integer updatafamilyInfo(QueryFamilyResult qfr) {
+		// TODO Auto-generated method stub
+		return this.dao.updatafamilyInfo(qfr);
+	}
 
 	/**
 	 * 更新用户的基本信息
 	 */
 	public Integer updataBaseInfo(UserInfo userInfo) {
-		this.dao.updataBaseInfo(userInfo);
-		return null;
+		
+		return this.dao.updataBaseInfo(userInfo);
 	}
 
 
@@ -228,7 +234,7 @@ public class EmpServiceImpl implements EmpService {
 	 */
 	public Integer updataDetialInfo(UserInfo userInfo) {
 		// TODO Auto-generated method stub
-		return null;
+		return this.dao.updataDetialInfo(userInfo);
 	}
 	
 	/**

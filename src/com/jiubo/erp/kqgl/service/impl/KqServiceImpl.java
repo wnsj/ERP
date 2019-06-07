@@ -74,5 +74,14 @@ public class KqServiceImpl implements KqService {
 		return this.dao.kqTableInfoList(kr);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jiubo.erp.kqgl.service.KqService#kqTableCountList(com.jiubo.erp.kqgl.vo.KqInfoResult)
+	 */
+	@Override
+	public List<KqInfoResult> kqTableCountList(KqInfoResult kr) {
+		// TODO Auto-generated method stub
+		return this.dao.kqTableCountList(kr);
+	}
+
 	
 }

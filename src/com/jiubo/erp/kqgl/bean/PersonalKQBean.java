@@ -3,6 +3,8 @@ package com.jiubo.erp.kqgl.bean;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.DocFlavor.STRING;
+
 public class PersonalKQBean {
 	
 	private String ryKQId;//人员考勤ID
@@ -20,15 +22,46 @@ public class PersonalKQBean {
 	private String ryDownNomalPA;//下班打卡正常
 	private String ryRestDays;//休息天数
 	private String ryOverTimesDays;//加班天数
-	
+	private String ryNoScheduleTimes;//未排班次数天数
+	private String ryEnteryTime;//入职时间
+	private String ryLeaveTime;//离职时间
 	private List<Map<String, String>>  punchTime;//个人的班次和打卡时间的
+	private String kqTableCount;//考勤情况综合统计
 	
+	
+	
+	public String getRyEnteryTime() {
+		return ryEnteryTime;
+	}
+
+
+	public void setRyEnteryTime(String ryEnteryTime) {
+		this.ryEnteryTime = ryEnteryTime;
+	}
+
+
+	public String getRyLeaveTime() {
+		return ryLeaveTime;
+	}
+
+
+	public void setRyLeaveTime(String ryLeaveTime) {
+		this.ryLeaveTime = ryLeaveTime;
+	}
 	
 	public PersonalKQBean() {
 		// TODO Auto-generated constructor stub
 	}
 	
 	
+	public String getRyNoScheduleTimes() {
+		return ryNoScheduleTimes;
+	}
+
+
+	public void setRyNoScheduleTimes(String ryNoScheduleTimes) {
+		this.ryNoScheduleTimes = ryNoScheduleTimes;
+	}
 
 	public String getRyKQId() {
 		return ryKQId;
@@ -42,6 +75,18 @@ public class PersonalKQBean {
 	}
 
 
+
+
+
+	public String getKqTableCount() {
+		return kqTableCount;
+	}
+
+
+
+	public void setKqTableCount(String kqTableCount) {
+		this.kqTableCount = kqTableCount;
+	}
 
 
 

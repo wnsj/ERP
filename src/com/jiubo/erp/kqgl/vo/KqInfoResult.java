@@ -12,6 +12,8 @@ public class KqInfoResult {
 	private String departname;//部门
 	private String departId;//部门id
 	private String positionName;//职位
+	private String entryDate;//入职日期
+	private String resignDate;//离职日期
 	private String punchTime;//班次
 	private String classTimeName;//出勤班次名称
 	private String classTimeType;//出勤班次类型 所有休息2 上班1
@@ -36,6 +38,30 @@ public class KqInfoResult {
 	
 	
 	
+	public String getEntryDate() {
+		return entryDate;
+	}
+
+
+
+	public void setEntryDate(String entryDate) {
+		this.entryDate = entryDate;
+	}
+
+
+
+	public String getResignDate() {
+		return resignDate;
+	}
+
+
+
+	public void setResignDate(String resignDate) {
+		this.resignDate = resignDate;
+	}
+
+
+
 	public String getProjectId() {
 		return projectId;
 	}

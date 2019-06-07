@@ -19,13 +19,13 @@ public interface empDao {
 	
 	List<Account> selectAccountList(Account account);
 	
-	Integer insertAccountInfo(Account account);
+	
 	
 	List<QueryResult> searchEmplist(QueryParam param);
 	
 	List<LeaveResign> selectLeaveList(LeaveResign lr);
 	
-	List<QueryFamilyResult> searchFamilyList(QueryParam param);
+	List<QueryFamilyResult> searchFamilyList(QueryFamilyResult param);
 
 	List<ProjectDataBean> selectProjectList();
 	
@@ -43,13 +43,17 @@ public interface empDao {
 	
 	Integer insertBaseInfo(UserInfo userInfo);
 	
+	Integer insertAccountInfo(Account account);
+	
 	Integer updataBaseInfo(UserInfo userInfo);
 	
 	Integer insertDetailInfo(UserInfo userInfo);
 	
 	Integer updataDetialInfo(UserInfo userInfo);
 	
-	Integer insertfamilyInfo(UserFamily uf);
+	Integer insertfamilyInfo(QueryFamilyResult qfr);
+	
+	Integer updatafamilyInfo(QueryFamilyResult qfr);
 	
 	List<PositionShift> selectShiftInfo(PositionShift pShift);
 
