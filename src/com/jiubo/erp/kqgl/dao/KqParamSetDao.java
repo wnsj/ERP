@@ -106,7 +106,7 @@ public interface KqParamSetDao {
 	public List<EmployeeBasicBean> queryEmployeeBasic(@Param("departmentId")String departmentId,@Param("state")String state);
 	
 	//查询具体员工的排班计划
-	public List<AttShiftBean> queryAttShift(@Param("userId")String userId,@Param("startTime")String startTime,@Param("endTime")String endTime);
+	public List<AttShiftBean> queryAttShift(@Param("userId")String userId,@Param("userName")String userName,@Param("startTime")String startTime,@Param("endTime")String endTime);
 	
 	//查询全部员工的排班计划
 	public List<Map<String,Object>> queryAllEmpAttShift(@Param("begDate")String begDate,@Param("endDate")String endDate);

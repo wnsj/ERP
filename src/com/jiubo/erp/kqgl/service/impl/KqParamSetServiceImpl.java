@@ -248,16 +248,16 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 	}
 
 	@Override
-	public JSONObject queryEmpAttShift(String userId, String startTime, String endTime,String flag) throws MessageException {
-		if(StringUtils.isBlank(userId) || StringUtils.isBlank(startTime) || StringUtils.isBlank(endTime))throw new MessageException("用户id为空或查询时间段为空！");
+	public JSONObject queryEmpAttShift(String userId,String userName,String startTime, String endTime,String flag) throws MessageException {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			Map<String,Object> dataMap = new HashMap<String,Object>();
 			Date startDate = TimeUtil.parseAnyDate(startTime);
 			if("30".equals(flag)){
 				List<String> dataList = new ArrayList<String>();
-				Date endDate = TimeUtil.dateAdd(startDate, TimeUtil.UNIT_MONTH, 1);
-				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId,TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(startDate), TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
+				Date endDate = TimeUtil.getFirstDayOfMonth(TimeUtil.dateAdd(startDate, TimeUtil.UNIT_MONTH, 1));
+				startDate = TimeUtil.getFirstDayOfMonth(startDate);
+				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId,userName,TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(startDate), TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
 				for(AttShiftBean attShiftBean : attShiftList)
 					dataList.add(attShiftBean.getName());
 				dataMap.put("monData", dataList);
@@ -270,7 +270,7 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 				List<Double> endList = new ArrayList<Double>();
 				
 				Date endDate = TimeUtil.dateAdd(TimeUtil.parseAnyDate(endTime), TimeUtil.UNIT_DAY, 1);
-				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, startTime, TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
+				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, userName,startTime, TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
 				for(AttShiftBean attShiftBean : attShiftList) {
 					double sTime = 0.0;	//工作开始时间
 					double eTime = 0;
