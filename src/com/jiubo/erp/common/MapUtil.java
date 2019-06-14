@@ -22,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.text.ParseException;
@@ -74,7 +73,7 @@ public class MapUtil {
 			}
 		}, java.util.Date.class);
 	}
-
+	
 	/**
 	 * 求Map<K,V>中Key(键)的最大值
 	 * @param map
@@ -626,5 +625,10 @@ public static com.alibaba.fastjson.JSONObject getJSONObjFromInputStream(HttpServ
 		com.alibaba.fastjson.JSONObject json = getJSONObjFromInputStream(request);
 		if(json == null)return null;
 		else return com.alibaba.fastjson.JSONObject.toJavaObject(json, Map.class);
+	}
+	
+	//copy相同属性
+		public void copyBean(Object dest,Object orig) throws Exception {
+		PropertyUtils.copyProperties(dest, orig);
 	}
  */
