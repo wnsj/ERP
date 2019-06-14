@@ -1,6 +1,5 @@
 package com.jiubo.erp.zpgl.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.Constant;
 import com.jiubo.erp.common.MapUtil;
 import com.jiubo.erp.common.MessageException;
-import com.jiubo.erp.kqgl.controller.KqParamSetController;
 import com.jiubo.erp.zpgl.bean.RecruitChannelBean;
 import com.jiubo.erp.zpgl.bean.RecruitDataBean;
 import com.jiubo.erp.zpgl.bean.ZpPlanBean;
