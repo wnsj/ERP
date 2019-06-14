@@ -128,8 +128,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		g.Reason_Id AS resignReasonId,
 		g.Reason_Name AS resignName
 		FROM
-		dbo.T_Employee_Basic a
-		LEFT JOIN dbo.Account_Data b ON a.Account=b.Account_ID
+		dbo.Account_Data b
+		LEFT JOIN dbo.T_Employee_Basic a ON a.Account=b.Account_ID
 		LEFT JOIN dbo.Position_Data c ON b.Position_ID=c.Position_ID
 		LEFT JOIN dbo.T_Department d ON a.Department_ID=d.ID
 		LEFT JOIN dbo.Account_Project_Data e ON b.Account_ID=e.Account_ID
@@ -163,9 +163,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="birth!=null and birth!=''">
 				AND Month(a.Birth)=#{birth}
 			</if>
-			AND a.isDelete='0'AND b.Account_ID is not null AND a.JobNum != '0'
+			
 		</trim>
-		
+			ORDER by b.Account_ID 
 	</select>
 	
 	<!--查询           全部家庭成员 -->

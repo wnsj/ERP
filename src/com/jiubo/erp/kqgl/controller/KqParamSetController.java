@@ -61,6 +61,7 @@ public class KqParamSetController {
 		   JSONObject result = new JSONObject();
 	       String retCode = Constant.Result.SUCCESS;
 	       String retMsg = Constant.Result.SUCCESS_MSG;
+	       
 		   try {
 		  	    result.put(Constant.Result.RETDATA,KqParamSetService.queryVacation());
 		   }catch (MessageException e){
