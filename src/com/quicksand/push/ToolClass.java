@@ -71,7 +71,7 @@ public class ToolClass {
 	}
 	
 	public static String judgeStr(String string) {
-		if (string.equals("")||string.equals("0")||string=="0") {
+		if (StringUtils.isBlank(string) || "0".equals(string)) {
 			return "";
 		}
 		return string;
