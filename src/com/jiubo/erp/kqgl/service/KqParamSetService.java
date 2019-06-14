@@ -305,7 +305,7 @@ public interface KqParamSetService {
 	 * @author:  dx
 	 * @version: 1.0
 	 */
-	public JSONObject queryEmpAttShift(String userId,String startTime,String endTime,String flag)throws MessageException;
+	public JSONObject queryEmpAttShift(String userId,String userName,String startTime,String endTime,String flag)throws MessageException;
 	
 	/**
 	 * @desc:查询全部员工的排班计划

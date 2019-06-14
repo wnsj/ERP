@@ -54,9 +54,9 @@ public class KqParamSetController {
 	   * @author:  dx
 	   * @version: 1.0
 	   */
-	  //http://127.0.0.1:8080/Erp1.1/kqParamSetContr/queryVacation
+	  //http://127.0.0.1:8080/Erp/kqParamSetContr/queryVacation
 	  @ResponseBody
-	  @RequestMapping(value="/queryVacation",method = {RequestMethod.POST})
+	  @RequestMapping(value="/queryVacation",method = {RequestMethod.GET,RequestMethod.POST})
       public JSONObject queryVacation(HttpServletRequest request,HttpServletResponse response){
 		   JSONObject result = new JSONObject();
 	       String retCode = Constant.Result.SUCCESS;
@@ -1028,9 +1028,11 @@ public class KqParamSetController {
 		    	   String str = ToolClass.getStrFromInputStream(request);
 		    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
 		    	   JSONObject jsObj = JSONObject.parseObject(str);
-		    	   if(jsObj.get("userId") == null || jsObj.get("startTime") == null || jsObj.get("endTime") == null)
-		    		   throw new MessageException("userId,startTime或endTime为空！");
-		    	   result = KqParamSetService.queryEmpAttShift(jsObj.getString("userId"), jsObj.getString("startTime"), jsObj.getString("endTime"), jsObj.getString("flag"));
+		    	   String userId = jsObj.get("userId") == null ? null : jsObj.getString("userId");
+		    	   String userName = jsObj.get("userName") == null ? null : jsObj.getString("userName");
+		    	   if(jsObj.get("startTime") == null || jsObj.get("endTime") == null)
+		    		   throw new MessageException("startTime或endTime为空！");
+		    	   result = KqParamSetService.queryEmpAttShift(userId,userName,jsObj.getString("startTime"), jsObj.getString("endTime"), jsObj.getString("flag"));
 			   }catch (MessageException e){
 			        retCode = Constant.Result.ERROR;
 			        retMsg = e.getMessage();
