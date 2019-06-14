@@ -13,6 +13,8 @@ public class PersonalKQBean {
 	private String ryDepartKQName;//部门名称
 	private String ryDepartKQId;//部门id
 	private String ryPositionKQName;//职位名称
+	private String beginDate;//开始日期
+	private String endDate;//结束日期
 	private String ryLaterTimes;//迟到次数
 	private String ryLeaveEarlyTimes;//早退次数
 	private String ryMinersTimes;//矿工次数
@@ -32,6 +34,26 @@ public class PersonalKQBean {
 	
 	public String getRyEnteryTime() {
 		return ryEnteryTime;
+	}
+
+
+	public String getBeginDate() {
+		return beginDate;
+	}
+
+
+	public void setBeginDate(String beginDate) {
+		this.beginDate = beginDate;
+	}
+
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
 

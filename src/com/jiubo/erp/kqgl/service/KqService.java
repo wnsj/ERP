@@ -39,4 +39,7 @@ public interface KqService {
 		
 		//考勤报表统计
 		List<KqInfoResult> kqTableCountList(KqInfoResult kr);
+		
+		//考勤人员        基础信息列表      按组
+		List<KqInfoResult> selectKIGList(KqInfoResult kResult);
 }
