@@ -1,6 +1,5 @@
 package com.jiubo.erp.zpgl.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.Constant;
 import com.jiubo.erp.common.MapUtil;
 import com.jiubo.erp.common.MessageException;
-import com.jiubo.erp.kqgl.controller.KqParamSetController;
 import com.jiubo.erp.zpgl.bean.RecruitChannelBean;
 import com.jiubo.erp.zpgl.bean.RecruitDataBean;
 import com.jiubo.erp.zpgl.bean.ZpPlanBean;
@@ -558,33 +556,6 @@ public class ZpglController {
 	    	   if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
 	    	   ZpPublishBean zpPublishBean = MapUtil.transJsonStrToObjectIgnoreCase(str,ZpPublishBean.class);
 		  	  zpglService.updateZpPublish(zpPublishBean);
-		   }catch (MessageException e){
-		        retCode = Constant.Result.ERROR;
-		        retMsg = e.getMessage();
-		   }catch (Exception e){
-		        retCode = Constant.Result.ERROR;
-		        retMsg = Constant.Result.ERROR_MSG;
-		        log.error(Constant.Result.RETMSG,e);
-		  }finally {
-		        result.put(Constant.Result.RETCODE, retCode);
-		        result.put(Constant.Result.RETMSG, retMsg);
-		        return result;
-		  }
-	}
-	
-	@ResponseBody
-	@RequestMapping(value="/test",method = {RequestMethod.GET,RequestMethod.POST})
-	public JSONObject test(HttpServletRequest request,HttpServletResponse response){
-		   JSONObject result = new JSONObject();
-	       String retCode = Constant.Result.SUCCESS;
-	       String retMsg = Constant.Result.SUCCESS_MSG;
-		   try {
-//			   String str = ToolClass.getStrFromInputStream(request);
-//			   log.error("str:{}",str);
-	    	   //if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
-//	    	   RecruitDataBean recruitDataBean = MapUtil.transJsonStrToObjectIgnoreCase(str,RecruitDataBean.class);
-//		  	   result.put(Constant.Result.RETDATA,zpglService.queryRecruitData(recruitDataBean));
-			   zpglService.test();
 		   }catch (MessageException e){
 		        retCode = Constant.Result.ERROR;
 		        retMsg = e.getMessage();
