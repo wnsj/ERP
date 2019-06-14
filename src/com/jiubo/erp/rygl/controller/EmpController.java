@@ -79,6 +79,7 @@ public class EmpController {
 		QueryParam qp = new QueryParam();
 		
 		System.out.println("添加一次修改");
+		System.out.println("添加一次修改");System.out.println("添加一次修改");System.out.println("添加一次修改");System.out.println("添加一次修改");
 		JSONObject result = new JSONObject();
 		String retCode = Constant.Result.SUCCESS;
 		String retMsg = Constant.Result.SUCCESS_MSG;
