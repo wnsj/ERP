@@ -77,14 +77,10 @@ public class EmpController {
 	@RequestMapping(value = "/allList")
 	public JSONObject allList(HttpServletResponse response, HttpServletRequest request) {
 		QueryParam qp = new QueryParam();
-		
-		System.out.println("添加一次修改");
-		System.out.println("添加一次修改");
 		JSONObject result = new JSONObject();
 		String retCode = Constant.Result.SUCCESS;
 		String retMsg = Constant.Result.SUCCESS_MSG;
 		try {
-			
 			result.put("resData", this.service.initEmpList(qp, request)) ;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
@@ -113,7 +109,6 @@ public class EmpController {
 	@RequestMapping(value = "/advanceAllList")
 	public JSONObject advanceQuery(HttpServletResponse response, HttpServletRequest request) throws Exception {
 		QueryParam qp = new QueryParam();
-
 		JSONObject result = new JSONObject();
 		String retCode = Constant.Result.SUCCESS;
 		String retMsg = Constant.Result.SUCCESS_MSG;
