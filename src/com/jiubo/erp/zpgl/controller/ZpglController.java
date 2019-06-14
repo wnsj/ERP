@@ -571,31 +571,4 @@ public class ZpglController {
 		        return result;
 		  }
 	}
-	
-	@ResponseBody
-	@RequestMapping(value="/test",method = {RequestMethod.GET,RequestMethod.POST})
-	public JSONObject test(HttpServletRequest request,HttpServletResponse response){
-		   JSONObject result = new JSONObject();
-	       String retCode = Constant.Result.SUCCESS;
-	       String retMsg = Constant.Result.SUCCESS_MSG;
-		   try {
-//			   String str = ToolClass.getStrFromInputStream(request);
-//			   log.error("str:{}",str);
-	    	   //if(StringUtils.isBlank(str))throw new MessageException("参数接收失败！");
-//	    	   RecruitDataBean recruitDataBean = MapUtil.transJsonStrToObjectIgnoreCase(str,RecruitDataBean.class);
-//		  	   result.put(Constant.Result.RETDATA,zpglService.queryRecruitData(recruitDataBean));
-			   zpglService.test();
-		   }catch (MessageException e){
-		        retCode = Constant.Result.ERROR;
-		        retMsg = e.getMessage();
-		   }catch (Exception e){
-		        retCode = Constant.Result.ERROR;
-		        retMsg = Constant.Result.ERROR_MSG;
-		        log.error(Constant.Result.RETMSG,e);
-		  }finally {
-		        result.put(Constant.Result.RETCODE, retCode);
-		        result.put(Constant.Result.RETMSG, retMsg);
-		        return result;
-		  }
-	}
 }
