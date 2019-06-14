@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="3.0">
 	<display-name>Erp</display-name>
 	<welcome-file-list>
-		<welcome-file>page/employee2.jsp</welcome-file>
+	 <welcome-file>page/employee2.jsp</welcome-file>
 	</welcome-file-list>
 	<!--springMvc配置 -->
 	<servlet>
@@ -20,12 +20,20 @@
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	<!--字符编码相关配置 <filter> <filter-name>CharacterEncodingFilter</filter-name> 
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class> 
-		<init-param> <param-name>encoding</param-name> <param-value>utf-8</param-value> 
-		</init-param> </filter> <filter-mapping> <filter-name>CharacterEncodingFilter</filter-name> 
-		<url-pattern>/*</url-pattern> </filter-mapping> -->
-
+	<!--字符编码相关配置 
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+	
 	<!--自定义过滤器配置 -->
 	<filter>
 		<filter-name>CorsFilter</filter-name>
@@ -35,7 +43,7 @@
 		<filter-name>CorsFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
+	
 	<!-- spring相关配置 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

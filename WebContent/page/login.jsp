@@ -124,7 +124,7 @@
 </head>
 
 <body class="bg-color center-wrapper">
-
+	
 	<div class="center-content">
 		<div class="row">
 			<div
@@ -134,10 +134,9 @@
 					<div class="bg-white user pd-md">
 						<form role="form" action="<%=path%>/ErpLogin/login" method="post">
 							<input type="text" class="form-control mg-b-sm"
-								placeholder="请输入用户名" value="admin1" name="username" autofocus>
-							<input type="password" class="form-control" placeholder="请输入密码"
-								name="password" value="a123456">
-							<button class="btn btn-info btn-block" type="submit">登录</button>
+								placeholder="请输入用户名"  value="admin1" name="username" autofocus > <input type="password"
+								class="form-control" placeholder="请输入密码" name="password"value="a123456">
+							<button class="btn btn-info btn-block" type="submit" >登录</button>
 						</form>
 					</div>
 				</section>
