@@ -608,7 +608,7 @@ public class RyxxlServiceImpl implements RyxxlService{
 			//异动率
 			dataMap.put("changeMix",  avgCount == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(totalBean.getTotal() / avgCount * 100 , 2)));
 			dataMap.put("endMonCount", totalBean.getEndMonCount());
-			dataMap.put("outEmp:",list);
+			dataMap.put("outEmp",list);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new MessageException(e.getMessage());
