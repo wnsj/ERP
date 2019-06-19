@@ -13,6 +13,7 @@ public class DepartmentBean implements Serializable {
     private String ParentID; //父级编号
     private String OrderNum; //顺序号
     private int level;//部门级别
+    private String preFixName;//带前缀的名字
     private List<DepartmentBean> children;//子部门
     private List<EmployeeBasicBean> employeeList;//部门员工
     private List<PositionDataBean> positionDataList;
@@ -239,6 +240,14 @@ public class DepartmentBean implements Serializable {
         this.positionDataList = positionDataList;
     }
 
+    public String getPreFixName() {
+        return preFixName;
+    }
+
+    public void setPreFixName(String preFixName) {
+        this.preFixName = preFixName;
+    }
+
     @Override
     public String toString() {
         return "DepartmentBean{" +
@@ -247,6 +256,7 @@ public class DepartmentBean implements Serializable {
                 ", ParentID='" + ParentID + '\'' +
                 ", OrderNum='" + OrderNum + '\'' +
                 ", level=" + level +
+                ", preFixName='" + preFixName + '\'' +
                 ", children=" + children +
                 ", employeeList=" + employeeList +
                 ", positionDataList=" + positionDataList +
