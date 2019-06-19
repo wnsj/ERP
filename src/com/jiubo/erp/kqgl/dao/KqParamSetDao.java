@@ -119,4 +119,7 @@ public interface KqParamSetDao {
 	
 	//查询部门下的岗位
 	public List<PositionDataBean> queryPositionDataByDeptId(String deptId);
+
+	//查询部门树
+	public List<DepartmentBean> queryDeptTree();
 }
