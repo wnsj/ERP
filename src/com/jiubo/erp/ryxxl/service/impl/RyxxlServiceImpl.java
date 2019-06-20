@@ -40,13 +40,16 @@ public class RyxxlServiceImpl implements RyxxlService{
 	
 	@Override
 	public Map<String, Object> queryZzryReport(Map<String, Object> paraMap) throws Exception {
+		String deptId = MapUtil.getString(paraMap,"deptId",MapUtil.ALLOW_NULL);
 		String date = MapUtil.getString(paraMap, "date", MapUtil.NOT_NULL);
 		String flag = MapUtil.getString(paraMap, "flag", MapUtil.ALLOW_NULL);
+		String include = MapUtil.getString(paraMap,"incude",MapUtil.ALLOW_NULL);
 		date = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(date), TimeUtil.UNIT_DAY, 1));
 		Map<String,Object> dataMap = new HashMap<String,Object>();
-		Map<String,Object> resultMap = ryxxlDao.queryZzryReport(date, flag);
+		Map<String,Object> resultMap = ryxxlDao.queryZzryReport(date, flag,deptId,include);
 		//在职人数
 		double sumCount = MapUtil.getDouble(resultMap, "SUMCOUNT", MapUtil.ALLOW_NULL);
+		sumCount = sumCount > 0 ? sumCount : 0;
 		dataMap.put("sumCount", sumCount);
 		//-----------------工龄-----------------
 		Map<String,Object> data = null;
@@ -55,45 +58,55 @@ public class RyxxlServiceImpl implements RyxxlService{
 		
 		//1-3月
 		m = MapUtil.getDouble(resultMap, "MM_1", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("oneThreeCount",(int)m);
 		data.put("oneThreeMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//4-6月
 		m = MapUtil.getDouble(resultMap, "MM_2", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("fourSixCount",(int)m);
 		data.put("fourSixMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//7-1年
 		m = MapUtil.getDouble(resultMap, "MM_3", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("sevenCount",(int)m);
 		data.put("sevenMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//满一年
 		m = MapUtil.getDouble(resultMap, "MM_4", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("oneYearCount",(int)m);
 		data.put("oneYearMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//满两年
 		m = MapUtil.getDouble(resultMap, "MM_5", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("twoYearCount",(int)m);
 		data.put("twoYearMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//3年以上
 		m = MapUtil.getDouble(resultMap, "MM_6", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("threeYearCount",(int)m);
 		data.put("threeYearMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		
 		//工龄总和
 		m = MapUtil.getDouble(resultMap, "MM_15", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("avgWorkCount",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount, 2));
 		dataMap.put("work", data);
+
 		//---------------------性别-------------------
-		
 		data = new HashMap<String,Object>();
 		m = MapUtil.getDouble(resultMap, "MM_7", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("man",(int)m);
 		data.put("manMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		
 		m = MapUtil.getDouble(resultMap, "MM_8", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("girl",(int)m);
 		data.put("girlMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		
 		m = MapUtil.getDouble(resultMap, "MM_22", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("otherSex",(int)m);
 		data.put("otherSexMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		dataMap.put("sex", data);
@@ -102,65 +115,77 @@ public class RyxxlServiceImpl implements RyxxlService{
 		data = new HashMap<String,Object>();
 		//20岁以下
 		m = MapUtil.getDouble(resultMap, "MM_9", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("twentyAge",(int)m);
 		data.put("twentyAgeMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//21-25岁
 		m = MapUtil.getDouble(resultMap, "MM_10", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("twentyOneAge",(int)m);
 		data.put("twentyOneAgeMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//26-30岁
 		m = MapUtil.getDouble(resultMap, "MM_11", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("twentySixAge",(int)m);
 		data.put("twentySixAgeMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//31-35岁
 		m = MapUtil.getDouble(resultMap, "MM_12", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("thirtyOneAge",(int)m);
 		data.put("thirtyOneAgeMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//36-40岁
 		m = MapUtil.getDouble(resultMap, "MM_13", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("thirtySixAge",(int)m);
 		data.put("thirtySixAgeMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//40以上
 		m = MapUtil.getDouble(resultMap, "MM_14", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("fortyAge",(int)m);
 		data.put("fortyAgeMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//总年龄
 		m = MapUtil.getDouble(resultMap, "MM_16", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("avgAge",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount, 2));
 		dataMap.put("age", data);
 		
 		//---------------------学历-------------------
 		data = new HashMap<String,Object>();
-		resultMap = ryxxlDao.queryEducation(date, flag);
+		resultMap = ryxxlDao.queryEducation(date, flag,deptId,include);
 		sumCount = MapUtil.getDouble(resultMap, "SUMCOUNT", MapUtil.ALLOW_NULL);
+		sumCount = sumCount > 0 ? sumCount : 0;
 	
 		//初中
 		m = MapUtil.getDouble(resultMap, "MM_17", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("chuzhong",(int)m);
 		data.put("chuzhongMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//高中
 		m = MapUtil.getDouble(resultMap, "MM_18", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("gaozhong",(int)m);
 		data.put("gaozhongMix",sumCount == 0 ? 0 :DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//专科
 		m = MapUtil.getDouble(resultMap, "MM_19", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("zhuanke",(int)m);
 		data.put("zhuankeMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//本科
 		m = MapUtil.getDouble(resultMap, "MM_20", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("benke",(int)m);
 		data.put("benkeMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		//其他
 		m = MapUtil.getDouble(resultMap, "MM_21", MapUtil.ALLOW_NULL);
+		m = m > 0 ? m : 0;
 		data.put("qita",(int)m);
 		data.put("qitaMix",sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 		
 		data.put("educationCount", sumCount);
-		
 		dataMap.put("education", data);
 		
 		//--------------------岗位--------------------------
-		List<Map<String,Object>> list = ryxxlDao.queryPositionReport(date,flag);
+		List<Map<String,Object>> list = ryxxlDao.queryPositionReport(date,flag,deptId,include);
 		//保证json有键值
 		String[] positionName = {"teShuPuGang","jiChuPuGang","zuZhangGangWei","zhuGuanGangWei","buZhangZongJian","zhuLiGangWei","ziShenGangWei"};
 		dataMap.put("totalCount", 0);
@@ -608,7 +633,7 @@ public class RyxxlServiceImpl implements RyxxlService{
 			//异动率
 			dataMap.put("changeMix",  avgCount == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(totalBean.getTotal() / avgCount * 100 , 2)));
 			dataMap.put("endMonCount", totalBean.getEndMonCount());
-			dataMap.put("outEmp:",list);
+			dataMap.put("outEmp",list);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new MessageException(e.getMessage());

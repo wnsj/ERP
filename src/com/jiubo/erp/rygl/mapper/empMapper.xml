@@ -27,6 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND a.Account_Name=#{accountName}
 			</if>
 		</trim>
+		
 	</select>
 
 	<!-- 获取民族列表 -->
@@ -123,12 +124,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		a.PositiveDate AS PositiveDate,
 		a.ResignDate AS ResignDate,
 		a.State AS State,
+		f.Project_ID AS projectId,
 		a.ResignType AS resignType,
 		g.Reason_Id AS resignReasonId,
 		g.Reason_Name AS resignName
 		FROM
-		dbo.T_Employee_Basic a
-		LEFT JOIN dbo.Account_Data b ON a.Account=b.Account_ID
+		dbo.Account_Data b
+		LEFT JOIN dbo.T_Employee_Basic a ON a.Account=b.Account_ID
 		LEFT JOIN dbo.Position_Data c ON b.Position_ID=c.Position_ID
 		LEFT JOIN dbo.T_Department d ON a.Department_ID=d.ID
 		LEFT JOIN dbo.Account_Project_Data e ON b.Account_ID=e.Account_ID
@@ -145,13 +147,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND f.Project_ID=#{projectId}
 			</if>
 			<if test="enterStartDate!=null and enterEndDate!=null and enterStartDate!='' and enterEndDate!=''">
-				AND a.PositiveDate &gt;= #{enterStartDate} AND a.PositiveDate &lt;=#{enterEndDate}
+				AND a.EntryDate &gt;= #{enterStartDate} AND a.EntryDate &lt;=#{enterEndDate}
 			</if>
 			<if test="leaveStartDate !=null and leaveEndDate !=null and leaveStartDate !='' and leaveEndDate !=''">
-				AND a.EntryDate &gt;= #{leaveStartDate} AND a.EntryDate &lt;=#{leaveEndDate}
+				AND a.ResignDate &gt;= #{leaveStartDate} AND a.ResignDate &lt;=#{leaveEndDate}
 			</if>
 			<if test="zzStartDate !=null and zzEndDate !=null and zzStartDate !='' and zzEndDate !=''">
-				AND a.ResignDate &gt;= #{zzStartDate} AND a.ResignDate &lt;=#{zzEndDate}
+				AND a.PositiveDate &gt;= #{zzStartDate} AND a.PositiveDate &lt;=#{zzEndDate}
 			</if>
 			<if test="resignType!=null and resignType !=''">
 				AND a.ResignType = #{resignType}
@@ -162,9 +164,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="birth!=null and birth!=''">
 				AND Month(a.Birth)=#{birth}
 			</if>
-			AND a.isDelete='0'AND b.Account_ID is not null
+			
 		</trim>
-		ORDER BY a.ID
+			ORDER by b.Account_ID 
 	</select>
 	
 	<!--查询           全部家庭成员 -->
@@ -197,9 +199,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="birth!=null and birth!=''">
 				AND Month(a.Birth)=#{birth}
 			</if>
-			AND a.isDelete='0' AND b.Account_ID is not null
+			AND a.isDelete='0' AND b.Account_ID is not null  AND a.JobNum != '0'
 		</trim>
-		ORDER BY a.ID
+		
 	</select>
 
 	<!-- 查询        单个成员             家庭信息 -->
@@ -309,7 +311,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 插入入职人员            账户信息 -->
 	<insert id="insertAccountInfo" parameterType="com.jiubo.erp.rygl.vo.Account">
-
+		
 		INSERT INTO Account_Data
 
 		(Account_Name,Account_Pwd,Account_State,Position_ID,Account_Mac)

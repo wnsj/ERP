@@ -77,12 +77,10 @@ public class EmpController {
 	@RequestMapping(value = "/allList")
 	public JSONObject allList(HttpServletResponse response, HttpServletRequest request) {
 		QueryParam qp = new QueryParam();
-		
 		JSONObject result = new JSONObject();
 		String retCode = Constant.Result.SUCCESS;
 		String retMsg = Constant.Result.SUCCESS_MSG;
 		try {
-			
 			result.put("resData", this.service.initEmpList(qp, request)) ;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
@@ -111,7 +109,6 @@ public class EmpController {
 	@RequestMapping(value = "/advanceAllList")
 	public JSONObject advanceQuery(HttpServletResponse response, HttpServletRequest request) throws Exception {
 		QueryParam qp = new QueryParam();
-
 		JSONObject result = new JSONObject();
 		String retCode = Constant.Result.SUCCESS;
 		String retMsg = Constant.Result.SUCCESS_MSG;
@@ -168,6 +165,8 @@ public class EmpController {
 			if (StringUtils.isBlank(str))
 				throw new MessageException("参数接收失败！");
 			qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
+			System.out.println("QueryParam:categry:"+qp.getSearchType());
+			
 			qp.setState("1");
 			result.put("resData", this.service.initEmpList(qp, request)) ;
 		} catch (MessageException e) {
@@ -1175,3 +1174,4 @@ public class EmpController {
 	}
 
 }
+

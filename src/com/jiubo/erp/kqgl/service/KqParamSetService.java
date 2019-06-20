@@ -305,7 +305,7 @@ public interface KqParamSetService {
 	 * @author:  dx
 	 * @version: 1.0
 	 */
-	public JSONObject queryEmpAttShift(String userId,String startTime,String endTime,String flag)throws MessageException;
+	public JSONObject queryEmpAttShift(String userId,String userName,String startTime,String endTime,String flag)throws MessageException;
 	
 	/**
 	 * @desc:查询全部员工的排班计划
@@ -346,7 +346,19 @@ public interface KqParamSetService {
 	 * @version: 1.0
 	 */
 	public List<PositionDataBean> queryPositionDataByDeptId(String deptId,boolean flag)throws MessageException;
-	
+
+	/* *
+	 * @desc:查询部门树
+	 * @author: dx
+	 * @date: 2019-06-18 12:00:09
+	 * @param :
+	 * @return:
+	 * @throws:
+	 * @version: 1.0
+	 **/
+
+	public List<DepartmentBean> queryDeptTree(Map<String,Object> param)throws MessageException;
+
 	public void test();
 }
 //班次类别

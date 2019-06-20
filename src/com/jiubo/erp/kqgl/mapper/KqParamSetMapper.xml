@@ -237,11 +237,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询具体员工的排班计划 -->
 	<select id="queryAttShift" resultType="com.jiubo.erp.kqgl.bean.AttShiftBean">
-		<![CDATA[ 
 			SELECT B.ID, B.NAME, B.YEAR, B.MONTH, B.SHIFTDATE, B.STARTTIME, B.ENDTIME, B.COLORVALUE, B.TYPE, B.ISDELETE, B.CREATEDATE, B.CREATOR
-			FROM T_ATT_PEOPLESHIFT A,T_ATT_SHIFT B
-			WHERE A.USERID = #{userId} AND A.SHIFTID = B.ID AND B.ISDELETE = 0 AND B.STARTTIME >= #{startTime} AND B.ENDTIME < #{endTime}
-		]]>
+			FROM T_ATT_PEOPLESHIFT A,T_ATT_SHIFT B,T_EMPLOYEE_BASIC C
+			<where>
+				AND C.ID = A.USERID AND A.SHIFTID = B.ID AND B.ISDELETE = 0 AND B.STARTTIME >= #{startTime} AND B.ENDTIME &lt;  #{endTime}
+				<if test="userId != null and userId != ''">
+					AND  A.USERID = #{userId}
+				</if>
+				<if test="userName != null and userName != ''">
+					AND C.NAME = #{userName}
+				</if>
+			</where> 
 	</select>
 	
 	<!-- 查询全部员工的排班计划AND C.STATE = 1 -->
@@ -280,5 +286,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM T_EMPLOYEE_BASIC A,ACCOUNT_DATA B,POSITION_DATA C
 		WHERE A.ACCOUNT = B.ACCOUNT_ID AND B.POSITION_ID = C.POSITION_ID AND A.DEPARTMENT_ID = #{deptId}
 		GROUP BY A.DEPARTMENT_ID,B.POSITION_ID,C.POSITION_NAME
+	</select>
+
+	<!--查询部门树-->
+	<select id="queryDeptTree" resultType="com.jiubo.erp.rygl.bean.DepartmentBean">
+		SELECT A.ID,A.PARENTID,A.LEV LEVEL,B.NAME
+		FROM F_GETCHILD(0) A,T_DEPARTMENT B
+		WHERE A.ID = B.ID
+		ORDER BY B.ORDERNUM
 	</select>
 </mapper>

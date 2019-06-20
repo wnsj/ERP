@@ -38,4 +38,7 @@ public interface kqglDao {
 	
 	//考勤报表统计
 	List<KqInfoResult> kqTableCountList(KqInfoResult kr);
+	
+	List<KqInfoResult> selectKIGList(KqInfoResult kResult);
+	
 }

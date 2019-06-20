@@ -41,12 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="accountName!=null and accountName!=''">
 				AND c.Account_Name=#{accountName}
 			</if>
-			<if test="startDate!=null and startDate!=''">
-				AND a.EntryDate &gt;= #{endDate}
-			</if>
-			<if test="endDate!=null and endDate!=''">
-				AND a.ResignDate&lt;=#{startDate}
-			</if>
+			
 			AND a.JobNum != '0'
 		</trim>
 
@@ -75,14 +70,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 		FROM
 		T_Employee_Basic a
-		INNER JOIN T_Department b ON a.Department_ID=b.ID
-		INNER JOIN
+		LEFT JOIN T_Department b ON a.Department_ID=b.ID
+		LEFT JOIN
 		Account_Data c ON a.Account=c.Account_ID
-		INNER JOIN Position_Data d ON
+		LEFT JOIN Position_Data d ON
 		c.Position_ID=d.Position_ID
-		INNER JOIN T_Att_PeopleShift e ON e.UserID
+		LEFT JOIN T_Att_PeopleShift e ON e.UserID
 		= a.Account
-		INNER JOIN T_Att_Shift f ON e.ShiftID=f.ID
+		LEFT JOIN T_Att_Shift f ON e.ShiftID=f.ID
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="name!=null and name!=''">
 				AND a.Name=#{name}
@@ -139,18 +134,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="com.jiubo.erp.kqgl.vo.KqInfoResult">
 		SELECT
 		DISTINCT
-		tb3.YYYYMMDD AS YYYYMMDD,
-		tb3.uId AS uId,
-		tb3.name AS
-		name,
-		tb3.accountName AS accountName,
-		tb3.jobNum AS jobNum,
-		tb3.departname AS departname,
-		tb3.departId AS departId,
-		tb3.accountId AS
-		accountId,
-		tb3.positionName AS positionName,
-		tb4.Name AS classTimeName,
+		tb3.YYYYMMDD,tb3.uId,tb3.name,tb3.accountName,tb3.jobNum,tb3.entryDate,tb3.resignDate,
+		tb3.departname,tb3.departId,tb3.accountId,tb3.positionName,
+		tb4.Name AS classTimeName, 
 		tb4.Type AS classTimeType,
 		tb4.ShiftDate AS shiftDate,
 		tb4.StartTime AS
@@ -174,6 +160,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		a.Name AS name,
 		c.Account_Name AS accountName,
 		a.JobNum AS jobNum,
+		a.EntryDate AS entryDate,
+		a.ResignDate AS resignDate,
 		b.Name AS departname,
 		b.ID AS departId,
 		a.Account AS accountId,
@@ -308,7 +296,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			
 			AND a.JobNum is not null AND a.JobNum != '0' AND a.Account is not null AND
-			a.Department_ID is not null AND c.Position_ID IS NOT NULL
+			a.Department_ID is not null AND c.Position_ID IS NOT NULL AND a.State='1'
 		</trim>
 		
 		)tab2
@@ -324,7 +312,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 		(
 		SELECT
-		i.UserID,j.EndTime,j.ShiftDate,j.StartTime,j.Name,j.Type
+		i.UserID,j.EndTime AS endDate,j.ShiftDate AS shiftDate,j.StartTime AS startDate,j.Name,j.Type AS classTimeType
 		FROM
 		T_Att_PeopleShift i
 		left JOIN T_Att_Shift j ON i.ShiftID=j.ID
@@ -382,7 +370,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND a.JobNum != '0'
 		</trim>
 	</select>
-
+	<!-- 考勤人员         基础信息列表       按住排序-->
+	<select id="selectKIGList" parameterType="com.jiubo.erp.kqgl.vo.KqInfoResult"
+		resultType="com.jiubo.erp.kqgl.vo.KqInfoResult">
+		SELECT
+		DISTINCT
+		a.ID AS uId,
+		a.Name AS name,
+		a.JobNum AS jobNum,
+		c.Account_Name AS accountName,
+		b.Name AS departname,
+		b.ID AS departId,
+		d.Position_Name AS positionName
+		FROM
+		T_Employee_Basic a
+		INNER JOIN
+		T_Department b ON a.Department_ID=b.ID
+		INNER JOIN Account_Data c ON
+		a.Account=c.Account_ID
+		INNER JOIN Position_Data d ON
+		c.Position_ID=d.Position_ID
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="name!=null and name!=''">
+				AND a.Name=#{name}
+			</if>
+			<if test="departname!=null and departname!=''">
+				AND b.Name=#{departname}
+			</if>
+			<if test="positionName!=null and positionName!=''">
+				AND d.Position_Name=#{positionName}
+			</if>
+			<if test="jobNum!=null and jobNum!=''">
+				AND a.JobNum=#{jobNum}
+			</if>
+			<if test="accountName!=null and accountName!=''">
+				AND c.Account_Name=#{accountName}
+			</if>
+			
+			AND a.JobNum != '0'  AND a.State = '1'
+		</trim>
+		order by b.Name
+	</select>
 
 
 </mapper>
