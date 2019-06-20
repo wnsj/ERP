@@ -30,8 +30,8 @@
 			<table>
 				<tr>
 					<td colspan="2" align="center"><input type="button"
-						onclick="textMothod" value="导出到Excel1" /> <input
-						type="button" onclick="exportExcel1(2)" value="导出到Excel2" /></td>
+						onclick="textMothod" value="导出到Excel1" /> <input type="button"
+						onclick="exportExcel1(2)" value="导出到Excel2" /></td>
 				</tr>
 			</table>
 		</form>
