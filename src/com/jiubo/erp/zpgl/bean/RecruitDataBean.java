@@ -1,6 +1,8 @@
 package com.jiubo.erp.zpgl.bean;
 
 import java.io.Serializable;
+
+import org.springframework.validation.annotation.Validated;
 //面试信息
 public class RecruitDataBean implements Serializable{
 	
@@ -52,6 +54,38 @@ public class RecruitDataBean implements Serializable{
 	private String begDate;//面试管理时间查询（开始时间）
 	private String endDate;//结束时间
 	
+	private String channelName;
+	private String departmentName;
+	private String positionName;
+	
+	
+	public String getDepartmentName() {
+		return departmentName;
+	}
+	public String getChannelName() {
+		return channelName;
+	}
+
+	public void setChannelName(String channelName) {
+		this.channelName = channelName;
+	}
+
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
+
+
 	public RecruitDataBean() {
 		super();
 	}
