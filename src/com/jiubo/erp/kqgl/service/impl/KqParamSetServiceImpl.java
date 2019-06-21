@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.Constant;
 import com.jiubo.erp.common.MapUtil;
@@ -230,7 +229,7 @@ public class KqParamSetServiceImpl implements KqParamSetService {
 
     //查询部门下的职位
     public List<PositionDataBean> queryPositionDataByDeptId(String deptId, boolean flag) {
-        if (flag) return kqParamSetDao.queryPositionDataByDeptId(deptId);
+        if (flag) return kqParamSetDao.queryPositionDataByDeptId(deptId,null,null);
         return new ArrayList<PositionDataBean>();
     }
 
@@ -261,6 +260,11 @@ public class KqParamSetServiceImpl implements KqParamSetService {
         addListPreFix(departmentBeans,departmentBeanList);
 
         return departmentBeanList;
+    }
+
+    @Override
+    public List<PositionDataBean> queryDeptPost(String deptId, String postId, String isPoint) {
+        return  kqParamSetDao.queryPositionDataByDeptId(deptId,postId,isPoint);
     }
 
     //为list中bean的名字添加前缀
@@ -308,18 +312,6 @@ public class KqParamSetServiceImpl implements KqParamSetService {
             }
             parentBean.setChildren(sonBeanList);
         }
-    }
-
-    @Override
-    public void test() {
-        List<DepartmentBean> list = new ArrayList<DepartmentBean>();
-        //父级目录
-        List<DepartmentBean> departmentList = queryDepartmentByPId("0");
-        for (DepartmentBean departmentBean : departmentList) {
-            //departmentBean.setChildren(getChildren(departmentBean.getID(),true));
-            list.add(departmentBean);
-        }
-        System.out.println(JSON.toJSONString(list));
     }
 
     @Override
@@ -420,8 +412,6 @@ public class KqParamSetServiceImpl implements KqParamSetService {
         }
         kqParamSetDao.updateAttShift(begDate, endDate);
     }
-
-
 }
 /*
  * private static Map<String,List<DepartmentBean>> dptMap = new HashMap<String,List<DepartmentBean>>();
