@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,8 @@ import com.quicksand.push.ToolClass;
 @Service
 @Transactional
 public class ZpglServiceImpl implements ZpglService {
+	
+//	Logger log = LoggerFactory.getLogger(ZpglServiceImpl.class);
 	
 	@Autowired
 	private ZpglDao zpglDao;
@@ -49,7 +52,9 @@ public class ZpglServiceImpl implements ZpglService {
 				}
 			}
 		}
+//		log.info(zpglDao.queryRecruitData(recruitDataBean).toString());
 		return zpglDao.queryRecruitData(recruitDataBean);
+		
 	}
 
 	@Override
@@ -95,8 +100,9 @@ public class ZpglServiceImpl implements ZpglService {
 	public List<ZpPlanBean> queryZpPlan(ZpPlanBean zpPlanBean) throws MessageException {
 		if(StringUtils.isBlank(zpPlanBean.getBegDate()) || StringUtils.isBlank(zpPlanBean.getEndDate()))throw new MessageException("查询时间（begDate或endDate）为空！");
 		try {
-			zpPlanBean.setBegDate(TimeUtil.getYearMonthStr(TimeUtil.parseAnyDate(zpPlanBean.getBegDate())));
-			zpPlanBean.setEndDate(TimeUtil.getYearMonthStr(TimeUtil.dateAdd(TimeUtil.parseAnyDate(zpPlanBean.getEndDate()), TimeUtil.UNIT_MONTH, 1)));
+//			zpPlanBean.setBegDate(TimeUtil.getYearMonthStr(TimeUtil.parseAnyDate(zpPlanBean.getBegDate())));
+//			zpPlanBean.setEndDate(TimeUtil.getYearMonthStr(TimeUtil.dateAdd(TimeUtil.parseAnyDate(zpPlanBean.getEndDate()), TimeUtil.UNIT_MONTH, 1)));
+			zpPlanBean.setEndDate(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(zpPlanBean.getEndDate()), TimeUtil.UNIT_DAY, 1)));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

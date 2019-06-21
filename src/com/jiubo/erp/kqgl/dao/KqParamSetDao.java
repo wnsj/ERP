@@ -118,5 +118,8 @@ public interface KqParamSetDao {
 	public void updateAttShift(@Param("begDate")String begDate,@Param("endDate")String endDate);
 	
 	//查询部门下的岗位
-	public List<PositionDataBean> queryPositionDataByDeptId(String deptId);
+	public List<PositionDataBean> queryPositionDataByDeptId(@Param("deptId")String deptId,@Param("postId")String postId,@Param("isPoint")String isPoint);
+
+	//查询部门树
+	public List<DepartmentBean> queryDeptTree();
 }

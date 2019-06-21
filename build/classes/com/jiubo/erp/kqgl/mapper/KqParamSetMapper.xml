@@ -284,7 +284,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="queryPositionDataByDeptId" resultMap="positionDataMap">
 		SELECT A.DEPARTMENT_ID,B.POSITION_ID,C.POSITION_NAME 
 		FROM T_EMPLOYEE_BASIC A,ACCOUNT_DATA B,POSITION_DATA C
-		WHERE A.ACCOUNT = B.ACCOUNT_ID AND B.POSITION_ID = C.POSITION_ID AND A.DEPARTMENT_ID = #{deptId}
+		WHERE A.ACCOUNT = B.ACCOUNT_ID AND B.POSITION_ID = C.POSITION_ID
+		<if test="deptId != null and deptId != ''">
+			AND A.DEPARTMENT_ID = #{deptId}
+		</if>
+		<if test="postId != null and postId != ''">
+			AND C.POSITION_ID = #{postId}
+		</if>
+		<if test="isPoint != null and isPoint != ''">
+			AND C.ISPOINT = 1
+		</if>
 		GROUP BY A.DEPARTMENT_ID,B.POSITION_ID,C.POSITION_NAME
+	</select>
+
+	<!--查询部门树-->
+	<select id="queryDeptTree" resultType="com.jiubo.erp.rygl.bean.DepartmentBean">
+		SELECT A.ID,A.PARENTID,A.LEV LEVEL,B.NAME
+		FROM F_GETCHILD(0) A,T_DEPARTMENT B
+		WHERE A.ID = B.ID
+		ORDER BY B.ORDERNUM
 	</select>
 </mapper>

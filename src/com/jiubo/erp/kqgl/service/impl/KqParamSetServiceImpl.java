@@ -4,11 +4,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,315 +34,394 @@ import com.jiubo.erp.rygl.bean.EmployeeBasicBean;
 
 @Service
 @Transactional
-public class KqParamSetServiceImpl implements KqParamSetService{
-	
-	@Autowired
-	private KqParamSetDao kqParamSetDao;
-	
-	@Override
-	public List<Vacation> queryVacation() {
-		return kqParamSetDao.queryVacation();
-	}
+public class KqParamSetServiceImpl implements KqParamSetService {
 
-	@Override
-	public void updateVacation(Vacation vacation) throws MessageException {
-		kqParamSetDao.updateVacation(vacation);
-	}
+    @Autowired
+    private KqParamSetDao kqParamSetDao;
 
-	@Override
-	public void addVacation(Vacation vacation) {
-		kqParamSetDao.addVacation(vacation);
-	}
+    @Override
+    public List<Vacation> queryVacation() {
+        return kqParamSetDao.queryVacation();
+    }
 
-	@Override
-	public void deleteVacation(int id) throws MessageException {
-		kqParamSetDao.deleteVacation(id);
-	}
+    @Override
+    public void updateVacation(Vacation vacation) throws MessageException {
+        kqParamSetDao.updateVacation(vacation);
+    }
 
-	@Override
-	public List<AttRuleTypeBean> queryAttRuleType() {
-		return kqParamSetDao.queryAttRuleType();
-	}
+    @Override
+    public void addVacation(Vacation vacation) {
+        kqParamSetDao.addVacation(vacation);
+    }
 
-	@Override
-	public void addAttRuleType(AttRuleTypeBean attRuleType) {
-		kqParamSetDao.addAttRuleType(attRuleType);
-	}
+    @Override
+    public void deleteVacation(int id) throws MessageException {
+        kqParamSetDao.deleteVacation(id);
+    }
 
-	@Override
-	public void deleteAttRuleType(int id) {
-		kqParamSetDao.deleteAttRuleType(id);
-	}
+    @Override
+    public List<AttRuleTypeBean> queryAttRuleType() {
+        return kqParamSetDao.queryAttRuleType();
+    }
 
-	@Override
-	public void updateAttRuleType(AttRuleTypeBean attRuleType) {
-		kqParamSetDao.updateAttRuleType(attRuleType);
-	}
+    @Override
+    public void addAttRuleType(AttRuleTypeBean attRuleType) {
+        kqParamSetDao.addAttRuleType(attRuleType);
+    }
 
-	@Override
-	public List<AttShiftScheduleBean> queryAttShiftSchedule() {
-		return kqParamSetDao.queryAttShiftSchedule();
-	}
+    @Override
+    public void deleteAttRuleType(int id) {
+        kqParamSetDao.deleteAttRuleType(id);
+    }
 
-	@Override
-	public void addAttShiftSchedule(AttShiftScheduleBean attShiftSchedule) {
-		kqParamSetDao.addAttShiftSchedule(attShiftSchedule);
-	}
+    @Override
+    public void updateAttRuleType(AttRuleTypeBean attRuleType) {
+        kqParamSetDao.updateAttRuleType(attRuleType);
+    }
 
-	@Override
-	public void deleteAttShiftSchedule(int id) {
-		kqParamSetDao.deleteAttShiftSchedule(id);
-	}
+    @Override
+    public List<AttShiftScheduleBean> queryAttShiftSchedule() {
+        return kqParamSetDao.queryAttShiftSchedule();
+    }
 
-	@Override
-	public void updateAttShiftSchedule(AttShiftScheduleBean attShiftSchedule) {
-		kqParamSetDao.updateAttShiftSchedule(attShiftSchedule);
-	}
+    @Override
+    public void addAttShiftSchedule(AttShiftScheduleBean attShiftSchedule) {
+        kqParamSetDao.addAttShiftSchedule(attShiftSchedule);
+    }
 
-	@Override
-	public List<AttShiftGroupBean> queryAttShiftGroup() {
-		return kqParamSetDao.queryAttShiftGroup();
-	}
+    @Override
+    public void deleteAttShiftSchedule(int id) {
+        kqParamSetDao.deleteAttShiftSchedule(id);
+    }
 
-	@Override
-	public void addAttShiftGroup(AttShiftGroupBean attShiftGroupBean) {
-		kqParamSetDao.addAttShiftGroup(attShiftGroupBean);
-	}
+    @Override
+    public void updateAttShiftSchedule(AttShiftScheduleBean attShiftSchedule) {
+        kqParamSetDao.updateAttShiftSchedule(attShiftSchedule);
+    }
 
-	@Override
-	public void deleteAttShiftGroup(int id) {
-		kqParamSetDao.deleteAttShiftGroup(id);
-	}
+    @Override
+    public List<AttShiftGroupBean> queryAttShiftGroup() {
+        return kqParamSetDao.queryAttShiftGroup();
+    }
 
-	@Override
-	public void updateAttShiftGroup(AttShiftGroupBean attShiftGroupBean) {
-		kqParamSetDao.updateAttShiftGroup(attShiftGroupBean);
-	}
+    @Override
+    public void addAttShiftGroup(AttShiftGroupBean attShiftGroupBean) {
+        kqParamSetDao.addAttShiftGroup(attShiftGroupBean);
+    }
 
-	@Override
-	public List<Map<String, Object>> queryDepartment() throws MessageException {
-		return kqParamSetDao.queryDepartment();
-	}
+    @Override
+    public void deleteAttShiftGroup(int id) {
+        kqParamSetDao.deleteAttShiftGroup(id);
+    }
 
-	@Override
-	public void addDepartment(DepartmentBean departmentBean) throws MessageException {
-		if(StringUtils.isBlank(departmentBean.getName()))throw new MessageException("部门名称不能为空!");
-		if(StringUtils.isBlank(departmentBean.getParentID()))departmentBean.setParentID("0");
-		if(StringUtils.isBlank(departmentBean.getOrderNum()))departmentBean.setOrderNum("0");
-		kqParamSetDao.addDepartment(departmentBean);
-	}
+    @Override
+    public void updateAttShiftGroup(AttShiftGroupBean attShiftGroupBean) {
+        kqParamSetDao.updateAttShiftGroup(attShiftGroupBean);
+    }
 
-	@Override
-	public void deleteDepartment(int id) throws MessageException {
-		if(id <= 0)throw new MessageException("部门id不能为空！");
-		kqParamSetDao.deleteDepartment(id);
-	}
+    @Override
+    public List<Map<String, Object>> queryDepartment() throws MessageException {
+        return kqParamSetDao.queryDepartment();
+    }
 
-	@Override
-	public void updateDepartment(DepartmentBean departmentBean) throws MessageException {
-		if(StringUtils.isBlank(departmentBean.getName()) || StringUtils.isBlank(departmentBean.getID()))throw new MessageException("部门名或部门id为空！");
-		kqParamSetDao.updateDepartment(departmentBean);
-	}
+    @Override
+    public void addDepartment(DepartmentBean departmentBean) throws MessageException {
+        if (StringUtils.isBlank(departmentBean.getName())) throw new MessageException("部门名称不能为空!");
+        if (StringUtils.isBlank(departmentBean.getParentID())) departmentBean.setParentID("0");
+        if (StringUtils.isBlank(departmentBean.getOrderNum())) departmentBean.setOrderNum("0");
+        kqParamSetDao.addDepartment(departmentBean);
+    }
 
-	@Override
-	public List<PositionTypeBean> queryPositionType() throws MessageException {
-		return kqParamSetDao.queryPositionType();
-	}
+    @Override
+    public void deleteDepartment(int id) throws MessageException {
+        if (id <= 0) throw new MessageException("部门id不能为空！");
+        kqParamSetDao.deleteDepartment(id);
+    }
 
-	@Override
-	public void addPositionType(PositionTypeBean positionTypeBean) throws MessageException {
-		kqParamSetDao.addPositionType(positionTypeBean);
-	}
+    @Override
+    public void updateDepartment(DepartmentBean departmentBean) throws MessageException {
+        if (StringUtils.isBlank(departmentBean.getName()) || StringUtils.isBlank(departmentBean.getID()))
+            throw new MessageException("部门名或部门id为空！");
+        kqParamSetDao.updateDepartment(departmentBean);
+    }
 
-	@Override
-	public void deletePositionType(int id) throws MessageException {
-		kqParamSetDao.deletePositionType(id);
-	}
+    @Override
+    public List<PositionTypeBean> queryPositionType() throws MessageException {
+        return kqParamSetDao.queryPositionType();
+    }
 
-	@Override
-	public void updatePositionType(PositionTypeBean positionTypeBean) throws MessageException {
-		kqParamSetDao.updatePositionType(positionTypeBean);
-	}
+    @Override
+    public void addPositionType(PositionTypeBean positionTypeBean) throws MessageException {
+        kqParamSetDao.addPositionType(positionTypeBean);
+    }
 
-	@Override
-	public List<Map<String,Object>> queryPositionData() throws MessageException {
-		return kqParamSetDao.queryPositionData();
-	}
+    @Override
+    public void deletePositionType(int id) throws MessageException {
+        kqParamSetDao.deletePositionType(id);
+    }
 
-	@Override
-	public void addPositionData(PositionDataBean positionDataBean) throws MessageException {
-		if(StringUtils.isBlank(positionDataBean.getPosition_Name()))
-			throw new MessageException("职位名为空！");
-		kqParamSetDao.addPositionData(positionDataBean);
-	}
+    @Override
+    public void updatePositionType(PositionTypeBean positionTypeBean) throws MessageException {
+        kqParamSetDao.updatePositionType(positionTypeBean);
+    }
 
-	@Override
-	public void updatePositionData(PositionDataBean positionDataBean) throws MessageException {
-		if(StringUtils.isBlank(positionDataBean.getPosition_ID()) || StringUtils.isBlank(positionDataBean.getPosition_Name()))
-			throw new MessageException("职位id或职位名为空！");
-		kqParamSetDao.updatePositionData(positionDataBean);
-	}
+    @Override
+    public List<Map<String, Object>> queryPositionData() throws MessageException {
+        return kqParamSetDao.queryPositionData();
+    }
 
-	@Override
-	public List<DepartmentBean> queryDepartmentEmployee(boolean flag,boolean flag2) {
-		//查询父级目录
-		List<DepartmentBean> departmentList = queryDepartmentByPId("0");
-		Iterator<DepartmentBean> iterator = departmentList.iterator();
-		for(;iterator.hasNext();) {
-			DepartmentBean departmentBean = iterator.next();
-			//查询子目录
-			departmentBean.setChildren(getChildren(departmentBean.getID(),flag,flag2));
-			//查询部门下的员工
-			departmentBean.setEmployeeList(queryEmployeeBasic(flag,departmentBean.getID(),"1"));
-			//查询部门下的岗位
-			departmentBean.setPositionDataList(queryPositionDataByDeptId(departmentBean.getID(),flag2));
-		}
-		return departmentList;
-	}
-	
-	public List<DepartmentBean> queryDepartmentByPId(String pId){
-		return kqParamSetDao.queryDepartmentByPId(pId);
-	}
-	
-	public List<EmployeeBasicBean> queryEmployeeBasic(boolean flag,String departmentId,String state){
-		if(flag)return kqParamSetDao.queryEmployeeBasic(departmentId, state);
-		else return new ArrayList<EmployeeBasicBean>();
-	}
-	
-	//获取所有子目录
-	private List<DepartmentBean> getChildren(String pId,boolean flag,boolean flag2) {
-		List<DepartmentBean> list = new ArrayList<DepartmentBean>();
-		List<DepartmentBean> departmentList = queryDepartmentByPId(pId);
-		Iterator<DepartmentBean> iterator = departmentList.iterator();
-		for(;iterator.hasNext();) {
-			DepartmentBean departmentBean = iterator.next();
-			//递归查询子目录
-			departmentBean.setChildren(getChildren(departmentBean.getID(),flag,flag2));
-			//查询部门下的员工
-			departmentBean.setEmployeeList(queryEmployeeBasic(flag,departmentBean.getID(),"1"));
-			//查询部门下的岗位
-			departmentBean.setPositionDataList(queryPositionDataByDeptId(departmentBean.getID(),flag2));
-			list.add(departmentBean);
-		}
-		return list;
-	}
-	
-	//查询部门下的职位
-	public List<PositionDataBean> queryPositionDataByDeptId(String deptId,boolean flag){
-		if(flag)return kqParamSetDao.queryPositionDataByDeptId(deptId);
-		return new ArrayList<PositionDataBean>();
-	}
-	
-	@Override
-	public void test() {
-		List<DepartmentBean> list = new ArrayList<DepartmentBean>();
-		//父级目录
-		List<DepartmentBean> departmentList = queryDepartmentByPId("0");
-		for(DepartmentBean departmentBean : departmentList) {
-			//departmentBean.setChildren(getChildren(departmentBean.getID(),true));
-			list.add(departmentBean);
-		}
-		System.out.println(JSON.toJSONString(list));
-	}
+    @Override
+    public void addPositionData(PositionDataBean positionDataBean) throws MessageException {
+        if (StringUtils.isBlank(positionDataBean.getPosition_Name()))
+            throw new MessageException("职位名为空！");
+        kqParamSetDao.addPositionData(positionDataBean);
+    }
 
-	@Override
-	public JSONObject queryEmpAttShift(String userId,String userName,String startTime, String endTime,String flag) throws MessageException {
-		JSONObject jsonObject = new JSONObject();
-		try {
-			Map<String,Object> dataMap = new HashMap<String,Object>();
-			Date startDate = TimeUtil.parseAnyDate(startTime);
-			if("30".equals(flag)){
-				List<String> dataList = new ArrayList<String>();
-				Date endDate = TimeUtil.getFirstDayOfMonth(TimeUtil.dateAdd(startDate, TimeUtil.UNIT_MONTH, 1));
-				startDate = TimeUtil.getFirstDayOfMonth(startDate);
-				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId,userName,TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(startDate), TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
-				for(AttShiftBean attShiftBean : attShiftList)
-					dataList.add(attShiftBean.getName());
-				dataMap.put("monData", dataList);
-			}else {
-				//开始上班时间
-				List<Double> startList = new ArrayList<Double>();
-				//上班时长
-				List<Double> timeList = new ArrayList<Double>();
-				//下班时间
-				List<Double> endList = new ArrayList<Double>();
-				
-				Date endDate = TimeUtil.dateAdd(TimeUtil.parseAnyDate(endTime), TimeUtil.UNIT_DAY, 1);
-				List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, userName,startTime, TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
-				for(AttShiftBean attShiftBean : attShiftList) {
-					double sTime = 0.0;	//工作开始时间
-					double eTime = 0;
-					double t = 0;
-					Date staTime = TimeUtil.parseAnyDate(attShiftBean.getStartTime());
-					Date enTime = TimeUtil.parseAnyDate(attShiftBean.getEndTime());
-					if("2".equals(attShiftBean.getType())) {
-						//2：休息
-					}else {
-						//1：工作
-						sTime = TimeUtil.getHourHex(staTime);
-						//判断是否是跨日工作
-						if(enTime.getTime() == staTime.getTime() || enTime.getTime() < staTime.getTime()) {
-							//工作时长 = 结束时间 + 1天 - 开始时间
-							enTime = TimeUtil.dateAdd(enTime, TimeUtil.UNIT_DAY, 1);
-							//eTime = "0 - ".concat(TimeUtil.getHourStr(enTime));
-							double d = TimeUtil.getHourHex(enTime);
-							eTime = (double)(0 - d);
-							t = TimeUtil.DateDiffHours(staTime,enTime) - d;
-						}else {
-							//不跨日工作
-							t = TimeUtil.DateDiffHours(staTime,enTime);
-						}
-					}
-					startList.add(sTime);
-					timeList.add(t);
-					endList.add(eTime);
-				}
-				dataMap.put("startTime", startList);
-				dataMap.put("timeList", timeList);
-				dataMap.put("endTime",endList);
-				dataMap.put("realData", attShiftList);
-			}
-			jsonObject.put(Constant.Result.RETDATA, dataMap);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return jsonObject;
-	}
+    @Override
+    public void updatePositionData(PositionDataBean positionDataBean) throws MessageException {
+        if (StringUtils.isBlank(positionDataBean.getPosition_ID()) || StringUtils.isBlank(positionDataBean.getPosition_Name()))
+            throw new MessageException("职位id或职位名为空！");
+        kqParamSetDao.updatePositionData(positionDataBean);
+    }
 
-	@Override
-	public List<Map<String, Object>> queryAllEmpAttShift(String begDate,String endDate) throws MessageException {
-		List<Map<String,Object>> list = null;
-		try {
-			list = kqParamSetDao.queryAllEmpAttShift(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.parseAnyDate(begDate)), TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(endDate), TimeUtil.UNIT_DAY, 1)));
-			for(Map<String, Object> map : list) {
-				if(map.get("SHIFTDATE") != null) 
-					map.put("SHIFTDATE", TimeUtil.getDateYYYY_MM_DD_HH_MM(TimeUtil.parseAnyDate(String.valueOf(map.get("SHIFTDATE")))));
-				if(map.get("STARTTIME") != null) 
-					map.put("STARTTIME", TimeUtil.getDateYYYY_MM_DD_HH_MM(TimeUtil.parseAnyDate(String.valueOf(map.get("STARTTIME")))));
-				if(map.get("ENDTIME") != null)
-					map.put("ENDTIME", TimeUtil.getDateYYYY_MM_DD_HH_MM(TimeUtil.parseAnyDate(String.valueOf(map.get("ENDTIME")))));
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
+    @Override
+    public List<DepartmentBean> queryDepartmentEmployee(boolean flag, boolean flag2) {
+        //查询父级目录
+        List<DepartmentBean> departmentList = queryDepartmentByPId("0");
+        Iterator<DepartmentBean> iterator = departmentList.iterator();
+        for (; iterator.hasNext(); ) {
+            DepartmentBean departmentBean = iterator.next();
+            //查询子目录
+            departmentBean.setChildren(getChildren(departmentBean.getID(), flag, flag2));
+            //查询部门下的员工
+            departmentBean.setEmployeeList(queryEmployeeBasic(flag, departmentBean.getID(), "1"));
+            //查询部门下的岗位
+            departmentBean.setPositionDataList(queryPositionDataByDeptId(departmentBean.getID(), flag2));
+        }
+        return departmentList;
+    }
 
-	@Override
-	public void updateEmpAttShift(Map<String,Object> paraMap) throws MessageException {
-		//kqParamSetDao.deleteAttPeopleShift(id);
-		String begDate = null;
-		String endDate = null;  
-		try {
-			begDate = MapUtil.getString(paraMap, "begDate", MapUtil.NOT_NULL);
-			endDate = MapUtil.getString(paraMap, "endDate", MapUtil.NOT_NULL);
-			endDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(endDate), TimeUtil.UNIT_DAY, 1));
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new MessageException(e.getMessage());
-		}
-		kqParamSetDao.updateAttShift(begDate,endDate);
-	}
+    public List<DepartmentBean> queryDepartmentByPId(String pId) {
+        return kqParamSetDao.queryDepartmentByPId(pId);
+    }
+
+    public List<EmployeeBasicBean> queryEmployeeBasic(boolean flag, String departmentId, String state) {
+        if (flag) return kqParamSetDao.queryEmployeeBasic(departmentId, state);
+        else return new ArrayList<EmployeeBasicBean>();
+    }
+
+    //获取所有子目录
+    private List<DepartmentBean> getChildren(String pId, boolean flag, boolean flag2) {
+        List<DepartmentBean> list = new ArrayList<DepartmentBean>();
+        List<DepartmentBean> departmentList = queryDepartmentByPId(pId);
+        Iterator<DepartmentBean> iterator = departmentList.iterator();
+        for (; iterator.hasNext(); ) {
+            DepartmentBean departmentBean = iterator.next();
+            //递归查询子目录
+            departmentBean.setChildren(getChildren(departmentBean.getID(), flag, flag2));
+            //查询部门下的员工
+            departmentBean.setEmployeeList(queryEmployeeBasic(flag, departmentBean.getID(), "1"));
+            //查询部门下的岗位
+            departmentBean.setPositionDataList(queryPositionDataByDeptId(departmentBean.getID(), flag2));
+            list.add(departmentBean);
+        }
+        return list;
+    }
+
+    //查询部门下的职位
+    public List<PositionDataBean> queryPositionDataByDeptId(String deptId, boolean flag) {
+        if (flag) return kqParamSetDao.queryPositionDataByDeptId(deptId);
+        return new ArrayList<PositionDataBean>();
+    }
+
+    @Override
+    public List<DepartmentBean> queryDeptTree(Map<String, Object> param) throws MessageException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        //第一层
+        List<DepartmentBean> departmentBeans = new ArrayList<DepartmentBean>();
+        Map<String, List<DepartmentBean>> sonMap = new HashMap<String, List<DepartmentBean>>();
+        List<DepartmentBean> deptList = kqParamSetDao.queryDeptTree();
+        for (DepartmentBean departmentBean : deptList) {
+            if ("0".equals(departmentBean.getParentID())) {
+                departmentBeans.add(departmentBean);
+            } else {
+                List<DepartmentBean> sonDeptList = sonMap.get(departmentBean.getParentID());
+                if (sonDeptList == null) sonDeptList = new ArrayList<DepartmentBean>();
+                sonDeptList.add(departmentBean);
+                sonMap.put(departmentBean.getParentID(), sonDeptList);
+            }
+        }
+
+        for (DepartmentBean departmentBean : departmentBeans) {
+            setDeptChildren(departmentBean, sonMap);
+        }
+
+        List<DepartmentBean> departmentBeanList = new ArrayList<DepartmentBean>();
+
+        addListPreFix(departmentBeans,departmentBeanList);
+
+        return departmentBeanList;
+    }
+
+    //为list中bean的名字添加前缀
+    private void addListPreFix(List<DepartmentBean> sourceList,List<DepartmentBean> targetList){
+        for (int i = 0; i < sourceList.size(); i++) {
+            DepartmentBean departmentBean = sourceList.get(i);
+            DepartmentBean deptBean = new DepartmentBean();
+            //编号
+            deptBean.setID(departmentBean.getID());
+            //名称
+            deptBean.setName(departmentBean.getName());
+            //父级编号
+            deptBean.setParentID(departmentBean.getParentID());
+            //顺序号
+            deptBean.setOrderNum(departmentBean.getOrderNum());
+            //部门级别
+            deptBean.setLevel(departmentBean.getLevel());
+            //带前缀的名字
+            String preFix = i == sourceList.size() - 1 ? "└" : "├";
+            deptBean.setPreFixName(getSpace(departmentBean.getLevel()) + preFix + departmentBean.getName());
+            targetList.add(deptBean);
+            //获取子部门
+            if(departmentBean.getChildren() != null && departmentBean.getChildren().size() > 0)addListPreFix(departmentBean.getChildren(),targetList);
+        }
+    }
+
+    //获取空格
+    private String getSpace(int level) {
+        int i = 1;
+        StringBuffer stringBuffer = new StringBuffer("&nbsp;");
+        while (i < level * 2) {
+            stringBuffer.append("&nbsp;");
+            i++;
+        }
+        return stringBuffer.toString();
+    }
+
+    //将父级部门与子部门对应
+    private void setDeptChildren(DepartmentBean parentBean, Map<String, List<DepartmentBean>> sonMap) {
+        List<DepartmentBean> sonBeanList = sonMap.get(parentBean.getID());
+        if (sonBeanList != null) {
+            for (DepartmentBean departmentBean : sonBeanList) {
+                List<DepartmentBean> childBeanList = sonMap.get(departmentBean.getID());
+                if (childBeanList != null) setDeptChildren(departmentBean, sonMap);
+            }
+            parentBean.setChildren(sonBeanList);
+        }
+    }
+
+    @Override
+    public void test() {
+        List<DepartmentBean> list = new ArrayList<DepartmentBean>();
+        //父级目录
+        List<DepartmentBean> departmentList = queryDepartmentByPId("0");
+        for (DepartmentBean departmentBean : departmentList) {
+            //departmentBean.setChildren(getChildren(departmentBean.getID(),true));
+            list.add(departmentBean);
+        }
+        System.out.println(JSON.toJSONString(list));
+    }
+
+    @Override
+    public JSONObject queryEmpAttShift(String userId, String userName, String startTime, String endTime, String flag) throws MessageException {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            Map<String, Object> dataMap = new HashMap<String, Object>();
+            Date startDate = TimeUtil.parseAnyDate(startTime);
+            if ("30".equals(flag)) {
+                List<String> dataList = new ArrayList<String>();
+                Date endDate = TimeUtil.getFirstDayOfMonth(TimeUtil.dateAdd(startDate, TimeUtil.UNIT_MONTH, 1));
+                startDate = TimeUtil.getFirstDayOfMonth(startDate);
+                List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, userName, TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(startDate), TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
+                for (AttShiftBean attShiftBean : attShiftList)
+                    dataList.add(attShiftBean.getName());
+                dataMap.put("monData", dataList);
+            } else {
+                //开始上班时间
+                List<Double> startList = new ArrayList<Double>();
+                //上班时长
+                List<Double> timeList = new ArrayList<Double>();
+                //下班时间
+                List<Double> endList = new ArrayList<Double>();
+
+                Date endDate = TimeUtil.dateAdd(TimeUtil.parseAnyDate(endTime), TimeUtil.UNIT_DAY, 1);
+                List<AttShiftBean> attShiftList = kqParamSetDao.queryAttShift(userId, userName, startTime, TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(endDate));
+                for (AttShiftBean attShiftBean : attShiftList) {
+                    double sTime = 0.0;    //工作开始时间
+                    double eTime = 0;
+                    double t = 0;
+                    Date staTime = TimeUtil.parseAnyDate(attShiftBean.getStartTime());
+                    Date enTime = TimeUtil.parseAnyDate(attShiftBean.getEndTime());
+                    if ("2".equals(attShiftBean.getType())) {
+                        //2：休息
+                    } else {
+                        //1：工作
+                        sTime = TimeUtil.getHourHex(staTime);
+                        //判断是否是跨日工作
+                        if (enTime.getTime() == staTime.getTime() || enTime.getTime() < staTime.getTime()) {
+                            //工作时长 = 结束时间 + 1天 - 开始时间
+                            enTime = TimeUtil.dateAdd(enTime, TimeUtil.UNIT_DAY, 1);
+                            //eTime = "0 - ".concat(TimeUtil.getHourStr(enTime));
+                            double d = TimeUtil.getHourHex(enTime);
+                            eTime = (double) (0 - d);
+                            t = TimeUtil.DateDiffHours(staTime, enTime) - d;
+                        } else {
+                            //不跨日工作
+                            t = TimeUtil.DateDiffHours(staTime, enTime);
+                        }
+                    }
+                    startList.add(sTime);
+                    timeList.add(t);
+                    endList.add(eTime);
+                }
+                dataMap.put("startTime", startList);
+                dataMap.put("timeList", timeList);
+                dataMap.put("endTime", endList);
+                dataMap.put("realData", attShiftList);
+            }
+            jsonObject.put(Constant.Result.RETDATA, dataMap);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryAllEmpAttShift(String begDate, String endDate) throws MessageException {
+        List<Map<String, Object>> list = null;
+        try {
+            list = kqParamSetDao.queryAllEmpAttShift(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.parseAnyDate(begDate)), TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(endDate), TimeUtil.UNIT_DAY, 1)));
+            for (Map<String, Object> map : list) {
+                if (map.get("SHIFTDATE") != null)
+                    map.put("SHIFTDATE", TimeUtil.getDateYYYY_MM_DD_HH_MM(TimeUtil.parseAnyDate(String.valueOf(map.get("SHIFTDATE")))));
+                if (map.get("STARTTIME") != null)
+                    map.put("STARTTIME", TimeUtil.getDateYYYY_MM_DD_HH_MM(TimeUtil.parseAnyDate(String.valueOf(map.get("STARTTIME")))));
+                if (map.get("ENDTIME") != null)
+                    map.put("ENDTIME", TimeUtil.getDateYYYY_MM_DD_HH_MM(TimeUtil.parseAnyDate(String.valueOf(map.get("ENDTIME")))));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public void updateEmpAttShift(Map<String, Object> paraMap) throws MessageException {
+        //kqParamSetDao.deleteAttPeopleShift(id);
+        String begDate = null;
+        String endDate = null;
+        try {
+            begDate = MapUtil.getString(paraMap, "begDate", MapUtil.NOT_NULL);
+            endDate = MapUtil.getString(paraMap, "endDate", MapUtil.NOT_NULL);
+            endDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(endDate), TimeUtil.UNIT_DAY, 1));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MessageException(e.getMessage());
+        }
+        kqParamSetDao.updateAttShift(begDate, endDate);
+    }
+
+
 }
 /*
  * private static Map<String,List<DepartmentBean>> dptMap = new HashMap<String,List<DepartmentBean>>();
@@ -409,7 +486,7 @@ public class KqParamSetServiceImpl implements KqParamSetService{
 		}
  */
 /*
-				Date targetDate =  TimeUtil.dateAdd(startDate, TimeUtil.UNIT_DAY, 7);
+                Date targetDate =  TimeUtil.dateAdd(startDate, TimeUtil.UNIT_DAY, 7);
 				//判断是否同月
 				if(TimeUtil.dateEqualsDate(startDate,targetDate,2)) {
 					//同月
