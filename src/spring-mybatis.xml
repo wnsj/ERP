@@ -17,11 +17,12 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		<property name="url" value="${jdbcUrl}" />
 		<property name="username" value="${user}" />
 		<property name="password" value="${password}" />
-	    <property name="initialSize" value="0"/><!-- 初始化连接大小 -->
+	    	<property name="initialSize" value="0"/><!-- 初始化连接大小 -->
 		<property name="maxActive" value="20" /><!-- 最大 连接数-->
 		<property name="maxIdle" value="20" /><!-- 最大 空闲 连接数 -->
 		<property name="minIdle" value="1"/><!-- 最小 空闲 连接数 -->
 		<property name="maxWait" value="6000"/><!--最大连接等待时间  6s--> 
+		<property name="testWhileIdle" value="true"/>
 	</bean>
 
 	<!-- MyBatis文件 -->

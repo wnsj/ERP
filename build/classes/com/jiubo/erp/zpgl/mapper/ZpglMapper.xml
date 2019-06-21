@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.erp.zpgl.dao.ZpglDao">
+	
+	<!-- 查询招聘渠道 -->
+	<select id="queryRecruitChannel" resultType="com.jiubo.erp.zpgl.bean.RecruitChannelBean">
+		SELECT RECRUITCHANNEL_ID, RECRUITCHANNEL_NAME
+		FROM ZP_RECRUITCHANNEL
+	</select>
+	
+	<!-- 添加招聘渠道 -->
+	<insert id="addRecruitChannel" parameterType="com.jiubo.erp.zpgl.bean.RecruitChannelBean">
+		INSERT INTO ZP_RECRUITCHANNEL (RECRUITCHANNEL_NAME)
+		VALUES(#{recruitChannelName})
+	</insert>
+	
+	<!-- 删除招聘渠道 -->
+	<delete id="deleteRecruitChannel">
+		DELETE FROM ZP_RECRUITCHANNEL
+		WHERE RECRUITCHANNEL_ID = #{id}
+	</delete>
+	
+	<!-- 修改招聘渠道 -->
+	<update id="updateRecruitChannel" parameterType="com.jiubo.erp.zpgl.bean.RecruitChannelBean">
+		UPDATE ZP_RECRUITCHANNEL
+		SET 
+			RECRUITCHANNEL_NAME = #{recruitChannelName}
+		WHERE RECRUITCHANNEL_ID = #{recruitChannelId}
+	</update>
+	
+	<!-- 查询面试信息 -->
+	<select id="queryRecruitData" parameterType="com.jiubo.erp.zpgl.bean.RecruitDataBean" resultType="com.jiubo.erp.zpgl.bean.RecruitDataBean">
+		SELECT 
+			ID, NAME, SEX, BIRTH, IDNUM, PHONE, MAIL, QQ, ADDRESS,
+			HOMEADDRESS, HOMETOWN, ACCOUNTPROP, PLOITICAL, MARITAL,
+			NATIONALITY, HEIGHT, WEIGHT, BLOODTYPE, EDUCATION, SCHOOL,
+			GRADUATION, PROFESSION, ATSCHOOL, WORKCOMPANY, WORKEXP,
+			CERTIFICATE, CHANNEL, POSITION, DEPARTMENT, WAGES,
+			INTERVIEWER, RECRUITDATE, SCORE,ISQUALIFIED, ISPAY, 
+			REMARK, ISDELETE, UPDATEDATE, UPDATEACCOUNT,
+			(CASE ISENTRY WHEN 0  THEN '未入职' 	WHEN 1  THEN '在职'	WHEN 2	THEN '离职'  END)	ISENTRY
+		FROM ZP_RECRUITDATA 
+		<where>
+			AND ISDELETE = 0
+			<if test="name != null and name != ''">
+				AND NAME LIKE '%' + #{name} + '%'
+			</if>
+			
+			<if test="phone != null and phone != ''">
+				AND PHONE LIKE '%' + #{phone} + '%'
+			</if>
+			
+			<if test="dateFlag != null and dateFlag != ''">
+				<choose>
+					<when test="dateFlag == 0">
+						AND INVITATIONDATE >= #{begDate}
+						<![CDATA[ AND INVITATIONDATE < #{endDate}]]>
+					</when>
+					<when test="dateFlag == 1">
+						AND RECRUITDATE >= #{begDate}
+						<![CDATA[ AND RECRUITDATE < #{endDate}]]>
+					</when>
+				</choose>
+			</if>
+			
+			<if test="isEntry != null and isEntry != ''">	
+				<choose>
+					<when test="isEntry == 0">
+						AND ISENTRY = 0
+					</when>
+					<when test="isEntry == 1">
+						AND ISENTRY = 1
+					</when>
+					<when test="isEntry == 2">
+						AND ISENTRY = 2
+					</when>
+				</choose>
+			</if>
+			
+			<if test="isQualified != null and isQualified != ''">
+				<choose>
+					<when test="isQualified == 0">
+						AND ISQUALIFIED = '是'
+					</when>
+					<when test="isQualified == 1">
+						AND ISQUALIFIED = '否'
+					</when>
+					<when test="isQualified == 2">
+						AND ISQUALIFIED = '待定'
+					</when>
+				</choose>
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加面试信息 -->
+	<insert id="addRecruitData" parameterType="com.jiubo.erp.zpgl.bean.RecruitDataBean">
+		INSERT INTO ZP_RECRUITDATA (
+			NAME, SEX, BIRTH, IDNUM, PHONE, MAIL, QQ, ADDRESS,
+		  	HOMEADDRESS, HOMETOWN, ACCOUNTPROP, PLOITICAL, MARITAL, NATIONALITY, HEIGHT,
+		  	WEIGHT, BLOODTYPE, EDUCATION, SCHOOL, GRADUATION, PROFESSION, ATSCHOOL, WORKCOMPANY,
+		  	WORKEXP, CERTIFICATE, CHANNEL, POSITION, DEPARTMENT, WAGES, INTERVIEWER, RECRUITDATE,
+		    INVITATIONDATE, SCORE, ISQUALIFIED, ISPAY, REMARK, ISENTRY, ISDELETE, UPDATEDATE, UPDATEACCOUNT)
+		VALUES(
+			#{name},#{sex}, #{birth},#{idNum}, #{phone},#{mail} ,#{qq},#{address},
+			#{homeAddress},#{homeTown},#{accountProp},#{ploitical},#{marital} ,#{nationality},#{height} ,
+			#{weight} ,#{bloodType} ,#{education} ,#{school} ,#{graduation},#{profession},#{atSchool},#{workCompany},
+			#{workexp},#{certificate},#{channel},#{position},#{department} , #{wages}, #{interviewer} ,#{recruitDate} ,
+			#{invitationDate},#{score}, #{isQualified},#{isPay}, #{remark},#{isEntry},#{isDelete},#{updateDate},#{updateAccount})  
+	</insert>
+	
+	<!-- 修改面试信息 -->
+	<update id="updateRecruitData" parameterType="com.jiubo.erp.zpgl.bean.RecruitDataBean">
+		UPDATE ZP_RECRUITDATA
+		SET 
+			  NAME = #{name}
+			, SEX = #{sex}
+			, BIRTH = #{birth}
+			, IDNUM = #{idNum}
+			, PHONE = #{phone}
+			, MAIL = #{mail} 
+			, QQ = #{qq}
+			, ADDRESS = #{address}
+			, HOMEADDRESS = #{homeAddress}
+			, HOMETOWN = #{homeTown}
+			, ACCOUNTPROP = #{accountProp}
+			, PLOITICAL = #{ploitical}
+			, MARITAL = #{marital} 
+			, NATIONALITY = #{nationality}
+			, HEIGHT = #{height} 
+			, WEIGHT = #{weight} 
+			, BLOODTYPE = #{bloodType} 
+			, EDUCATION = #{education} 
+			, SCHOOL = #{school} 
+			, GRADUATION = #{graduation} 
+			, PROFESSION = #{profession}
+			, ATSCHOOL = #{atSchool} 
+			, WORKCOMPANY = #{workCompany}
+			, WORKEXP = #{workexp}
+			, CERTIFICATE = #{certificate} 
+			, CHANNEL = #{channel} 
+			, POSITION = #{position} 
+			, DEPARTMENT = #{department} 
+			, WAGES = #{wages} 
+			, INTERVIEWER = #{interviewer} 
+			, RECRUITDATE = #{recruitDate} 
+			, INVITATIONDATE = #{invitationDate}
+			, SCORE = #{score} 
+			, ISQUALIFIED = #{isQualified} 
+			, ISPAY = #{isPay} 
+			, REMARK = #{remark} 
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 删除面试信息（逻辑删除） -->
+	<update id="updateRecruitDataById">
+		UPDATE ZP_RECRUITDATA
+		SET ISDELETE = 1
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 查询招聘计划 -->
+	<select id="queryZpPlan" parameterType="com.jiubo.erp.zpgl.bean.ZpPlanBean" resultType="com.jiubo.erp.zpgl.bean.ZpPlanBean">
+		SELECT A.PLAN_ID, A.DEPARTMENT,B.NAME DEPARTMENTNAME, A.POSITION,C.POSITION_NAME POSITIONNAME, A.LACKNUM, A.PLANNUM, A.PHONENUM, A.PLANDATE
+		FROM ZP_PLAN A 
+		LEFT JOIN  T_DEPARTMENT B ON A.DEPARTMENT = B.ID 
+		LEFT JOIN  POSITION_DATA C ON A.POSITION = C.POSITION_ID
+		<where>
+			<if test="begDate != null and begDate != ''">
+				AND YEAR(PLANDATE) * 100 + MONTH(PLANDATE) >= #{begDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				<![CDATA[ AND YEAR(PLANDATE) * 100 + MONTH(PLANDATE) < #{endDate}]]>
+			</if>
+			<if test=" department != null and department != ''">
+				AND A.DEPARTMENT = #{department}
+			</if>
+			<if test="position != null and position != ''">
+				AND C.POSITION_ID = #{position}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加招聘计划 -->
+	<insert id="addZpPlan" parameterType="com.jiubo.erp.zpgl.bean.ZpPlanBean">
+		INSERT INTO ZP_PLAN (DEPARTMENT, POSITION, LACKNUM, PLANNUM, PHONENUM, PLANDATE)
+		VALUES(#{department},#{position},#{lackNum},#{planNum},#{phoneNum},#{planDate})
+	</insert>
+	
+	<!-- 删除招聘计划 -->
+	<delete id="deleteZpPlan">
+		DELETE FROM ZP_PLAN WHERE PLAN_ID = #{id}
+	</delete>
+	
+	<!-- 修改招聘计划 -->
+	<update id="updateZpPlan" parameterType="com.jiubo.erp.zpgl.bean.ZpPlanBean">
+		UPDATE ZP_PLAN
+		SET 
+			DEPARTMENT = #{department}
+			, POSITION = #{position}
+			, LACKNUM = #{lackNum}
+			, PLANNUM = #{planNum}
+			, PHONENUM = #{phoneNum}
+			, PLANDATE = #{planDate}
+		WHERE PLAN_ID = #{planId}
+	</update>
+	
+	<!-- 查询招聘发布信息 -->
+	<select id="queryZpPublish" parameterType="com.jiubo.erp.zpgl.bean.ZpPublishBean" resultType="com.jiubo.erp.zpgl.bean.ZpPublishBean">
+		SELECT A.PUBLISH_ID,A.CHANNEL,B.RECRUITCHANNEL_NAME CHANNELNAME,A.POSITION,
+			C.POSITION_NAME,A.PUBLISHNUM, A.PHONENUM, A.PUBLISHDATE
+		FROM ZP_PUBLISH A,ZP_RECRUITCHANNEL B,POSITION_DATA C
+		WHERE A.CHANNEL = B.RECRUITCHANNEL_ID AND A.POSITION = C.POSITION_ID 
+		<if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
+			AND A.PUBLISHDATE >= #{begDate} 
+			<![CDATA[ AND A.PUBLISHDATE < #{endDate} ]]>
+		</if>
+		<if test="channel != null and channel != ''">
+			AND A.CHANNEL = #{channel}
+		</if>
+		<if test="position != null and position != ''">
+			AND A.POSITION = #{position}
+		</if>
+	</select>
+	
+	<!-- 添加招聘发布信息 -->
+	<insert id="addZpPublish" parameterType="com.jiubo.erp.zpgl.bean.ZpPublishBean">
+		INSERT INTO ZP_PUBLISH (CHANNEL, POSITION, PUBLISHNUM, PHONENUM, PUBLISHDATE)
+		VALUES(#{channel},#{position},#{publishNum},#{phoneNum},#{publishDate})
+	</insert>
+	
+	<!-- 删除招聘发布信息 -->
+	<delete id="deleteZpPublish">
+		DELETE FROM ZP_PUBLISH
+		WHERE PUBLISH_ID = #{id}
+	</delete>
+	
+	<!-- 修改招聘发布信息 -->
+	<update id="updateZpPublish" parameterType="com.jiubo.erp.zpgl.bean.ZpPublishBean">
+		UPDATE ZP_PUBLISH
+		SET 
+			CHANNEL = #{channel}
+			, POSITION = #{position}
+			, PUBLISHNUM = #{publishNum}
+			, PHONENUM = #{phoneNum}
+			, PUBLISHDATE = #{publishDate}
+		WHERE PUBLISH_ID = #{publishId}
+	</update>
+	
+	<!-- 查询请假信息 
+	<select id="queryAttLeaveBean" parameterType="com.jiubo.erp.wzbg.bean.AttLeaveBean" resultType="com.jiubo.erp.wzbg.bean.AttLeaveBean">
+		SELECT A.ID, A.USERID, A.JOBNUM,C.NAME EMPNAME, A.LEAVETYPEID,B.NAME LEAVENAME, A.STARTTIME, A.ENDTIME, A.TOTLETIME, 
+		A.TOTLEDATE, A.REASON, A.APPLICANT, A.APPLIDATE, A.VERIFIER, A.VERIFYDATE, A.STATUS, A.ISDELETE, A.CREATEDATE, A.CREATOR
+		FROM T_ATT_LEAVE A,T_ATT_LEAVETYPE B,T_EMPLOYEE_BASIC C
+		WHERE A.LEAVETYPEID = B.ID AND A.ISDELETE = 0 AND A.USERID = C.ACCOUNT
+		<where>
+			<if test="">
+				AND C.DEPARTMENT_ID = 
+			</if>
+			<if test="">
+				AND C.NAME LIKE 
+			</if>
+		</where>
+	</select>
+	-->
+	
+	
+	
+</mapper>
+
+<!-- <select id="queryRecruitDataTest" resultType="com.jiubo.erp.zpgl.bean.RecruitDataBean">
+		SELECT 
+			ID, NAME, SEX, BIRTH, IDNUM, PHONE, MAIL, QQ, ADDRESS,
+			HOMEADDRESS, HOMETOWN, ACCOUNTPROP, PLOITICAL, MARITAL,
+			NATIONALITY, HEIGHT, WEIGHT, BLOODTYPE, EDUCATION, SCHOOL,
+			GRADUATION, PROFESSION, ATSCHOOL, WORKCOMPANY, WORKEXP,
+			CERTIFICATE, CHANNEL, POSITION, DEPARTMENT, WAGES,
+			INTERVIEWER, RECRUITDATE, SCORE,ISQUALIFIED, ISPAY, 
+			REMARK, ISDELETE, UPDATEDATE, UPDATEACCOUNT,
+			(CASE ISENTRY WHEN 0  THEN '未入职' 	WHEN 1  THEN '在职'	WHEN 2	THEN '离职'  END)	ISENTRY
+		FROM ZP_RECRUITDATA 
+		<if test="name != null and name != ''">
+			<bind name="pattern" value="'%' + name + '%'" />
+		<bind name="bindName" value="'%'+ name + '%'"/>
+			where NAME like #{pattern}
+		</if>
+	</select> -->

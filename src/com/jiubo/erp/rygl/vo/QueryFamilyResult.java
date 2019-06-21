@@ -7,7 +7,7 @@ public class QueryFamilyResult {
 	private String appellation; //称谓
 	private String chname;//成员名字
 	private String birth;//生日
-	private String workadress;//工作单位
+	private String workAddress;//工作单位
 	private String position;//职务
 	private String phone;//手机号
 	private String wechat;//微信号
@@ -84,11 +84,11 @@ public class QueryFamilyResult {
 	public void setBirth(String birth) {
 		this.birth = birth;
 	}
-	public String getWorkadress() {
-		return workadress;
+	public String getWorkAddress() {
+		return workAddress;
 	}
-	public void setWorkadress(String workadress) {
-		this.workadress = workadress;
+	public void setWorkAddress(String workAddress) {
+		this.workAddress = workAddress;
 	}
 	public String getPosition() {
 		return position;

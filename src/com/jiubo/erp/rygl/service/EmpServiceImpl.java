@@ -1,6 +1,5 @@
 package com.jiubo.erp.rygl.service;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -30,8 +29,7 @@ public class EmpServiceImpl implements EmpService {
 	/*
 	 * 初始化人员列表
 	 * 
-	 * @see
-	 * com.jiubo.erp.rygl.service.EmpService#initEmpList(com.jiubo.erp.rygl.vo.
+	 * @see com.jiubo.erp.rygl.service.EmpService#initEmpList(com.jiubo.erp.rygl.vo.
 	 * QueryParam, com.jiubo.erp.common.PageParam)
 	 */
 	@Override
@@ -42,24 +40,23 @@ public class EmpServiceImpl implements EmpService {
 		request.setAttribute("totalnfo", emplist.size());
 		return emplist;
 	}
-	
-	
+
 	/*
-	 * 初始化家庭成员列表
-	 * SS
-	 * @see
-	 * com.jiubo.erp.rygl.service.EmpService#initEmpList(com.jiubo.erp.rygl.vo.
+	 * 初始化家庭成员列表 SS
+	 * 
+	 * @see com.jiubo.erp.rygl.service.EmpService#initEmpList(com.jiubo.erp.rygl.vo.
 	 * QueryParam, com.jiubo.erp.common.PageParam)
 	 */
 	@Override
 	public List<QueryFamilyResult> initFamilList(QueryFamilyResult param) throws Exception {
 		List<QueryFamilyResult> fmlist = this.dao.searchFamilyList(param);
-		
+
 		return fmlist;
 	}
-	
+
 	/**
 	 * 家庭成员的模糊查询
+	 * 
 	 * @param param
 	 * @param request
 	 * @return
@@ -67,7 +64,7 @@ public class EmpServiceImpl implements EmpService {
 	 */
 	public List<QueryFamilyResult> familyfuzzyQuery(QueryFamilyResult param) throws Exception {
 		List<QueryFamilyResult> fmlist = this.dao.searchFamilyList(param);
-	
+
 		return fmlist;
 	}
 
@@ -93,10 +90,10 @@ public class EmpServiceImpl implements EmpService {
 	public List<ProjectDataBean> initProjectList(HttpServletRequest request) {
 		List<ProjectDataBean> list = this.dao.selectProjectList();
 		request.setAttribute("project", list);
-		
+
 		return list;
 	}
-	
+
 	/*
 	 * 初始化职位列表
 	 * 
@@ -107,24 +104,24 @@ public class EmpServiceImpl implements EmpService {
 		List<Position> positions = this.dao.selectPositionList();
 		return positions;
 	}
-	
+
 	/**
 	 * 初始化民族列表
 	 */
 	@Override
 	public List<Nation> initNationList() {
-		List<Nation>  nations = this.dao.selectNationList();
+		List<Nation> nations = this.dao.selectNationList();
 		return nations;
 	}
-	
+
 	/**
 	 * 初始化离职原因列表
 	 */
-	public List<LeaveResign> initLeaveList(LeaveResign lr){
+	public List<LeaveResign> initLeaveList(LeaveResign lr) {
 		List<LeaveResign> lrList = this.dao.selectLeaveList(lr);
 		return lrList;
 	}
-	
+
 	/**
 	 * 查询所有人员列表
 	 * 
@@ -135,84 +132,122 @@ public class EmpServiceImpl implements EmpService {
 		List<QueryResult> emplist = this.dao.searchEmplist(param);
 		return emplist;
 	}
-	
+
 	/**
-	 * 根据部门名称查询部门的ID
-	 * depName 部门名称
+	 * 根据部门名称查询部门的ID depName 部门名称
 	 */
-	public List<DepartmentBean> selectUserDepId(DepartmentBean depName){
+	public List<DepartmentBean> selectUserDepId(DepartmentBean depName) {
 		List<DepartmentBean> depList = this.dao.selectDepartList(depName);
 		return depList;
 	}
-	
+
 	/**
 	 * 查询ERP账户信息
 	 */
-	public List<Account> selectAccountList(Account account){
+	public List<Account> selectAccountList(Account account) {
 		List<Account> aList = this.dao.selectAccountList(account);
 		return aList;
 	}
-	
+
+	/**
+	 * 插入账号信息
+	 */
 	public Integer insertAccountInfo(Account account) {
-		
+
 		return this.dao.insertAccountInfo(account);
 	}
-	
+
+	/**
+	 * 初始化密码
+	 */
+	public Integer updataAccountPwd(Account accountPwd) {
+
+		return this.dao.updataAccountPwd(accountPwd);
+	}
+
+	/**
+	 * 转正日期
+	 */
+	public Integer shiftPosition(UserInfo userInfo) {
+		return this.dao.shiftPosition(userInfo);
+	};
+
+	/**
+	 * 离职日期
+	 */
+	public Integer employeeResgin(UserInfo userInfo) {
+		return this.dao.employeeResgin(userInfo);
+	}
+
+	/**
+	 * 删除状态
+	 */
+	public Integer deleteEmployee(UserInfo userInfo) {
+		return this.deleteEmployee(userInfo);
+	}
+
 	/**
 	 * 查询用户基本信息
 	 */
 	public List<UserInfo> searchUBInfo(UserInfo userInfo) {
-		List<UserInfo> uList= this.dao.searchUBInfo(userInfo);
-		System.out.println("-------查询用户------"+uList.size());
+		List<UserInfo> uList = this.dao.searchUBInfo(userInfo);
+		System.out.println("-------查询用户------" + uList.size());
 		return uList;
 	}
+
 	/**
 	 * 查看单个用户的家庭成员信息
 	 */
-	public List<QueryFamilyResult>singleFamilyList(QueryFamilyResult qfr){
+	public List<QueryFamilyResult> singleFamilyList(QueryFamilyResult qfr) {
 		return this.dao.singleFamilyList(qfr);
 	}
-	
+
 	/**
 	 * 查询用户详细信息
 	 */
 	public List<UserInfo> searchUDInfo(UserInfo userInfo) {
-		List<UserInfo> uList= this.dao.searchUDInfo(userInfo);
-		System.out.println("-------查询用户------"+uList.size());
+		List<UserInfo> uList = this.dao.searchUDInfo(userInfo);
+		System.out.println("-------查询用户------" + uList.size());
 		return uList;
 	}
-	
+
 	/**
 	 * 插入用户信息
+	 * 
 	 * @param userInfo
 	 * @return
 	 */
 	public Integer insertUserInfo(UserInfo userInfo) {
 		Integer uInfoId = this.dao.insertBaseInfo(userInfo);
-	
+
 		return uInfoId;
 	}
-	
+
 	/**
 	 * 插入用户的详细信息
+	 * 
 	 * @param userInfo
 	 * @return
 	 */
 	public Integer insertUserDetailInfo(UserInfo userInfo) {
-		
+
 		return this.dao.insertDetailInfo(userInfo);
 	}
-	
+
 	/**
 	 * 插入user的家庭信息
 	 */
 	public Integer insertUserFmInfo(QueryFamilyResult qfr) {
-		
+
 		return this.dao.insertfamilyInfo(qfr);
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.jiubo.erp.rygl.service.EmpService#updatafamilyInfo(com.jiubo.erp.rygl.vo.QueryFamilyResult)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jiubo.erp.rygl.service.EmpService#updatafamilyInfo(com.jiubo.erp.rygl.vo.
+	 * QueryFamilyResult)
 	 */
 	@Override
 	public Integer updatafamilyInfo(QueryFamilyResult qfr) {
@@ -224,10 +259,9 @@ public class EmpServiceImpl implements EmpService {
 	 * 更新用户的基本信息
 	 */
 	public Integer updataBaseInfo(UserInfo userInfo) {
-		
+
 		return this.dao.updataBaseInfo(userInfo);
 	}
-
 
 	/**
 	 * 更新用户的详细信息
@@ -236,16 +270,15 @@ public class EmpServiceImpl implements EmpService {
 		// TODO Auto-generated method stub
 		return this.dao.updataDetialInfo(userInfo);
 	}
-	
+
 	/**
 	 * 查询用户的调动信息
 	 */
 	public List<PositionShift> selectShiftInfo(PositionShift pShift) {
-		List<PositionShift> psList = this.dao.selectShiftInfo(pShift); 
+		List<PositionShift> psList = this.dao.selectShiftInfo(pShift);
 		return psList;
 	}
 
-	
 	/**
 	 * 
 	 */
@@ -254,13 +287,11 @@ public class EmpServiceImpl implements EmpService {
 		return this.dao.updateLeaveReason(lResign);
 	}
 
-
 	@Override
 	public Integer deleteLeaveReason(LeaveResign lResign) {
 		// TODO Auto-generated method stub
 		return this.dao.deleteLeaveReason(lResign);
 	}
-
 
 	@Override
 	public Integer addLeaveReason(LeaveResign lResign) {

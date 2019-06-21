@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONArray;
 import com.jiubo.erp.common.Constant;
+import com.jiubo.erp.common.MD5Util;
 import com.jiubo.erp.common.MapUtil;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.common.Position;
@@ -81,6 +82,10 @@ public class EmpController {
 		String retCode = Constant.Result.SUCCESS;
 		String retMsg = Constant.Result.SUCCESS_MSG;
 		try {
+			String str = ToolClass.getStrFromInputStream(request);
+			if (StringUtils.isBlank(str))
+				throw new MessageException("参数接收失败！");
+			qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
 			result.put("resData", this.service.initEmpList(qp, request)) ;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
@@ -358,7 +363,6 @@ public class EmpController {
 		List<Position> pList = new ArrayList<>();
 		try {
 			pList = this.service.initPositionList();
-			System.out.println("positionList" + pList.size());
 			return pList;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -499,7 +503,155 @@ public class EmpController {
 
 		return uList;
 	}
-
+	
+	
+	/**
+	 * 初始化当前账号密码
+	 * @param accountPwd
+	 * @return
+	 * @return 返回值类型  Integer
+	 * @author 作者 mwl
+	 * @date   时间 2019年6月17日下午4:04:28
+	 */
+	@SuppressWarnings("finally")
+	@ResponseBody
+	@RequestMapping(value = "/updataAccountPwd")
+	public JSONObject updataAccountPwd(HttpServletResponse response, HttpServletRequest request) {
+		
+		Account pwd = new Account();
+		JSONObject result = new JSONObject();
+		String retCode = Constant.Result.SUCCESS;
+		String retMsg = Constant.Result.SUCCESS_MSG;
+		try {
+			String str = ToolClass.getStrFromInputStream(request);
+			if (StringUtils.isBlank(str))
+				throw new MessageException("参数接收失败！");
+			pwd = MapUtil.transJsonStrToObjectIgnoreCase(str, Account.class);
+			pwd.setAccountPwd(MD5Util.MD5EncodeUtf8("111111"));
+			
+			result.put("resData", this.service.updataAccountPwd(pwd)) ;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			log.error(Constant.Result.RETMSG, e);
+		} finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+			return result;
+		}
+	}
+	/**
+	 * 转正日期
+	 * @param response
+	 * @param request
+	 * @return
+	 * @return 返回值类型  JSONObject
+	 * @author 作者 mwl
+	 * @date   时间 2019年6月18日下午1:30:10
+	 */
+	@SuppressWarnings("finally")
+	@ResponseBody
+	@RequestMapping(value = "/shiftPositiveDate")
+	public JSONObject shiftPositiveDate(HttpServletResponse response, HttpServletRequest request) {
+		
+		UserInfo user = new UserInfo();
+		JSONObject result = new JSONObject();
+		String retCode = Constant.Result.SUCCESS;
+		String retMsg = Constant.Result.SUCCESS_MSG;
+		try {
+			String str = ToolClass.getStrFromInputStream(request);
+			if (StringUtils.isBlank(str))
+				throw new MessageException("参数接收失败！");
+			user = MapUtil.transJsonStrToObjectIgnoreCase(str, UserInfo.class);
+			user.setPositiveDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(user.getPositiveDate()));
+			
+			result.put("resData", this.service.shiftPosition(user)) ;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			log.error(Constant.Result.RETMSG, e);
+		} finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+			return result;
+		}
+	}
+	/**
+	 * 辞职日期
+	 * @param response
+	 * @param request
+	 * @return
+	 * @return 返回值类型  JSONObject
+	 * @author 作者 mwl
+	 * @date   时间 2019年6月18日下午1:30:42
+	 */
+	@SuppressWarnings("finally")
+	@ResponseBody
+	@RequestMapping(value = "/employeeResginDate")
+	public JSONObject employeeResginDate(HttpServletResponse response, HttpServletRequest request) {
+		
+		UserInfo user = new UserInfo();
+		JSONObject result = new JSONObject();
+		String retCode = Constant.Result.SUCCESS;
+		String retMsg = Constant.Result.SUCCESS_MSG;
+		try {
+			String str = ToolClass.getStrFromInputStream(request);
+			if (StringUtils.isBlank(str))
+				throw new MessageException("参数接收失败！");
+			user = MapUtil.transJsonStrToObjectIgnoreCase(str, UserInfo.class);
+			user.setResignDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(user.getResignDate()));
+			
+			result.put("resData", this.service.shiftPosition(user)) ;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			log.error(Constant.Result.RETMSG, e);
+		} finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+			return result;
+		}
+	}
+	
+	@SuppressWarnings("finally")
+	@ResponseBody
+	@RequestMapping(value = "/deleteEmployee")
+	public JSONObject deleteEmployee(HttpServletResponse response, HttpServletRequest request) {
+		
+		UserInfo user = new UserInfo();
+		JSONObject result = new JSONObject();
+		String retCode = Constant.Result.SUCCESS;
+		String retMsg = Constant.Result.SUCCESS_MSG;
+		try {
+			String str = ToolClass.getStrFromInputStream(request);
+			if (StringUtils.isBlank(str))
+				throw new MessageException("参数接收失败！");
+			user = MapUtil.transJsonStrToObjectIgnoreCase(str, UserInfo.class);
+			
+			
+			result.put("resData", this.service.shiftPosition(user));
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			log.error(Constant.Result.RETMSG, e);
+		} finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+			return result;
+		}
+	}
 	/**
 	 * 个人的家庭成员信息
 	 * 
@@ -878,7 +1030,7 @@ public class EmpController {
 					qfr.setAppellation(jArr.getJSONObject(i).getString("appellation"));
 					qfr.setChname(jArr.getJSONObject(i).getString("chname"));
 					qfr.setBirth(jArr.getJSONObject(i).getString("birth"));
-					qfr.setWorkadress(jArr.getJSONObject(i).getString("workadress"));
+					qfr.setWorkAddress(jArr.getJSONObject(i).getString("workadress"));
 					qfr.setPosition(jArr.getJSONObject(i).getString("position"));
 					qfr.setPhone(jArr.getJSONObject(i).getString("phone"));
 					qfr.setWechat(jArr.getJSONObject(i).getString("wechat"));
