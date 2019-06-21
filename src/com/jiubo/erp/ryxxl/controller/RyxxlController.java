@@ -38,7 +38,7 @@ public class RyxxlController {
      * @author: dx
      * @version: 1.0
      */
-    //http://127.0.0.1:8080/Erp/ryxxlController/queryZzryReport?date=2019-01-01&flag=1&deptId=6&incude=0（缺少包含非正式员工，待完善）
+    //http://127.0.0.1:8080/Erp/ryxxlController/queryZzryReport?date=2019-01-01&flag=1&deptId=6&incude=0
     @ResponseBody
     @RequestMapping(value = "/queryZzryReport", method = {RequestMethod.POST})
     public JSONObject queryZzryReport(@RequestBody String params) {
@@ -82,7 +82,6 @@ public class RyxxlController {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败！");
             Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
             result.put(Constant.Result.RETDATA, ryxxlService.queryLzryReport(requestMap));
-            if (false) throw new MessageException("");
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
@@ -105,7 +104,7 @@ public class RyxxlController {
      * @author: dx
      * @version: 1.0
      */
-    //http://127.0.0.1:8080/Erp/ryxxlController/queryChanges?begDate=2019-01&level=1
+    //http://127.0.0.1:8080/Erp/ryxxlController/queryChanges?begDate=2019-01&level=1&deptId=0
     @ResponseBody
     @RequestMapping(value = "/queryChanges", method = {RequestMethod.POST})
     public JSONObject queryChanges(@RequestBody String params) {
@@ -138,7 +137,7 @@ public class RyxxlController {
      * @author: dx
      * @version: 1.0
      */
-    //http://127.0.0.1:8080/Erp/ryxxlController/queryRecruit?begDate=2019-01&endDate=2019-04
+    //http://127.0.0.1:8080/Erp/ryxxlController/queryRecruit?begDate=2019-01&endDate=2019-04&deptId=&posId=
     @ResponseBody
     @RequestMapping(value = "/queryRecruit", method = {RequestMethod.POST})
     public JSONObject queryRecruit(@RequestBody String params) {
@@ -171,7 +170,7 @@ public class RyxxlController {
      * @author: dx
      * @version: 1.0
      */
-    //
+    //http://127.0.0.1:8080/Erp/ryxxlController/queryRlzylyReport?deptId=40&begDate=2019-01&isEntry=0&isQuit=0
     @ResponseBody
     @RequestMapping(value = "/queryRlzylyReport", method = {RequestMethod.POST})
     public JSONObject queryRlzylyReport(@RequestBody String params) {

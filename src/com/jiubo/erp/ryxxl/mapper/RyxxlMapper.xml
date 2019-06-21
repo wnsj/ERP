@@ -21,9 +21,6 @@
                     AND A.ENTRYDATE &lt; #{date}
                 </otherwise>
             </choose>
-            <if test="deptId != null and deptId != ''">
-                AND A.DEPARTMENT_ID = #{deptId}
-            </if>
             <if test="include == 0">
                 AND A.POSITIVEDATE &lt; #{date}
             </if>
@@ -110,9 +107,6 @@
                     AND A.ENTRYDATE &lt; #{date}
                 </otherwise>
             </choose>
-            <if test="deptId != null and deptId != ''">
-                AND A.DEPARTMENT_ID = #{deptId}
-            </if>
             <if test="include == 0">
                 AND A.POSITIVEDATE &lt; #{date}
             </if>
@@ -158,9 +152,6 @@
                     AND A.ENTRYDATE &lt; #{date}
                 </otherwise>
             </choose>
-            <if test="deptId != null and deptId != ''">
-                AND A.DEPARTMENT_ID = #{deptId}
-            </if>
             <if test="include == 0">
                 AND A.POSITIVEDATE &lt; #{date}
             </if>
@@ -194,15 +185,6 @@
         ( SELECT COUNT(1)
         FROM T_EMPLOYEE_BASIC A ,ACCOUNT_DATA B
         WHERE A.ACCOUNT = B.ACCOUNT_ID AND A.RESIGNDATE >= #{begDate} AND A.RESIGNDATE &lt; #{endDate} AND A.STATE = 2
-        <if test="deptId != null and deptId != '' ">
-            AND A.DEPARTMENT_ID = #{deptId}
-        </if>
-        <if test="posId != null and posId.length > 0">
-            AND B.POSITION_ID IN
-            <foreach collection="posId" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
         ) SUMCOUNT
         FROM (
         SELECT
@@ -225,11 +207,8 @@
         <if test="deptId != null and deptId != '' ">
             AND A.DEPARTMENT_ID = #{deptId}
         </if>
-        <if test="posId != null and posId.length > 0">
-            AND B.POSITION_ID IN
-            <foreach collection="posId" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        <if test="posId != null and posId != ''">
+            AND B.POSITION_ID = #{posId}
         </if>
         ) B
     </select>
@@ -243,15 +222,6 @@
         FROM T_EMPLOYEE_BASIC A,T_EMPLOYEE_DETIAL C,ACCOUNT_DATA D
         WHERE A.ACCOUNT = D.ACCOUNT_ID AND A.ID = C.EMPLOYEE_BASIC_ID
         AND A.RESIGNDATE >= #{begDate} AND A.RESIGNDATE &lt; #{endDate} AND A.STATE = 2
-        <if test="deptId != null and deptId != '' ">
-            AND A.DEPARTMENT_ID = #{deptId}
-        </if>
-        <if test="posId != null and posId.length > 0">
-            AND D.POSITION_ID IN
-            <foreach collection="posId" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
         ) SUMCOUNT
         FROM (
         SELECT
@@ -266,25 +236,29 @@
         <if test="deptId != null and deptId != '' ">
             AND A.DEPARTMENT_ID = #{deptId}
         </if>
-        <if test="posId != null and posId.length > 0">
-            AND D.POSITION_ID IN
-            <foreach collection="posId" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        <if test="posId != null and posId != ''">
+            AND D.POSITION_ID = #{posId}
         </if>
         ) B
     </select>
 
     <!-- 查询不同岗位类型离职人数 -->
     <select id="queryOutEmpPositionType" resultType="java.util.Map">
-		 SELECT B.POSITIONTYPE_NAME,B.POSITIONTYPE_ID,COUNT(1) SUMCOUNT,
- 			(SELECT COUNT(1) FROM T_EMPLOYEE_BASIC D,ACCOUNT_DATA C WHERE C.ACCOUNT_ID = D.ACCOUNT AND D.STATE = 2  
-  			AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate}) AllCOUNT 
- 		FROM POSITION_DATA A,POSITION_TYPE B,ACCOUNT_DATA C,T_EMPLOYEE_BASIC D 
- 		WHERE A.POSITIONTYPE_ID = B.POSITIONTYPE_ID AND C.POSITION_ID = A.POSITION_ID AND C.ACCOUNT_ID = D.ACCOUNT AND D.STATE = 2  
-  		AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate}
- 		GROUP BY B.POSITIONTYPE_ID,B.POSITIONTYPE_NAME
-	</select>
+        SELECT B.POSITIONTYPE_NAME,B.POSITIONTYPE_ID,COUNT(1) SUMCOUNT,
+        (SELECT COUNT(1) FROM T_EMPLOYEE_BASIC D,ACCOUNT_DATA C WHERE C.ACCOUNT_ID = D.ACCOUNT AND D.STATE = 2
+        AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate}) AllCOUNT
+        FROM POSITION_DATA A,POSITION_TYPE B,ACCOUNT_DATA C,T_EMPLOYEE_BASIC D
+        WHERE A.POSITIONTYPE_ID = B.POSITIONTYPE_ID AND C.POSITION_ID = A.POSITION_ID AND C.ACCOUNT_ID = D.ACCOUNT AND
+        D.STATE = 2
+        AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate}
+        <if test="deptId != null and deptId != '' ">
+            AND D.DEPARTMENT_ID = #{deptId}
+        </if>
+        <if test="posId != null and posId != ''">
+            AND A.POSITION_ID = #{posId}
+        </if>
+        GROUP BY B.POSITIONTYPE_ID,B.POSITIONTYPE_NAME
+    </select>
 
     <!-- 查询重点岗位 -->
     <select id="queryPositionDataIsPoint" resultType="java.util.Map">
@@ -312,31 +286,37 @@
 
     <!-- 查询所有岗位离职人数 -->
     <select id="queryOutEmpAllCount" resultType="com.jiubo.erp.ryxxl.bean.OutEmpBean">
-		SELECT A.POSITION_ID,A.POSITION_NAME,D.RESIGNTYPE,COUNT(*) COUNT,(
-			 SELECT COUNT(*)
-			 FROM POSITION_DATA A,ACCOUNT_DATA C,T_EMPLOYEE_BASIC D 
-			 WHERE
-			 	C.POSITION_ID = A.POSITION_ID AND C.ACCOUNT_ID = D.ACCOUNT AND D.STATE = 2
-			 	AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate} 
-		 ) SUMCOUNT
-		 FROM POSITION_DATA A,ACCOUNT_DATA C,T_EMPLOYEE_BASIC D 
-		 WHERE C.POSITION_ID = A.POSITION_ID AND C.ACCOUNT_ID = D.ACCOUNT AND D.STATE = 2
-		 AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate} 
-		 GROUP BY A.POSITION_ID,A.POSITION_NAME,D.RESIGNTYPE
-		 ORDER BY A.POSITION_ID
-	</select>
+        SELECT A.POSITION_ID,A.POSITION_NAME,D.RESIGNTYPE,COUNT(*) COUNT,(
+        SELECT COUNT(*)
+        FROM POSITION_DATA A,ACCOUNT_DATA C,T_EMPLOYEE_BASIC D
+        WHERE
+        C.POSITION_ID = A.POSITION_ID AND C.ACCOUNT_ID = D.ACCOUNT AND D.STATE = 2
+        AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate}
+        ) SUMCOUNT
+        FROM POSITION_DATA A,ACCOUNT_DATA C,T_EMPLOYEE_BASIC D
+        WHERE C.POSITION_ID = A.POSITION_ID AND C.ACCOUNT_ID = D.ACCOUNT AND D.STATE = 2
+        AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate}
+        <if test="deptId != null and deptId != ''">
+            AND D.DEPARTMENT_ID = #{deptId}
+        </if>
+        <if test="postId != null and postId != ''">
+            AND A.POSITION_ID = #{postId}
+        </if>
+        GROUP BY A.POSITION_ID,A.POSITION_NAME,D.RESIGNTYPE
+        ORDER BY A.POSITION_ID
+    </select>
 
     <!-- 查询每个部门离职人数 -->
     <select id="queryOutEmpByDept" resultType="com.jiubo.erp.ryxxl.bean.OutEmpBean">
-		SELECT A.DEPARTMENT_ID,A.RESIGNTYPE,COUNT(*) COUNT, (
-			SELECT COUNT(*) FROM T_EMPLOYEE_BASIC A
-			WHERE A.RESIGNDATE >= #{begDate} AND A.RESIGNDATE &lt; #{endDate}  AND A.STATE = 2
-		) SUMCOUNT
-		FROM T_EMPLOYEE_BASIC A
-		WHERE A.RESIGNDATE >= #{begDate} AND A.RESIGNDATE &lt; #{endDate}  AND A.STATE = 2
-		GROUP BY A.DEPARTMENT_ID,A.RESIGNTYPE
-		ORDER BY A.DEPARTMENT_ID
-	</select>
+        SELECT A.DEPARTMENT_ID,A.RESIGNTYPE,COUNT(*) COUNT, (
+        SELECT COUNT(*) FROM T_EMPLOYEE_BASIC A
+        WHERE A.RESIGNDATE >= #{begDate} AND A.RESIGNDATE &lt; #{endDate} AND A.STATE = 2
+        ) SUMCOUNT
+        FROM T_EMPLOYEE_BASIC A
+        WHERE A.RESIGNDATE >= #{begDate} AND A.RESIGNDATE &lt; #{endDate} AND A.STATE = 2
+        GROUP BY A.DEPARTMENT_ID,A.RESIGNTYPE
+        ORDER BY A.DEPARTMENT_ID
+    </select>
 
     <!-- 查询异动 -->
     <select id="queryOutEmpChangeByDept" resultType="com.jiubo.erp.ryxxl.bean.OutEmpBean">
@@ -352,27 +332,28 @@
 
     <!-- 查询月初人数，月末人数，本月入职人数 -->
     <select id="queryEmpCount" resultType="com.jiubo.erp.ryxxl.bean.OutEmpBean">
-		SELECT C.DEPARTMENT_ID,C.BEGMONCOUNT BEGMONCOUNT,B.ENTRYCOUNT ENTRYCOUNT,D.ENDMONCOUNT ENDMONCOUNT 
-		FROM (
-			SELECT A.DEPARTMENT_ID,COUNT(*) BEGMONCOUNT
-			FROM T_EMPLOYEE_BASIC A 
-			WHERE A.ENTRYDATE &lt; #{begDate}  AND A.STATE = 1
-			GROUP BY A.DEPARTMENT_ID
-			) C LEFT JOIN ( 
-				SELECT DEPARTMENT_ID,COUNT(*) ENTRYCOUNT 
-				FROM T_EMPLOYEE_BASIC 
-				WHERE ENTRYDATE >= #{begDate} AND ENTRYDATE &lt; #{endDate}
-				GROUP BY DEPARTMENT_ID
-			) B 
-			ON C.DEPARTMENT_ID = B.DEPARTMENT_ID 
-			LEFT JOIN (
-				SELECT A.DEPARTMENT_ID,COUNT(*) ENDMONCOUNT
-				FROM T_EMPLOYEE_BASIC A 
-				WHERE A.ENTRYDATE &lt; #{endDate}  AND A.STATE = 1
-				GROUP BY A.DEPARTMENT_ID
-			) D
-			ON C.DEPARTMENT_ID = D.DEPARTMENT_ID
-	</select>
+        SELECT C.DEPARTMENT_ID,C.BEGMONCOUNT BEGMONCOUNT,B.ENTRYCOUNT ENTRYCOUNT,D.ENDMONCOUNT ENDMONCOUNT
+        FROM (
+            SELECT A.DEPARTMENT_ID,COUNT(*) BEGMONCOUNT
+            FROM T_EMPLOYEE_BASIC A
+            WHERE A.ENTRYDATE &lt; #{begDate} AND A.STATE = 1
+            GROUP BY A.DEPARTMENT_ID
+        ) C
+        LEFT JOIN (
+            SELECT DEPARTMENT_ID,COUNT(*) ENTRYCOUNT
+            FROM T_EMPLOYEE_BASIC
+            WHERE ENTRYDATE >= #{begDate} AND ENTRYDATE &lt; #{endDate}
+            GROUP BY DEPARTMENT_ID
+        ) B
+        ON C.DEPARTMENT_ID = B.DEPARTMENT_ID
+        LEFT JOIN (
+            SELECT A.DEPARTMENT_ID,COUNT(*) ENDMONCOUNT
+            FROM T_EMPLOYEE_BASIC A
+            WHERE A.ENTRYDATE &lt; #{endDate} AND A.STATE = 1
+            GROUP BY A.DEPARTMENT_ID
+        ) D
+        ON C.DEPARTMENT_ID = D.DEPARTMENT_ID
+    </select>
 
     <!-- 查询每个部门岗位缺编人数，月初人数，计划招聘数，到面人数，合格人数，入职人数，月末人数 -->
     <select id="queryRecruitByDeptPosId" resultType="com.jiubo.erp.ryxxl.bean.ZpxgpgBean">
@@ -395,6 +376,8 @@
 						CASE WHEN SCORE > 0 THEN 1 ELSE 0 END SCORE,
 						DEPARTMENT, POSITION
 					FROM ZP_RECRUITDATA
+					WHERE YEAR(INVITATIONDATE) * 100 + MONTH(INVITATIONDATE) >= YEAR(#{begDate}) * 100 + MONTH (#{begDate})
+					AND YEAR(INVITATIONDATE) * 100 + MONTH(INVITATIONDATE) &lt; YEAR(#{endDate}) * 100 + MONTH (#{endDate})
 				) A
 				GROUP BY A.DEPARTMENT,A.POSITION 
 			) D
@@ -423,6 +406,12 @@
 		) F
 		ON A.POSITION = F.POSITION_ID AND A.DEPARTMENT = F.DEPARTMENT_ID
 		WHERE A.PLANDATE >= #{begDate} AND A.PLANDATE &lt; #{endDate}
+		<if test="deptId != null and deptId != ''">
+            AND A.DEPARTMENT = #{deptId}
+        </if>
+        <if test="posId != null and posId != ''">
+            AND A.POSITION = #{posId}
+        </if>
 	</select>
 
     <!-- 查询合格人数，面试人数，入职人数 -->
@@ -443,6 +432,8 @@
 					CASE WHEN 1=1 THEN 1 ELSE 0 END SCORE,
 					CHANNEL, POSITION
 				FROM ZP_RECRUITDATA
+				WHERE YEAR(INVITATIONDATE) * 100 + MONTH(INVITATIONDATE) >= YEAR(#{begDate}) * 100 + MONTH (#{begDate})
+				AND YEAR(INVITATIONDATE) * 100 + MONTH(INVITATIONDATE) &lt; YEAR(#{endDate}) * 100 + MONTH (#{endDate})
 			) A GROUP BY A.CHANNEL,A.POSITION
 		) C
 		ON C.CHANNEL = B.CHANNEL AND C.POSITION = B.POSITION
