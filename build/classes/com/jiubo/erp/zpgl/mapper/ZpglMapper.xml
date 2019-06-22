@@ -32,35 +32,75 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询面试信息 -->
 	<select id="queryRecruitData" parameterType="com.jiubo.erp.zpgl.bean.RecruitDataBean" resultType="com.jiubo.erp.zpgl.bean.RecruitDataBean">
-		SELECT 
-			ID, NAME, SEX, BIRTH, IDNUM, PHONE, MAIL, QQ, ADDRESS,
-			HOMEADDRESS, HOMETOWN, ACCOUNTPROP, PLOITICAL, MARITAL,
-			NATIONALITY, HEIGHT, WEIGHT, BLOODTYPE, EDUCATION, SCHOOL,
-			GRADUATION, PROFESSION, ATSCHOOL, WORKCOMPANY, WORKEXP,
-			CERTIFICATE, CHANNEL, POSITION, DEPARTMENT, WAGES,
-			INTERVIEWER, RECRUITDATE, SCORE,ISQUALIFIED, ISPAY, 
-			REMARK, ISDELETE, UPDATEDATE, UPDATEACCOUNT,
-			(CASE ISENTRY WHEN 0  THEN '未入职' 	WHEN 1  THEN '在职'	WHEN 2	THEN '离职'  END)	ISENTRY
-		FROM ZP_RECRUITDATA 
+		SELECT
+			A.ID,
+			A.NAME,
+			A.SEX,
+			A.BIRTH,
+			A.IDNUM,
+			A.PHONE,
+			A.MAIL,
+			A.QQ,
+			A.ADDRESS,
+			A.HOMEADDRESS,
+			A.HOMETOWN,
+			A.ACCOUNTPROP,
+			A.PLOITICAL,
+			A.MARITAL,
+			A.NATIONALITY,
+			A.HEIGHT,
+			A.WEIGHT,
+			A.BLOODTYPE,
+			A.EDUCATION,
+			A.SCHOOL,
+			A.GRADUATION,
+			A.PROFESSION,
+			A.ATSCHOOL,
+			A.WORKCOMPANY,
+			A.WORKEXP,
+			A.CERTIFICATE,
+			A.CHANNEL,
+			A.POSITION,
+			A.DEPARTMENT,
+			A.WAGES,
+			A.INTERVIEWER,
+			A.INVITATIONDATE,
+			A.RECRUITDATE,
+			A.SCORE,
+			A.ISQUALIFIED,
+			A.ISPAY,
+			A.REMARK,
+			A.ISDELETE,
+			A.UPDATEDATE,
+			A.UPDATEACCOUNT,
+			B.NAME AS DEPARTMENTNAME,
+			C.POSITION_NAME AS POSITIONNAME,
+			D.RECRUITCHANNEL_NAME AS CHANNELNAME,
+			( CASE A.ISENTRY WHEN 0 THEN '未入职' WHEN 1 THEN '在职' WHEN 2 THEN '离职' END ) ISENTRY 
+		  FROM
+			ZP_RECRUITDATA AS A
+			LEFT JOIN T_DEPARTMENT AS B ON A.DEPARTMENT = B.ID
+			LEFT JOIN POSITION_DATA AS C ON A.POSITION = C.POSITION_ID
+			LEFT JOIN ZP_RECRUITCHANNEL AS D ON A.CHANNEL = D.RECRUITCHANNEL_ID
 		<where>
-			AND ISDELETE = 0
+			AND A.ISDELETE = 0
 			<if test="name != null and name != ''">
-				AND NAME LIKE '%' + #{name} + '%'
+				AND A.NAME LIKE '%' + #{name} + '%'
 			</if>
 			
 			<if test="phone != null and phone != ''">
-				AND PHONE LIKE '%' + #{phone} + '%'
+				AND A.PHONE LIKE '%' + #{phone} + '%'
 			</if>
 			
 			<if test="dateFlag != null and dateFlag != ''">
 				<choose>
 					<when test="dateFlag == 0">
-						AND INVITATIONDATE >= #{begDate}
-						<![CDATA[ AND INVITATIONDATE < #{endDate}]]>
+						AND A.INVITATIONDATE >= #{begDate}
+						<![CDATA[ AND A.INVITATIONDATE < #{endDate}]]>
 					</when>
 					<when test="dateFlag == 1">
-						AND RECRUITDATE >= #{begDate}
-						<![CDATA[ AND RECRUITDATE < #{endDate}]]>
+						AND A.RECRUITDATE >= #{begDate}
+						<![CDATA[ AND A.RECRUITDATE < #{endDate}]]>
 					</when>
 				</choose>
 			</if>
@@ -68,13 +108,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="isEntry != null and isEntry != ''">	
 				<choose>
 					<when test="isEntry == 0">
-						AND ISENTRY = 0
+						AND A.ISENTRY = 0
 					</when>
 					<when test="isEntry == 1">
-						AND ISENTRY = 1
+						AND A.ISENTRY = 1
 					</when>
 					<when test="isEntry == 2">
-						AND ISENTRY = 2
+						AND A.ISENTRY = 2
 					</when>
 				</choose>
 			</if>
@@ -82,13 +122,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="isQualified != null and isQualified != ''">
 				<choose>
 					<when test="isQualified == 0">
-						AND ISQUALIFIED = '是'
+						AND A.ISQUALIFIED = '是'
 					</when>
 					<when test="isQualified == 1">
-						AND ISQUALIFIED = '否'
+						AND A.ISQUALIFIED = '否'
 					</when>
 					<when test="isQualified == 2">
-						AND ISQUALIFIED = '待定'
+						AND A.ISQUALIFIED = '待定'
 					</when>
 				</choose>
 			</if>
@@ -168,12 +208,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		LEFT JOIN  T_DEPARTMENT B ON A.DEPARTMENT = B.ID 
 		LEFT JOIN  POSITION_DATA C ON A.POSITION = C.POSITION_ID
 		<where>
-			<if test="begDate != null and begDate != ''">
+			<!-- <if test="begDate != null and begDate != ''">
 				AND YEAR(PLANDATE) * 100 + MONTH(PLANDATE) >= #{begDate}
 			</if>
 			<if test="endDate != null and endDate != ''">
 				<![CDATA[ AND YEAR(PLANDATE) * 100 + MONTH(PLANDATE) < #{endDate}]]>
+			</if> -->
+			
+			<if test="begDate != null and begDate != '' and endDate != null and endDate != ''">
+				AND A.PLANDATE >= #{begDate} 
+				<![CDATA[ AND A.PLANDATE < #{endDate} ]]>
 			</if>
+			<![CDATA[ AND A.PLANDATE < #{endDate} ]]>
 			<if test=" department != null and department != ''">
 				AND A.DEPARTMENT = #{department}
 			</if>
