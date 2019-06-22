@@ -175,6 +175,76 @@ public class AttLeaveBean implements Serializable{
 				+ isDelete + ", createDate=" + createDate + ", creator=" + creator + ", empName=" + empName
 				+ ", leaveName=" + leaveName + ", begDate=" + begDate + ", endDate=" + endDate + "]";
 	}
+
+	public static void main(String[] args) {
+		String time = "2019-04-01 23:59:59";
+		String dateTyep = "EntryDate";
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT  ");
+		sql.append("    COUNT(1) AS num ");
+		sql.append("    ,CAST(SUM(CASE WHEN jobMonth <=3 THEN 1 ELSE 0 END) AS varchar) AS M1 ");
+		sql.append("    ,CAST(SUM(CASE WHEN jobMonth >3 AND jobMonth <=6 THEN 1 ELSE 0 END)AS varchar) AS M3 ");
+		sql.append("    ,CAST(SUM(CASE WHEN (jobMonth >6 AND jobMonth <12) OR (jobMonth =12 AND jobYear <1) THEN 1 ELSE 0 END) AS varchar) AS M6 ");
+		sql.append("    ,CAST(SUM(CASE WHEN jobYear =1 THEN 1 ELSE 0 END)AS varchar) AS Y1 ");
+		sql.append("    ,CAST(SUM(CASE WHEN jobYear =2 THEN 1 ELSE 0 END)AS varchar) AS Y2 ");
+		sql.append("    ,CAST(SUM(CASE WHEN jobYear >=3 THEN 1 ELSE 0 END)AS varchar) AS Y3 ");
+		sql.append("    ,CAST((CASE WHEN COUNT(1) > 0 THEN (SUM(jobMonth) / COUNT(1)) ");
+		sql.append("        ELSE 0 END) AS varchar) + ' 个月'  AS avgMonth ");
+		//学历部分
+		sql.append("    ,CAST(SUM(CASE WHEN Education Like '初中%' THEN 1 ELSE 0 END)AS varchar) AS Edu1 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Education Like '高中%' THEN 1 ELSE 0 END)AS varchar) AS Edu2 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Education Like '专科%' THEN 1 ELSE 0 END)AS varchar) AS Edu3 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Education Like '本科%' OR Education Like '博士%' OR Education Like '硕士%' THEN 1 ELSE 0 END)AS varchar) AS Edu4 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Education Like '未知%' OR Education = '' OR Education IS NULL THEN 1 ELSE 0 END)AS varchar) AS Edu5 ");
+		//年龄部分
+		sql.append("    ,CAST(SUM(CASE WHEN Age <=20 THEN 1 ELSE 0 END) AS varchar) AS Age1 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Age >20 AND Age <=25 THEN 1 ELSE 0 END)AS varchar) AS Age2 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Age >25 AND Age <=30 THEN 1 ELSE 0 END)AS varchar) AS Age3 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Age >30 AND Age <=35 THEN 1 ELSE 0 END)AS varchar) AS Age4 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Age >35 AND Age <=40 THEN 1 ELSE 0 END)AS varchar) AS Age5 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Age >40 THEN 1 ELSE 0 END)AS varchar) AS Age6 ");
+		sql.append("    ,CAST((CASE WHEN COUNT(1) > 0 THEN (SUM(Age) / COUNT(1)) ");
+		sql.append("        ELSE 0 END) AS decimal(5,1)) AS avgAge ");
+		//性别部分
+		sql.append("    ,CAST(SUM(CASE WHEN Sex ='男' THEN 1 ELSE 0 END) AS varchar) AS Sex1 ");
+		sql.append("    ,CAST(SUM(CASE WHEN Sex ='女' THEN 1 ELSE 0 END) AS varchar) AS Sex2 ");
+		//岗位类型
+//		for (int i = 0; i < PositionTypeTab.Tables[0].Rows.Count; i++)
+//		{
+//			string typeID = Convert.ToString(PositionTypeTab.Tables[0].Rows[i]["PositionType_ID"]).Trim();
+//			sql.append("    ,CAST(SUM(CASE WHEN PositionType_ID ='" + typeID + "' THEN 1 ELSE 0 END) AS varchar) AS type" + i + " ");
+//		}
+		sql.append(" FROM ");
+		sql.append(" ( ");
+		sql.append("    SELECT B.[ID] ");
+		sql.append("        ,datediff(MM," + dateTyep + ",'" + time + "') AS jobMonth ");
+		sql.append("        ,FLOOR(datediff(DD," + dateTyep + ",'" + time + "')/365.25) AS jobYear ");
+		sql.append("        ,B.[Name] ");  //添加B.
+		sql.append("        ,[Sex] ");
+		sql.append("        ,[JobNum] ");
+		sql.append("        ,[Account] ");
+		sql.append("        ,D.Education ");
+		sql.append("        ,FLOOR(datediff(DD,B.Birth,'" + time + "')/365.25) AS Age ");
+		sql.append("        ,A.Position_ID ");
+		sql.append("        ,T.PositionType_ID ");
+		sql.append("    FROM [T_Employee_Basic] B with (nolock) ");
+		sql.append("    LEFT JOIN T_Employee_Detial D with (nolock) ");
+		sql.append("        ON B.ID = D.Employee_basic_ID ");
+		sql.append("    LEFT JOIN Account_Data A with (nolock) ");
+		sql.append("        ON B.Account = A.Account_ID ");
+		sql.append("    LEFT JOIN Position_Data P with (nolock) ");
+		sql.append("        ON A.Position_ID = P.Position_ID ");
+		sql.append("    LEFT JOIN Position_Type T with (nolock) ");
+		sql.append("        ON P.PositionType_ID = T.PositionType_ID ");
+
+		sql.append("    LEFT JOIN T_Department TD with (nolock) ");//添加
+		sql.append("        ON B.Department_ID = TD.ID ");         //添加
+		sql.append("    where B.[State] = 1 ");
+		sql.append("        and B.IsDelete = 0 ");
+		sql.append("        and " + dateTyep + " <= '" + time + "' ");
+		sql.append(" ) Tab ");
+		System.out.println(sql.toString());
+	}
 }
 /*
  SELECT A.ID, A.USERID, A.JOBNUM,C.NAME EMPNAME, A.LEAVETYPEID,B.NAME LEAVENAME,C.DEPARTMENT_ID,D.NAME DEPTNAME,A.STARTTIME, A.ENDTIME, A.TOTLETIME, 
