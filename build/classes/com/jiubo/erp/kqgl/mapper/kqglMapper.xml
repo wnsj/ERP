@@ -22,6 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		LEFT JOIN T_Employee_Basic a ON a.Account=c.Account_ID
 		LEFT JOIN T_Department b ON a.Department_ID=b.ID
 		LEFT JOIN Position_Data d ON c.Position_ID=d.Position_ID
+		LEFT JOIN Account_Project_Data e ON c.Account_ID=e.Account_ID
+		LEFT JOIN Project_Data f ON f.Project_ID=e.Project_ID
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="name!=null and name!=''">
 				AND a.Name=#{name}
@@ -34,6 +36,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="jobNum!=null and jobNum!=''">
 				AND a.JobNum=#{jobNum}
+			</if>
+			<if test="accountName !=null and accountName !=''">
+				AND c.Account_Name=#{accountName}
+			</if>
+			<if test="projectId !=null and projectId !=''">
+				AND f.Project_ID=#{projectId}
 			</if>
 			<if test="beginDate!=null and beginDate!=''">
 				AND (a.ResignDate&gt;#{beginDate} OR a.ResignDate IS NULL or a.ResignDate='1900-01-01 00:00:00.000')
@@ -133,7 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</trim>
 	</select>
 
-	<!-- 考勤报表统计 -->
+	<!-- 考勤报表 -->
 	<select id="kqTableInfoList" parameterType="com.jiubo.erp.kqgl.vo.AttParam"
 		resultType="com.jiubo.erp.kqgl.vo.KqInfoResult">
 		SELECT

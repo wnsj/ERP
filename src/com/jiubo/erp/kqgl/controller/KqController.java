@@ -75,7 +75,7 @@ public class KqController {
 			ap = MapUtil.transJsonStrToObjectIgnoreCase(str, AttParam.class);
 
 			ap.setBeginDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getBeginDate()));
-			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
+//			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
 
 			List<KqInfoResult> kqInfoRes = this.service.selectKqInfoList(ap);
 
@@ -119,11 +119,11 @@ public class KqController {
 			ap = MapUtil.transJsonStrToObjectIgnoreCase(str, AttParam.class);
 
 			ap.setBeginDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getBeginDate()));
-			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
+
 
 			
 			List<KqInfoResult> kqInfoRes = this.service.searchKqInfoList(ap);
-			System.out.println("kqInfoRes"+kqInfoRes.size());
+//			System.out.println("kqInfoRes"+kqInfoRes.size()+ ap.toString());
 			if (kqInfoRes.size() < 1) {
 				kqInfoRes = this.service.selectKqInfoList(ap);
 			} else {
@@ -326,7 +326,7 @@ public class KqController {
 			ap = MapUtil.transJsonStrToObjectIgnoreCase(str, AttParam.class);
 
 			ap.setBeginDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getBeginDate()));
-			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
+//			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
 
 			
 			List<KqInfoResult> kqInfoRes = this.service.searchKqInfoList(ap);
@@ -409,7 +409,7 @@ public class KqController {
 			ap = MapUtil.transJsonStrToObjectIgnoreCase(str, AttParam.class);
 
 			ap.setBeginDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getBeginDate()));
-			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
+//			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
 
 			List<KqInfoResult> kqInfoRes = this.service.searchKqInfoList(ap);
 //			System.out.println("---班型测试kqInfoRes----" + kqInfoRes.size() + ap.getEndDate() + ap.getBeginDate());
@@ -508,10 +508,10 @@ public class KqController {
 			ap = MapUtil.transJsonStrToObjectIgnoreCase(str, AttParam.class);
 
 			ap.setBeginDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getBeginDate()));
-			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
+//			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
 
 			List<KqInfoResult> kqInfoRes = this.service.searchKqInfoList(ap);
-			System.out.println("---班型测试kqInfoRes----" + kqInfoRes.size() + ap.getEndDate() + ap.getBeginDate());
+//			System.out.println("---班型测试singleKQList----" + kqInfoRes.size() + ap.getEndDate() + ap.getBeginDate()+ap.toString());
 
 			// 查询班次数据为空时执行，返回基本信息
 			if (kqInfoRes.size() < 1) {
@@ -563,14 +563,14 @@ public class KqController {
 			ap = MapUtil.transJsonStrToObjectIgnoreCase(str, AttParam.class);
 
 			ap.setBeginDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getBeginDate()));
-			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
+//			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
 
 			
 			List<PersonalKQBean> rykqLsit = new ArrayList<>();
 
 
 			List<KqInfoResult> kqInfoRes = this.service.selectKqInfoList(ap);
-//			System.out.println("kqInfoRes:" + kqInfoRes.size());
+			System.out.println("kqInfoRes:" + kqInfoRes.size()+ap.toString());
 			for (KqInfoResult kqInfoResult : kqInfoRes) {
 				PersonalKQBean pKqBean = new PersonalKQBean();
 				pKqBean.setRyKQName(kqInfoResult.getName());
@@ -587,6 +587,7 @@ public class KqController {
 				pKqBean.setRyOnPA("0");
 				pKqBean.setRyDownPA("0");
 				pKqBean.setRyRestDays("0");
+				pKqBean.setRyOverTimesDays("0");
 				rykqLsit.add(pKqBean);
 			}
 			
@@ -751,13 +752,11 @@ public class KqController {
 			ap = MapUtil.transJsonStrToObjectIgnoreCase(str, AttParam.class);
 
 			ap.setBeginDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getBeginDate()));
-			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
 
-			// System.out.println("kqTableList：：："+kqr.getStartDate());
 			List<PersonalKQBean> rykqLsit = new ArrayList<>();
 
 			List<KqInfoResult> kqInfoRes = this.service.selectKqInfoList(ap);
-//			System.out.println("kqTableList+kqInfoRes:" + kqInfoRes.size());
+			System.out.println("kqTableList:" + kqInfoRes.size()+ap.toString());
 			for (KqInfoResult kqInfoResult : kqInfoRes) {
 				PersonalKQBean pKqBean = new PersonalKQBean();
 				pKqBean.setRyKQId(kqInfoResult.getuId());
@@ -777,7 +776,7 @@ public class KqController {
 				pKqBean.setRyRestDays("0");
 				rykqLsit.add(pKqBean);
 			}
-			// System.out.println("kqTableList+人员考勤"+rykqLsit.size());
+			
 
 			kqInfoRes = this.service.kqTableInfoList(ap);
 			// System.out.println("---班型测试kqInfoRes----："+kqr.getDepartname());
@@ -934,13 +933,11 @@ public class KqController {
 			ap = MapUtil.transJsonStrToObjectIgnoreCase(str, AttParam.class);
 
 			ap.setBeginDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getBeginDate()));
-			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
 
-//			System.out.println("kqTableList：：：" + ap.getBeginDate());
 			List<PersonalKQBean> rykqLsit = new ArrayList<>();
 
 			List<KqInfoResult> kqInfoRes = this.service.selectKqInfoList(ap);
-//			System.out.println("kqTableList+kqInfoRes:" + kqInfoRes.size());
+			
 			for (KqInfoResult kqInfoResult : kqInfoRes) {
 				PersonalKQBean pKqBean = new PersonalKQBean();
 				pKqBean.setRyKQId(kqInfoResult.getuId());
@@ -965,19 +962,14 @@ public class KqController {
 				pKqBean.setRyLeaveTime(kqInfoResult.getResignDate() + "离职");
 				rykqLsit.add(pKqBean);
 			}
-//			System.out.println("kqTableList+人员考勤" + rykqLsit.size());
 
 			kqInfoRes = this.service.kqTableInfoList(ap);
-//			System.out.println("---班型测试kqInfoRes----：" + ap.getDepartname());
-//			System.out.println("---班型测试kqInfoRes----：" + kqInfoRes.size());
-//			System.out.println("---班型测试kqInfoRes----：" + ap.getEndDate());
-//			System.out.println("---班型测试kqInfoRes----：" + ap.getBeginDate());
+
 
 			// 查询班次数据为空时执行，返回基本信息
 			if (kqInfoRes.size() > 0) {
 				kqInfoRes = kquClassTime(kqInfoRes);
-				rykqLsit = selectKqTableCountInfo(kqInfoRes, rykqLsit);
-//				System.out.println("dpkqLsit2:" + rykqLsit.size() + kqInfoRes.size());
+//				rykqLsit = selectKqTableCountInfo(kqInfoRes, rykqLsit);
 			}
 			result.put("resData", rykqLsit);
 		} catch (MessageException e) {
