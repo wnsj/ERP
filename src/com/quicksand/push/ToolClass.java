@@ -15,6 +15,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.StreamUtils;
 
@@ -281,6 +282,5 @@ public class ToolClass {
 	        e.printStackTrace(System.out);  
 	    }  
 	    return macAddress;  
-	}  
-	
+	}
 }

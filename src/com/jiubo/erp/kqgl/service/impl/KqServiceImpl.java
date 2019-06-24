@@ -16,6 +16,7 @@ import com.jiubo.erp.kqgl.bean.PositionDataBean;
 import com.jiubo.erp.kqgl.bean.PositionTypeBean;
 import com.jiubo.erp.kqgl.dao.kqglDao;
 import com.jiubo.erp.kqgl.service.KqService;
+import com.jiubo.erp.kqgl.vo.AttParam;
 import com.jiubo.erp.kqgl.vo.ClassTime;
 import com.jiubo.erp.kqgl.vo.DepartKQ;
 import com.jiubo.erp.kqgl.vo.KqInfoResult;
@@ -31,14 +32,14 @@ public class KqServiceImpl implements KqService {
 	private kqglDao dao;
 	
 	@Override
-	public List<KqInfoResult> selectKqInfoList(KqInfoResult kResult){
-		List<KqInfoResult> kqInfoList = this.dao.selectKqInfoList(kResult);
+	public List<KqInfoResult> selectKqInfoList(AttParam ap){
+		List<KqInfoResult> kqInfoList = this.dao.selectKqInfoList(ap);
 		return kqInfoList;
 	}
 	
 	@Override
-	public List<KqInfoResult> searchKqInfoList(KqInfoResult kResult){
-		List<KqInfoResult> kqInfoList = this.dao.searchKqInfoList(kResult);
+	public List<KqInfoResult> searchKqInfoList(AttParam ap){
+		List<KqInfoResult> kqInfoList = this.dao.searchKqInfoList(ap);
 		return kqInfoList;
 	}
 	
@@ -69,27 +70,27 @@ public class KqServiceImpl implements KqService {
 	 * @see com.jiubo.erp.kqgl.service.KqService#kqTableInfoList(com.jiubo.erp.kqgl.bean.PersonalKQBean)
 	 */
 	@Override
-	public List<KqInfoResult> kqTableInfoList(KqInfoResult kr) {
+	public List<KqInfoResult> kqTableInfoList(AttParam ap) {
 		// TODO Auto-generated method stub
-		return this.dao.kqTableInfoList(kr);
+		return this.dao.kqTableInfoList(ap);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.jiubo.erp.kqgl.service.KqService#kqTableCountList(com.jiubo.erp.kqgl.vo.KqInfoResult)
 	 */
 	@Override
-	public List<KqInfoResult> kqTableCountList(KqInfoResult kr) {
+	public List<KqInfoResult> kqTableCountList(AttParam ap) {
 		// TODO Auto-generated method stub
-		return this.dao.kqTableCountList(kr);
+		return this.dao.kqTableCountList(ap);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.jiubo.erp.kqgl.service.KqService#selectKIGList(com.jiubo.erp.kqgl.vo.KqInfoResult)
 	 */
 	@Override
-	public List<KqInfoResult> selectKIGList(KqInfoResult kResult) {
+	public List<KqInfoResult> selectKIGList(AttParam ap) {
 		// TODO Auto-generated method stub
-		return this.dao.selectKIGList(kResult);
+		return this.dao.selectKIGList(ap);
 	}
 
 	

@@ -53,6 +53,9 @@ public interface EmpService {
 	//插入员工的账户信息
 	public Integer insertAccountInfo(Account account);
 	
+	//修改 员工的账户密码
+	Integer updataAccountPwd(Account accountPwd);
+	
 	//单个员工基础信息
 	public List<UserInfo> searchUBInfo(UserInfo userInfo);
 	//单个员工详细信息
@@ -70,8 +73,18 @@ public interface EmpService {
 	
 	//插入用户的详细信息
 	public Integer insertUserDetailInfo(UserInfo userInfo);
+	
 	//更新用户的详细信息
 	Integer updataDetialInfo(UserInfo userInfo);
+	
+	// 人员   转正日期
+	Integer shiftPosition(UserInfo userInfo);
+	
+	// 人员   离职日期
+	Integer employeeResgin(UserInfo userInfo);
+	
+	// 人员   删除状态
+	Integer deleteEmployee(UserInfo userInfo);
 	
 	//插入家庭信息
 	public Integer insertUserFmInfo(QueryFamilyResult qfr);

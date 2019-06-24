@@ -19,7 +19,7 @@ public interface empDao {
 	
 	List<Account> selectAccountList(Account account);
 	
-	
+	Integer updataAccountPwd(Account accountPwd);
 	
 	List<QueryResult> searchEmplist(QueryParam param);
 	
@@ -46,6 +46,11 @@ public interface empDao {
 	Integer insertAccountInfo(Account account);
 	
 	Integer updataBaseInfo(UserInfo userInfo);
+	
+	Integer shiftPosition(UserInfo userInfo);
+	Integer employeeResgin(UserInfo userInfo);
+	Integer deleteEmployee(UserInfo userInfo);
+	
 	
 	Integer insertDetailInfo(UserInfo userInfo);
 	
