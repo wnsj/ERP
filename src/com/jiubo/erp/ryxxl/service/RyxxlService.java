@@ -37,6 +37,8 @@ public interface RyxxlService {
 	 * @version: 1.0
 	 */
 	public Map<String,Object> queryChanges(Map<String,Object> paraMap) throws MessageException;
+
+	public Map<String,Object> getChanges(Map<String,Object> paraMap) throws MessageException;
 	
 	/**
 	 * @desc:招聘效果分析表

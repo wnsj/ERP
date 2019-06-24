@@ -370,6 +370,27 @@ public interface KqParamSetService {
     * @version: 1.0
     **/
     public List<PositionDataBean> queryDeptPost(String deptId, String postId, String isPoint);
+
+    /* *
+     * @desc:获取部门
+     * @author: dx
+     * @date: 2019-06-21 13:16:04
+     * @return: java.util.List<com.jiubo.erp.rygl.bean.DepartmentBean>
+     * @throws:
+     * @version: 1.0
+     **/
+    public List<DepartmentBean> getDept()throws MessageException;
+
+    /* *
+    * @desc:将子部门与父级部门组合
+    * @author: dx
+    * @date: 2019-06-22 13:55:40
+    * @param deptList :所有部门
+    * @return: java.util.List<com.jiubo.erp.rygl.bean.DepartmentBean>
+    * @throws:
+    * @version: 1.0
+    **/
+    public List<DepartmentBean> composeDept(List<DepartmentBean> deptList)throws MessageException;
 }
 //班次类别
 //public List<AttShift> queryAttShift();

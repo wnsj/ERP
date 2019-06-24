@@ -184,7 +184,7 @@ public class KqParamSetServiceImpl implements KqParamSetService {
     }
 
     @Override
-    public List<DepartmentBean> queryDepartmentEmployee(boolean flag, boolean flag2) {
+    public List<DepartmentBean> queryDepartmentEmployee(boolean flag, boolean flag2) throws MessageException {
         //查询父级目录
         List<DepartmentBean> departmentList = queryDepartmentByPId("0");
         Iterator<DepartmentBean> iterator = departmentList.iterator();
@@ -229,17 +229,34 @@ public class KqParamSetServiceImpl implements KqParamSetService {
 
     //查询部门下的职位
     public List<PositionDataBean> queryPositionDataByDeptId(String deptId, boolean flag) {
-        if (flag) return kqParamSetDao.queryPositionDataByDeptId(deptId,null,null);
+        if (flag) return kqParamSetDao.queryPositionDataByDeptId(deptId, null, null);
         return new ArrayList<PositionDataBean>();
     }
 
     @Override
     public List<DepartmentBean> queryDeptTree(Map<String, Object> param) throws MessageException {
-        Map<String, Object> map = new HashMap<String, Object>();
         //第一层
-        List<DepartmentBean> departmentBeans = new ArrayList<DepartmentBean>();
-        Map<String, List<DepartmentBean>> sonMap = new HashMap<String, List<DepartmentBean>>();
+        List<DepartmentBean> departmentBeans = getDept();
+
+        List<DepartmentBean> departmentBeanList = new ArrayList<DepartmentBean>();
+
+        addListPreFix(departmentBeans, departmentBeanList);
+
+        return departmentBeanList;
+    }
+
+    @Override
+    public List<DepartmentBean> getDept() throws MessageException {
         List<DepartmentBean> deptList = kqParamSetDao.queryDeptTree();
+        List<DepartmentBean> departmentBeans = composeDept(deptList);
+        return departmentBeans;
+    }
+
+    @Override
+    public List<DepartmentBean> composeDept(List<DepartmentBean> deptList) throws MessageException {
+        List<DepartmentBean> departmentBeans = new ArrayList<DepartmentBean>();
+        if (deptList == null)throw new MessageException("部门List为空!");
+        Map<String, List<DepartmentBean>> sonMap = new HashMap<String, List<DepartmentBean>>();
         for (DepartmentBean departmentBean : deptList) {
             if ("0".equals(departmentBean.getParentID())) {
                 departmentBeans.add(departmentBean);
@@ -254,21 +271,16 @@ public class KqParamSetServiceImpl implements KqParamSetService {
         for (DepartmentBean departmentBean : departmentBeans) {
             setDeptChildren(departmentBean, sonMap);
         }
-
-        List<DepartmentBean> departmentBeanList = new ArrayList<DepartmentBean>();
-
-        addListPreFix(departmentBeans,departmentBeanList);
-
-        return departmentBeanList;
+        return departmentBeans;
     }
 
     @Override
     public List<PositionDataBean> queryDeptPost(String deptId, String postId, String isPoint) {
-        return  kqParamSetDao.queryPositionDataByDeptId(deptId,postId,isPoint);
+        return kqParamSetDao.queryPositionDataByDeptId(deptId, postId, isPoint);
     }
 
     //为list中bean的名字添加前缀
-    private void addListPreFix(List<DepartmentBean> sourceList,List<DepartmentBean> targetList){
+    private void addListPreFix(List<DepartmentBean> sourceList, List<DepartmentBean> targetList) {
         for (int i = 0; i < sourceList.size(); i++) {
             DepartmentBean departmentBean = sourceList.get(i);
             DepartmentBean deptBean = new DepartmentBean();
@@ -287,7 +299,8 @@ public class KqParamSetServiceImpl implements KqParamSetService {
             deptBean.setPreFixName(getSpace(departmentBean.getLevel()) + preFix + departmentBean.getName());
             targetList.add(deptBean);
             //获取子部门
-            if(departmentBean.getChildren() != null && departmentBean.getChildren().size() > 0)addListPreFix(departmentBean.getChildren(),targetList);
+            if (departmentBean.getChildren() != null && departmentBean.getChildren().size() > 0)
+                addListPreFix(departmentBean.getChildren(), targetList);
         }
     }
 

@@ -44,9 +44,10 @@ public class RyxxlServiceImpl implements RyxxlService {
         String date = MapUtil.getString(paraMap, "date", MapUtil.NOT_NULL);
         String flag = MapUtil.getString(paraMap, "flag", MapUtil.ALLOW_NULL);
         String include = MapUtil.getString(paraMap, "incude", MapUtil.ALLOW_NULL);
-        date = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(date), TimeUtil.UNIT_DAY, 1));
+        date = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.dateAdd(TimeUtil.parseAnyDate(date), TimeUtil.UNIT_DAY, 1), TimeUtil.UNIT_SECOND, -1));
         Map<String, Object> dataMap = new HashMap<String, Object>();
         Map<String, Object> resultMap = ryxxlDao.queryZzryReport(date, flag, deptId, include);
+        System.out.println("resultMap:" + resultMap);
         //在职人数
         double sumCount = MapUtil.getDouble(resultMap, "SUMCOUNT", MapUtil.ALLOW_NULL);
         sumCount = sumCount > 0 ? sumCount : 0;
@@ -87,10 +88,9 @@ public class RyxxlServiceImpl implements RyxxlService {
         data.put("threeYearCount", (int) m);
         data.put("threeYearMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
 
-        //工龄总和
-        m = MapUtil.getDouble(resultMap, "MM_15", MapUtil.ALLOW_NULL);
-        m = m > 0 ? m : 0;
-        data.put("avgWorkCount", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount, 2));
+        //平均工龄
+        data.put("avgWorkCount", MapUtil.getString(resultMap, "MM_15", MapUtil.ALLOW_NULL));
+
         dataMap.put("work", data);
 
         //---------------------性别-------------------
@@ -143,17 +143,17 @@ public class RyxxlServiceImpl implements RyxxlService {
         m = m > 0 ? m : 0;
         data.put("fortyAge", (int) m);
         data.put("fortyAgeMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
-        //总年龄
+        //平均年龄
         m = MapUtil.getDouble(resultMap, "MM_16", MapUtil.ALLOW_NULL);
         m = m > 0 ? m : 0;
-        data.put("avgAge", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount, 2));
+        data.put("avgAge", m);
         dataMap.put("age", data);
 
         //---------------------学历-------------------
         data = new HashMap<String, Object>();
-        resultMap = ryxxlDao.queryEducation(date, flag, deptId, include);
-        sumCount = MapUtil.getDouble(resultMap, "SUMCOUNT", MapUtil.ALLOW_NULL);
-        sumCount = sumCount > 0 ? sumCount : 0;
+        //resultMap = ryxxlDao.queryEducation(date, flag, deptId, include);
+        //sumCount = MapUtil.getDouble(resultMap, "SUMCOUNT", MapUtil.ALLOW_NULL);
+        //sumCount = sumCount > 0 ? sumCount : 0;
 
         //初中
         m = MapUtil.getDouble(resultMap, "MM_17", MapUtil.ALLOW_NULL);
@@ -206,12 +206,13 @@ public class RyxxlServiceImpl implements RyxxlService {
             //每个岗位的人数
             double count = MapUtil.getDouble(map, "SUMCOUNT", MapUtil.ALLOW_NULL);
             //总人数
-            sumCount = MapUtil.getDouble(map, "AllCOUNT", MapUtil.ALLOW_NULL);
+            //sumCount = MapUtil.getDouble(map, "AllCOUNT", MapUtil.ALLOW_NULL);
             data.put("positionTypeId", positionTypeId);
             data.put("positionTypeName", name);
             data.put("positionTypeCount", (int) count);
             dataMap.put("totalCount", sumCount);
             data.put("positionTypeMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(count / sumCount * 100, 2) + "%");
+            name = StringUtils.isBlank(name) ? "" : name;
             switch (name) {
                 case "特殊普岗":
                     dataMap.put("teShuPuGang", data);
@@ -233,6 +234,9 @@ public class RyxxlServiceImpl implements RyxxlService {
                     break;
                 case "资深岗位":
                     dataMap.put("ziShenGangWei", data);
+                    break;
+                default:
+                    dataMap.put("weiZhiGangWei", data);
                     break;
             }
         }
@@ -491,6 +495,133 @@ public class RyxxlServiceImpl implements RyxxlService {
         }
         return dataMap;
     }
+    private void addParam(List<DepartmentBean> departmentBeans){
+        if(departmentBeans != null){
+            for (DepartmentBean departmentBean : departmentBeans){
+                regCount += departmentBean.getResignation();
+                disCount += departmentBean.getDismiss();
+                unKcount += departmentBean.getUnKnow();
+               addParam(departmentBean.getChildren());
+            }
+        }
+    }
+    @Override
+    public Map<String, Object> getChanges(Map<String, Object> paraMap) throws MessageException {
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        try {
+            String endDate = null;
+            int level = MapUtil.getInt(paraMap, "level", MapUtil.NOT_NULL);
+            String begDate = MapUtil.getString(paraMap, "begDate", MapUtil.NOT_NULL);
+            String deptId = MapUtil.getString(paraMap, "deptId", MapUtil.ALLOW_NULL);
+            Date date = TimeUtil.parseAnyDate(begDate);
+            begDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.getFirstDayOfMonth(date));
+            endDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.getFirstDayOfMonth(TimeUtil.dateAdd(date, TimeUtil.UNIT_MONTH, 1)));
+            List<DepartmentBean> list = ryxxlDao.getChanges(begDate,endDate);
+            list = kqParamSetService.composeDept(list);
+            addParam(list);
+            System.out.println("reg:"+regCount);
+            System.out.println("disCount:"+disCount);
+            System.out.println("unKcount:"+unKcount);
+            int outRegCount = 0;
+            int outDisCount = 0;
+            int outUnCount = 0;
+            //统计各部门人数
+            for (DepartmentBean departmentBean : list) {
+                int count = departmentBean.getResignation() + departmentBean.getDismiss() + departmentBean.getUnKnow();
+                int total = departmentBean.getJinSheng() + departmentBean.getJiangZhi() + departmentBean.getChange();
+                int begMon = departmentBean.getBegMonCount();
+                int endMon = departmentBean.getEndMonCount();
+                int resignationCount = departmentBean.getResignation();
+                int dismissCount = departmentBean.getDismiss();
+                int unKnowCount = departmentBean.getUnKnow();
+
+                int diaoRuCount = departmentBean.getDiaoRu();
+                int diaoChuCount = departmentBean.getDiaoChu();
+                int jinShengCount = departmentBean.getJinSheng();
+                int jiangZhiCount = departmentBean.getJiangZhi();
+                int changeCount = departmentBean.getChange();
+
+                addList(departmentBean, departmentBean.getChildren());
+                departmentBean.setCount(count + departmentBean.getCount());
+                departmentBean.setTotal(total + departmentBean.getTotal());
+                departmentBean.setBegMonCount(begMon + departmentBean.getBegMonCount());
+                departmentBean.setEndMonCount(endMon + departmentBean.getEndMonCount());
+                departmentBean.setResignation(resignationCount + departmentBean.getResignation());
+                departmentBean.setDismiss(dismissCount + departmentBean.getDismiss());
+                departmentBean.setUnKnow(unKnowCount + departmentBean.getUnKnow());
+
+            }
+
+            //选择了部门
+            if (!"0".equals(deptId) && StringUtils.isNotBlank(deptId)) level = 3;
+            //总计
+            DepartmentBean totalBean = new DepartmentBean();
+
+            //根据level获取不同层次部门
+            if (level == 1) {
+                for (DepartmentBean bean : list) {
+                    if(bean.getChildren() != null)bean.getChildren().clear();
+                    addBean(totalBean, bean, true);
+                }
+            } else if (level == 2) {
+                for (DepartmentBean departmentBean : list) {
+                    addBean(totalBean, departmentBean, true);
+                    if (departmentBean.getChildren() == null) continue;
+                    for (DepartmentBean bean : departmentBean.getChildren()) {
+                        if (bean.getChildren() != null) bean.getChildren().clear();
+                        addBean(totalBean, bean, false);
+                    }
+                }
+            } else {
+                for (DepartmentBean departmentBean : list) {
+                    addBean(totalBean, departmentBean, true);
+                    if(departmentBean.getChildren() == null) continue;
+                    for (DepartmentBean bean : departmentBean.getChildren()) {
+                        addBean(totalBean, bean, false);
+                        if(bean.getChildren() == null)continue;
+                        for (DepartmentBean dept : bean.getChildren()) {
+                            addBean(totalBean, dept, false);
+                            if (dept.getChildren() == null)continue;
+                            for (DepartmentBean dpt : dept.getChildren()) {
+                                addBean(totalBean, dpt, false);
+                            }
+                        }
+                    }
+                }
+            }
+            if (!"0".equals(deptId) && StringUtils.isNotBlank(deptId)) {
+                List<DepartmentBean> targetList = new ArrayList<DepartmentBean>();
+                getBeanForList(deptId, list, targetList);
+                list = targetList;
+            } else {
+                //平均人数
+                double avgCount = (totalBean.getBegMonCount() + totalBean.getEndMonCount()) / 2;
+                dataMap.put("avgCount", avgCount);
+                dataMap.put("begMonCount", totalBean.getBegMonCount());
+                dataMap.put("entryCount", totalBean.getEntryCount());
+                dataMap.put("count", totalBean.getCount());
+                dataMap.put("resignation", totalBean.getResignation());
+                dataMap.put("dismiss", totalBean.getDismiss());
+                dataMap.put("unKnow", totalBean.getUnKnow());
+                //离职率
+                dataMap.put("resignationMix", avgCount == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(totalBean.getCount() / avgCount * 100, 2)));
+                dataMap.put("total", totalBean.getTotal());
+                dataMap.put("diaoRu", totalBean.getDiaoRu());
+                dataMap.put("diaoChu", totalBean.getDiaoChu());
+                dataMap.put("jinSheng", totalBean.getJinSheng());
+                dataMap.put("jiangZhi", totalBean.getJiangZhi());
+                dataMap.put("change", totalBean.getChange());
+                //异动率
+                dataMap.put("changeMix", avgCount == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(totalBean.getTotal() / avgCount * 100, 2)));
+                dataMap.put("endMonCount", totalBean.getEndMonCount());
+            }
+            dataMap.put("outEmp", list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MessageException(e.getMessage());
+        }
+        return dataMap;
+    }
 
     @Override
     public Map<String, Object> queryChanges(Map<String, Object> paraMap) throws MessageException {
@@ -597,7 +728,8 @@ public class RyxxlServiceImpl implements RyxxlService {
                 empMap.put(outEmpBean.getDepartmentId(), outEmpBean);
             }
 
-            List<DepartmentBean> list = kqParamSetService.queryDepartmentEmployee(false, false);
+            //List<DepartmentBean> list = kqParamSetService.queryDepartmentEmployee(false, false);
+            List<DepartmentBean> list = kqParamSetService.getDept();
             //将数据对应部门
             setListPara(list, outEmpMap, changeMap, newChangeMap, empMap);
 
@@ -622,24 +754,28 @@ public class RyxxlServiceImpl implements RyxxlService {
             //根据level获取不同层次部门
             if (level == 1) {
                 for (DepartmentBean bean : list) {
-                    bean.getChildren().clear();
+                    if(bean.getChildren() != null)bean.getChildren().clear();
                     addBean(totalBean, bean, true);
                 }
             } else if (level == 2) {
                 for (DepartmentBean departmentBean : list) {
                     addBean(totalBean, departmentBean, true);
+                    if (departmentBean.getChildren() == null) continue;
                     for (DepartmentBean bean : departmentBean.getChildren()) {
-                        bean.getChildren().clear();
+                        if (bean.getChildren() != null) bean.getChildren().clear();
                         addBean(totalBean, bean, false);
                     }
                 }
             } else {
                 for (DepartmentBean departmentBean : list) {
                     addBean(totalBean, departmentBean, true);
+                    if(departmentBean.getChildren() == null) continue;
                     for (DepartmentBean bean : departmentBean.getChildren()) {
                         addBean(totalBean, bean, false);
+                        if(bean.getChildren() == null)continue;
                         for (DepartmentBean dept : bean.getChildren()) {
                             addBean(totalBean, dept, false);
+                            if (dept.getChildren() == null)continue;
                             for (DepartmentBean dpt : dept.getChildren()) {
                                 addBean(totalBean, dpt, false);
                             }
@@ -653,7 +789,7 @@ public class RyxxlServiceImpl implements RyxxlService {
                 list = targetList;
             } else {
                 //平均人数
-                double avgCount = (totalBean.getBegMonCount() + totalBean.getEndMonCount()) / 2;
+                double avgCount = (totalBean.getBegMonCount() + totalBean.getEndMonCount())  / 2D;
                 dataMap.put("avgCount", avgCount);
                 dataMap.put("begMonCount", totalBean.getBegMonCount());
                 dataMap.put("entryCount", totalBean.getEntryCount());
@@ -752,12 +888,14 @@ public class RyxxlServiceImpl implements RyxxlService {
                 departmentBean.setEndMonCount(empBean.getEndMonCount());
                 departmentBean.setEntryCount(empBean.getEntryCount());
             }
-            if (departmentBean.getChildren().size() > 0) {
+            if (departmentBean.getChildren() != null && departmentBean.getChildren().size() > 0) {
                 setListPara(departmentBean.getChildren(), param1, param2, param3, param4);
             }
         }
     }
-
+    static int regCount = 0;
+    static int disCount = 0;
+    static int unKcount = 0;
     private void addList(DepartmentBean bean, List<DepartmentBean> list) {
         int count = 0;
         int sum = 0;
@@ -772,68 +910,69 @@ public class RyxxlServiceImpl implements RyxxlService {
         int jinShengCount = 0;
         int jiangZhiCount = 0;
         int changeCount = 0;
+        if (list != null) {
+            for (DepartmentBean departmentBean : list) {
+                //离职人数
+                int total = departmentBean.getResignation() + departmentBean.getDismiss() + departmentBean.getUnKnow();
+                //异动人数
+                int total2 = departmentBean.getJinSheng() + departmentBean.getJiangZhi() + departmentBean.getChange();
+                int begMon = departmentBean.getBegMonCount();
+                int endMon = departmentBean.getEndMonCount();
+                int resignation = departmentBean.getResignation();
+                int dismiss = departmentBean.getDismiss();
+                int unKnow = departmentBean.getUnKnow();
+                int entryCount = departmentBean.getEntryCount();
+                int diaoRu = departmentBean.getDiaoRu();
+                int diaoChu = departmentBean.getDiaoChu();
+                int jinSheng = departmentBean.getJinSheng();
+                int jiangZhi = departmentBean.getJiangZhi();
+                int change = departmentBean.getChange();
+                if (departmentBean.getChildren() != null && departmentBean.getChildren().size() > 0) {
+                    addList(departmentBean, departmentBean.getChildren());
+                    //如果还有子部门， 小计 = 自身人数 + 子部门人数
+                    total += departmentBean.getCount();
+                    total2 += departmentBean.getTotal();
+                    begMon += departmentBean.getBegMonCount();
+                    endMon += departmentBean.getEndMonCount();
+                    resignation += departmentBean.getResignation();
+                    dismiss += departmentBean.getDismiss();
+                    unKnow += departmentBean.getUnKnow();
+                    entryCount += departmentBean.getEntryCount();
+                    diaoRu += departmentBean.getDiaoRu();
+                    diaoChu += departmentBean.getDiaoChu();
+                    jinSheng += departmentBean.getJinSheng();
+                    jiangZhi += departmentBean.getJiangZhi();
+                    change += departmentBean.getChange();
+                }
 
-        for (DepartmentBean departmentBean : list) {
-            //离职人数
-            int total = departmentBean.getResignation() + departmentBean.getDismiss() + departmentBean.getUnKnow();
-            //异动人数
-            int total2 = departmentBean.getJinSheng() + departmentBean.getJiangZhi() + departmentBean.getChange();
-            int begMon = departmentBean.getBegMonCount();
-            int endMon = departmentBean.getEndMonCount();
-            int resignation = departmentBean.getResignation();
-            int dismiss = departmentBean.getDismiss();
-            int unKnow = departmentBean.getUnKnow();
-            int entryCount = departmentBean.getEntryCount();
-            int diaoRu = departmentBean.getDiaoRu();
-            int diaoChu = departmentBean.getDiaoChu();
-            int jinSheng = departmentBean.getJinSheng();
-            int jiangZhi = departmentBean.getJiangZhi();
-            int change = departmentBean.getChange();
-            if (departmentBean.getChildren().size() > 0) {
-                addList(departmentBean, departmentBean.getChildren());
-                //如果还有子部门， 小计 = 自身人数 + 子部门人数
-                total += departmentBean.getCount();
-                total2 += departmentBean.getTotal();
-                begMon += departmentBean.getBegMonCount();
-                endMon += departmentBean.getEndMonCount();
-                resignation += departmentBean.getResignation();
-                dismiss += departmentBean.getDismiss();
-                unKnow += departmentBean.getUnKnow();
-                entryCount += departmentBean.getEntryCount();
-                diaoRu += departmentBean.getDiaoRu();
-                diaoChu += departmentBean.getDiaoChu();
-                jinSheng += departmentBean.getJinSheng();
-                jiangZhi += departmentBean.getJiangZhi();
-                change += departmentBean.getChange();
+                departmentBean.setCount(total);
+                departmentBean.setTotal(total2);
+                departmentBean.setBegMonCount(begMon);
+                departmentBean.setEndMonCount(endMon);
+                departmentBean.setResignation(resignation);
+                departmentBean.setDismiss(dismiss);
+                departmentBean.setUnKnow(unKnow);
+                departmentBean.setEntryCount(entryCount);
+                departmentBean.setDiaoRu(diaoRu);
+                departmentBean.setDiaoChu(diaoChu);
+                departmentBean.setJinSheng(jinSheng);
+                departmentBean.setJiangZhi(jiangZhi);
+                departmentBean.setChange(change);
+
+                count += total;
+                sum += total2;
+                begMonCount += begMon;
+                endMonCount += endMon;
+                resignationCount += resignation;
+                dismissCount += dismiss;
+                unKnowCount += unKnow;
+                allEntryCount += entryCount;
+                diaoRuCount += diaoRu;
+                diaoChuCount += diaoChu;
+                jinShengCount += jinSheng;
+                jiangZhiCount += jiangZhi;
+                changeCount += change;
             }
-
-            departmentBean.setCount(total);
-            departmentBean.setTotal(total2);
-            departmentBean.setBegMonCount(begMon);
-            departmentBean.setEndMonCount(endMon);
-            departmentBean.setResignation(resignationCount);
-            departmentBean.setDismiss(dismiss);
-            departmentBean.setUnKnow(unKnow);
-            departmentBean.setEntryCount(entryCount);
-            departmentBean.setDiaoRu(diaoRu);
-            departmentBean.setDiaoChu(diaoChu);
-            departmentBean.setJinSheng(jinSheng);
-            departmentBean.setJiangZhi(jiangZhi);
-            departmentBean.setChange(change);
-
-            count += total;
-            sum += total2;
-            begMonCount += begMon;
-            endMonCount += endMon;
-            resignationCount += resignationCount;
-            dismissCount += dismiss;
-            unKnowCount += unKnow;
-            allEntryCount += entryCount;
-            diaoRuCount += diaoRu;
-            diaoChuCount += diaoChu;
-            jinShengCount += jinSheng;
-            jiangZhiCount += jiangZhi;
-            changeCount += change;
         }
         bean.setCount(count);
         bean.setTotal(sum);
@@ -862,7 +1001,7 @@ public class RyxxlServiceImpl implements RyxxlService {
             endDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.getFirstDayOfMonth(TimeUtil.dateAdd(TimeUtil.parseAnyDate(endDate), TimeUtil.UNIT_MONTH, 1)));
 
             //查询每个部门岗位缺编人数，月初人数，计划招聘数，到面人数，合格人数，入职人数，月末人数
-            List<ZpxgpgBean> recruitChannelList = ryxxlDao.queryRecruitByDeptPosId(begDate, endDate,deptId,posId);
+            List<ZpxgpgBean> recruitChannelList = ryxxlDao.queryRecruitByDeptPosId(begDate, endDate, deptId, posId);
             for (ZpxgpgBean zpxgpgBean : recruitChannelList) {
                 double faceCount = zpxgpgBean.getFaceCount();
                 //招聘有效率 = 合格人数 / 到面人数 * 100%
@@ -927,7 +1066,8 @@ public class RyxxlServiceImpl implements RyxxlService {
             }
 
             //获取所有部门
-            List<DepartmentBean> departmentList = kqParamSetService.queryDepartmentEmployee(false, false);
+            //List<DepartmentBean> departmentList = kqParamSetService.queryDepartmentEmployee(false, false);
+            List<DepartmentBean> departmentList = kqParamSetService.getDept();
 
             //计算
             departmentList = calculateBean(departmentList, clockMap, deptAttendanceMap, vacationMap, days, deptId);
@@ -991,7 +1131,7 @@ public class RyxxlServiceImpl implements RyxxlService {
                 departmentList.add(departmentBean);
                 return departmentList;
             }
-            if (departmentBean.getChildren().size() > 0)
+            if (departmentBean.getChildren() != null && departmentBean.getChildren().size() > 0)
                 calculateBean(departmentBean.getChildren(), param1, param2, param3, days, deptId);
         }
         return departmentList;

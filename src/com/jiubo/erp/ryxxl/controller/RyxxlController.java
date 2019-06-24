@@ -114,7 +114,8 @@ public class RyxxlController {
         try {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败！");
             Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
-            result.put(Constant.Result.RETDATA, ryxxlService.queryChanges(requestMap));
+            //result.put(Constant.Result.RETDATA, ryxxlService.queryChanges(requestMap));
+            result.put(Constant.Result.RETDATA, ryxxlService.getChanges(requestMap));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
@@ -228,3 +229,12 @@ public class RyxxlController {
         }
     }
 }
+/*
+  //分页插件的用法
+ //	PageHelper.offsetPage(0,10);
+ PageHelper.startPage(0,10);
+ List<RecruitChannelBean> recruitChannelBeans = zpglDao.queryRecruitChannel();
+ PageInfo page = new PageInfo(recruitChannelBeans);
+ //获取总条数
+ System.out.println("Total:"+page.getTotal());
+ */

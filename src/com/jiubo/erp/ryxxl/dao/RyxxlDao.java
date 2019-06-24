@@ -3,6 +3,7 @@ package com.jiubo.erp.ryxxl.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.jiubo.erp.rygl.bean.DepartmentBean;
 import org.apache.ibatis.annotations.Param;
 
 import com.jiubo.erp.ryxxl.bean.DepartmentAttendanceBean;
@@ -15,7 +16,7 @@ public interface RyxxlDao {
     public Map<String, Object> queryZzryReport(@Param("date") String date, @Param("flag") String flag, @Param("deptId") String deptId, @Param("include") String include);
 
     //查询学历
-    public Map<String, Object> queryEducation(@Param("date") String date, @Param("flag") String flag, @Param("deptId") String deptId, @Param("include") String include);
+    //public Map<String, Object> queryEducation(@Param("date") String date, @Param("flag") String flag, @Param("deptId") String deptId, @Param("include") String include);
 
     //查询岗位报表
     public List<Map<String, Object>> queryPositionReport(@Param("date") String date, @Param("flag") String flag, @Param("deptId") String deptId, @Param("include") String include);
@@ -64,4 +65,7 @@ public interface RyxxlDao {
 
     //修改或添加部门未打卡信息
     public void updateAddDeptAttendance(DepartmentAttendanceBean departmentAttendanceBean);
+
+    //人员异动查询报表
+    public List<DepartmentBean> getChanges(@Param("begDate") String begDate,@Param("endDate") String endDate);
 }
