@@ -391,6 +391,18 @@ public interface KqParamSetService {
     * @version: 1.0
     **/
     public List<DepartmentBean> composeDept(List<DepartmentBean> deptList)throws MessageException;
+
+    /* *
+     * @desc:为DepartmentBeanList中的Bean添加前缀
+     * @author: dx
+     * @date: 2019-06-24 13:34:23
+     * @param sourceList :原数据List
+     * @param targetList :新数据List
+     * @return: void
+     * @throws:
+     * @version: 1.0
+     **/
+    public void addDeptPreFix(List<DepartmentBean> sourceList, List<DepartmentBean> targetList)throws MessageException;
 }
 //班次类别
 //public List<AttShift> queryAttShift();

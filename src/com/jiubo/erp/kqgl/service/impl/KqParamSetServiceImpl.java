@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -240,7 +241,7 @@ public class KqParamSetServiceImpl implements KqParamSetService {
 
         List<DepartmentBean> departmentBeanList = new ArrayList<DepartmentBean>();
 
-        addListPreFix(departmentBeans, departmentBeanList);
+        addDeptPreFix(departmentBeans, departmentBeanList);
 
         return departmentBeanList;
     }
@@ -280,27 +281,30 @@ public class KqParamSetServiceImpl implements KqParamSetService {
     }
 
     //为list中bean的名字添加前缀
-    private void addListPreFix(List<DepartmentBean> sourceList, List<DepartmentBean> targetList) {
+    public void addDeptPreFix(List<DepartmentBean> sourceList, List<DepartmentBean> targetList)throws MessageException{
+        if (sourceList == null || targetList == null)throw new MessageException("sourceList or targetList is null!");
         for (int i = 0; i < sourceList.size(); i++) {
             DepartmentBean departmentBean = sourceList.get(i);
             DepartmentBean deptBean = new DepartmentBean();
+            //copy DepartmentBean，children属性除外
+            BeanUtils.copyProperties(departmentBean, deptBean, "children");
             //编号
-            deptBean.setID(departmentBean.getID());
+            //deptBean.setID(departmentBean.getID());
             //名称
-            deptBean.setName(departmentBean.getName());
+            //deptBean.setName(departmentBean.getName());
             //父级编号
-            deptBean.setParentID(departmentBean.getParentID());
+            //deptBean.setParentID(departmentBean.getParentID());
             //顺序号
-            deptBean.setOrderNum(departmentBean.getOrderNum());
+            //deptBean.setOrderNum(departmentBean.getOrderNum());
             //部门级别
-            deptBean.setLevel(departmentBean.getLevel());
+            //deptBean.setLevel(departmentBean.getLevel());
             //带前缀的名字
             String preFix = i == sourceList.size() - 1 ? "└" : "├";
             deptBean.setPreFixName(getSpace(departmentBean.getLevel()) + preFix + departmentBean.getName());
             targetList.add(deptBean);
             //获取子部门
             if (departmentBean.getChildren() != null && departmentBean.getChildren().size() > 0)
-                addListPreFix(departmentBean.getChildren(), targetList);
+                addDeptPreFix(departmentBean.getChildren(), targetList);
         }
     }
 
@@ -318,13 +322,15 @@ public class KqParamSetServiceImpl implements KqParamSetService {
     //将父级部门与子部门对应
     private void setDeptChildren(DepartmentBean parentBean, Map<String, List<DepartmentBean>> sonMap) {
         List<DepartmentBean> sonBeanList = sonMap.get(parentBean.getID());
-        if (sonBeanList != null) {
+        if (sonBeanList == null) {
+            sonBeanList = new ArrayList<DepartmentBean>();
+        }else{
             for (DepartmentBean departmentBean : sonBeanList) {
                 List<DepartmentBean> childBeanList = sonMap.get(departmentBean.getID());
                 if (childBeanList != null) setDeptChildren(departmentBean, sonMap);
             }
-            parentBean.setChildren(sonBeanList);
         }
+        parentBean.setChildren(sonBeanList);
     }
 
     @Override
