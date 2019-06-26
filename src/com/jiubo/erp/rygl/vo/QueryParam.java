@@ -45,6 +45,23 @@ public class QueryParam {
 	public QueryParam() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	
+
+	@Override
+	public String toString() {
+		return "QueryParam [departName=" + departName + ", departId=" + departId + ", state=" + state + ", projectId="
+				+ projectId + ", searchType=" + searchType + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", birth=" + birth + ", resignType=" + resignType + ", resignReasonId=" + resignReasonId
+				+ ", enterStartDate=" + enterStartDate + ", enterEndDate=" + enterEndDate + ", leaveStartDate="
+				+ leaveStartDate + ", leaveEndDate=" + leaveEndDate + ", zzStartDate=" + zzStartDate + ", zzEndDate="
+				+ zzEndDate + ", searchContent=" + searchContent + ", chName=" + chName + ", empName=" + empName
+				+ ", shBirth=" + shBirth + ", currentPage=" + currentPage + ", records=" + records + "]";
+	}
+
+
+
 
 	public String getEnterStartDate() {
 		return enterStartDate;

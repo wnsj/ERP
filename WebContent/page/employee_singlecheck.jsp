@@ -337,16 +337,7 @@
 					                        for(QueryFamilyResult bean:fmlist){	 
 	                                     %>
 										<tr>
-											<td><%=bean.getJobnum() %></td>
-											<td><%=bean.getName()%></td>
-											<td><%=bean.getAppellation() %></td>
-											<td><%=bean.getChname() %></td>
-											<td><%=bean.getBirth() %></td>
-											<td><%=bean.getWorkadress() %></td>
-											<td><%=bean.getPosition() %></td>
-											<td><%=bean.getPhone() %></td>
-											<td><%=bean.getWechat() %></td>
-											<td><%=bean.getFamAddress()%></td>
+											
 										</tr>
 										<%
 					                          }

@@ -1,6 +1,7 @@
 package com.jiubo.erp.rygl.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.jiubo.erp.common.Position;
 import com.jiubo.erp.rygl.bean.DepartmentBean;

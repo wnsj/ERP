@@ -102,10 +102,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 查询 全部职位 -->
 	<select id="selectPositionList" resultType="com.jiubo.erp.rygl.vo.Position">
 		SELECT
-		dbo.Position_Data.Position_ID As positionId,
-		dbo.Position_Data.Position_Name AS positionName
+		Position_ID AS positionId,
+		Position_Name AS positionName
 		FROM
-		dbo.Position_Data
+		Position_Data
 	</select>
 
 	<!-- 查询 全部项目 -->
@@ -163,6 +163,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="projectId!=null and projectId!=''">
 				AND f.Project_ID=#{projectId}
+			</if>
+			<if test="searchContent !=null and searchContent !=''">
+				AND (a.JobNum like '%'+#{searchContent}+'%' OR a.name like '%'+#{searchContent}+'%'
+				OR d.Name like '%'+#{searchContent}+'%' OR c.Position_Name like '%'+#{searchContent}+'%')
 			</if>
 			<if
 				test="enterStartDate!=null and enterEndDate!=null and enterStartDate!='' and enterEndDate!=''">
@@ -399,8 +403,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		set
 		Name=#{name},Sex=#{sex},Department_id=#{departId},Birth=#{birth},
 		EntryDate=#{entryDate},PositiveDate=#{positiveDate},ResignDate=#{resignDate},Photo=#{photo},
-		CreateDate='2019-04-13
-		11:30:29:000',UpdateDate=#{updateDate},IsDelete=#{isDelete},State=#{state},
+		UpdateDate=#{updateDate},IsDelete=#{isDelete},State=#{state},
 		CreateUser=#{createUser},Account=#{accountId},Remark=#{remark},Parent_ID=#{parentId},
 		ResignType=#{resignType},ResignReason=#{resignReason}
 		where

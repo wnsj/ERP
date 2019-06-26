@@ -53,9 +53,9 @@ public class ToolClass {
 	//比较两个时间字符串的大小
 	public static int compare_date(String DATE1, String DATE2) {
 	        
-		DATE1 = DATE1+"00";
-		DATE2 = DATE2+"00";
-		SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.000"); //加上时间
+//		DATE1 = DATE1+"00";
+//		DATE2 = DATE2+"00";
+		SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0"); //加上时间
 	    try {
 	    	Date dt1 = df.parse(DATE1);
 	    	Date dt2 = df.parse(DATE2);

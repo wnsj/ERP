@@ -5,9 +5,11 @@ public class Position {
 	private String positionName;
 	private String positionTypeId;
 	private String isPoint;
+	
 	public Position() {
 		// TODO Auto-generated constructor stub
 	}
+	
 	public String getPositionId() {
 		return positionId;
 	}
@@ -17,6 +19,7 @@ public class Position {
 	public String getPositionName() {
 		return positionName;
 	}
+
 	public void setPositionName(String positionName) {
 		this.positionName = positionName;
 	}

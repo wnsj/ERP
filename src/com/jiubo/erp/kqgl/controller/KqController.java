@@ -937,7 +937,6 @@ public class KqController {
 			List<PersonalKQBean> rykqLsit = new ArrayList<>();
 
 			List<KqInfoResult> kqInfoRes = this.service.selectKqInfoList(ap);
-			
 			for (KqInfoResult kqInfoResult : kqInfoRes) {
 				PersonalKQBean pKqBean = new PersonalKQBean();
 				pKqBean.setRyKQId(kqInfoResult.getuId());
@@ -964,13 +963,13 @@ public class KqController {
 			}
 
 			kqInfoRes = this.service.kqTableInfoList(ap);
-
-
+			System.out.println("kqInfoRes:"+kqInfoRes.size()+"--"+"rykqLsit:"+rykqLsit.size()+ap.toString());
 			// 查询班次数据为空时执行，返回基本信息
 			if (kqInfoRes.size() > 0) {
 				kqInfoRes = kquClassTime(kqInfoRes);
-//				rykqLsit = selectKqTableCountInfo(kqInfoRes, rykqLsit);
+				rykqLsit = selectKqTableCountInfo(kqInfoRes, rykqLsit);
 			}
+			System.out.println("kqInfoRes:"+kqInfoRes.size()+"--"+"rykqLsit:"+rykqLsit.size()+ap.toString());
 			result.put("resData", rykqLsit);
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
@@ -1009,7 +1008,7 @@ public class KqController {
 				if (ryKQ.getuId().equals(ry.getRyKQId())
 						&& ToolClass.compare_date(ry.getBeginDate(), ry.getEndDate()) <= 0) {
 					// 入职时间在开始和结束时间之前
-					// System.out.println("selectKqTableCountInfo-----getEntryDate:"+ryKQ.getEntryDate());
+//					 System.out.println("selectKqTableCountInfo-----getEntryDate:"+ryKQ.getEntryDate()+ry.getBeginDate());
 					if (!StringUtil.isEmpty(ryKQ.getEntryDate())
 							&& ToolClass.compare_date(ryKQ.getEntryDate(), ry.getBeginDate()) <= 0) {
 						// 离职时间在结束时间之后或者为null=在职
