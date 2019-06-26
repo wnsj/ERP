@@ -17,6 +17,9 @@ public class ZpPlanBean implements Serializable{
 	private String positionName;//职位名
 	private String begDate;//查询时间
 	private String endDate;//查询时间
+	private String isYes;//是否完成
+	private String isBack;//是否撤销
+	
 	public ZpPlanBean() {
 		super();
 	}
@@ -86,12 +89,25 @@ public class ZpPlanBean implements Serializable{
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
+	public String getIsYes() {
+		return isYes;
+	}
+	public void setIsYes(String isYes) {
+		this.isYes = isYes;
+	}
+	public String getIsBack() {
+		return isBack;
+	}
+	public void setIsBack(String isBack) {
+		this.isBack = isBack;
+	}
+
 	@Override
 	public String toString() {
 		return "ZpPlanBean [planId=" + planId + ", department=" + department + ", position=" + position + ", lackNum="
 				+ lackNum + ", planNum=" + planNum + ", phoneNum=" + phoneNum + ", planDate=" + planDate
 				+ ", departmentName=" + departmentName + ", positionName=" + positionName + ", begDate=" + begDate
-				+ ", endDate=" + endDate + "]";
+				+ ", endDate=" + endDate + ", isYes=" + isYes + ", isBack=" + isBack + "]";
 	}
 	
 	

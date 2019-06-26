@@ -1,8 +1,6 @@
 package com.jiubo.erp.zpgl.bean;
 
 import java.io.Serializable;
-
-import org.springframework.validation.annotation.Validated;
 //面试信息
 public class RecruitDataBean implements Serializable{
 	

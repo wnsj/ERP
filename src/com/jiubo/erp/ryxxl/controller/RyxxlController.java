@@ -81,7 +81,8 @@ public class RyxxlController {
         try {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败！");
             Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
-            result.put(Constant.Result.RETDATA, ryxxlService.queryLzryReport(requestMap));
+            //result.put(Constant.Result.RETDATA, ryxxlService.queryLzryReport(requestMap));
+            result.put(Constant.Result.RETDATA, ryxxlService.getLzryReport(requestMap));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
@@ -148,7 +149,8 @@ public class RyxxlController {
         try {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败！");
             Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
-            result.put(Constant.Result.RETDATA, ryxxlService.queryRecruit(requestMap));
+            //result.put(Constant.Result.RETDATA, ryxxlService.queryRecruit(requestMap));
+            result.put(Constant.Result.RETDATA, ryxxlService.getRecruit(requestMap));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
@@ -181,7 +183,8 @@ public class RyxxlController {
         try {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败！");
             Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
-            result.put(Constant.Result.RETDATA, ryxxlService.queryRlzylyReport(requestMap));
+            //result.put(Constant.Result.RETDATA, ryxxlService.queryRlzylyReport(requestMap));
+            result.put(Constant.Result.RETDATA, ryxxlService.getRlzylyReport(requestMap));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();

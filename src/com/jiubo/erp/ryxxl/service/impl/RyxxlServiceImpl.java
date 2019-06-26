@@ -46,8 +46,7 @@ public class RyxxlServiceImpl implements RyxxlService {
         String include = MapUtil.getString(paraMap, "incude", MapUtil.ALLOW_NULL);
         date = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.dateAdd(TimeUtil.parseAnyDate(date), TimeUtil.UNIT_DAY, 1), TimeUtil.UNIT_SECOND, -1));
         Map<String, Object> dataMap = new HashMap<String, Object>();
-        Map<String, Object> resultMap = ryxxlDao.queryZzryReport(date, flag, deptId, include);
-        System.out.println("resultMap:" + resultMap);
+        Map<String, Object> resultMap = ryxxlDao.queryZzryReport(date, flag, deptId, include);;
         //在职人数
         double sumCount = MapUtil.getDouble(resultMap, "SUMCOUNT", MapUtil.ALLOW_NULL);
         sumCount = sumCount > 0 ? sumCount : 0;
@@ -244,6 +243,193 @@ public class RyxxlServiceImpl implements RyxxlService {
     }
 
     @Override
+    public Map<String, Object> getLzryReport(Map<String, Object> paraMap) throws Exception {
+        String begDate = MapUtil.getString(paraMap, "begDate", MapUtil.NOT_NULL);
+        String endDate = MapUtil.getString(paraMap, "endDate", MapUtil.NOT_NULL);
+        String deptId = MapUtil.getString(paraMap, "deptId", MapUtil.ALLOW_NULL);
+        String posId = MapUtil.getString(paraMap, "posId", MapUtil.ALLOW_NULL);
+        endDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.dateAdd(TimeUtil.parseAnyDate(endDate), TimeUtil.UNIT_DAY, 1),TimeUtil.UNIT_SECOND,-1));
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        Map<String, Object> data = null;
+        //-----------------------------------------工龄-----------------------------------------
+        Map<String,Object> resultMap = ryxxlDao.getOutEmpWorkEdu(begDate, endDate, deptId, posId);
+        //总人数
+        double sumCount = MapUtil.getDouble(resultMap, "SUMCOUNT", MapUtil.ALLOW_NULL);
+        sumCount = sumCount > 0 ? sumCount : 0;
+        double m = 0;
+        data = new HashMap<String, Object>();
+        //未转正
+        m = MapUtil.getDouble(resultMap, "MM_1", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("noCorrection", (int) m);
+        data.put("noCorrectionMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //1-3月
+        m = MapUtil.getDouble(resultMap, "MM_2", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("oneThreeCount", (int) m);
+        data.put("oneThreeMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //4-6月
+        m = MapUtil.getDouble(resultMap, "MM_3", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("fourSixCount", (int) m);
+        data.put("fourSixMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //7-1年
+        m = MapUtil.getDouble(resultMap, "MM_4", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("sevenCount", (int) m);
+        data.put("sevenMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //满一年
+        m = MapUtil.getDouble(resultMap, "MM_5", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("oneYearCount", (int) m);
+        data.put("oneYearMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //满两年
+        m = MapUtil.getDouble(resultMap, "MM_6", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("twoYearCount", (int) m);
+        data.put("twoYearMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //3年以上
+        m = MapUtil.getDouble(resultMap, "MM_7", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("threeYearCount", (int) m);
+        data.put("threeYearMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //平均工龄
+        data.put("avgWorkCount", MapUtil.getString(resultMap, "MM_8", MapUtil.ALLOW_NULL));
+        dataMap.put("work", data);
+        //-----------------------------------------学历-----------------------------------------
+        data = new HashMap<String, Object>();
+        //初中
+        m = MapUtil.getDouble(resultMap, "MM_17", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("chuzhong", (int) m);
+        data.put("chuzhongMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //高中
+        m = MapUtil.getDouble(resultMap, "MM_18", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("gaozhong", (int) m);
+        data.put("gaozhongMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //专科
+        m = MapUtil.getDouble(resultMap, "MM_19", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("zhuanke", (int) m);
+        data.put("zhuankeMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //本科
+        m = MapUtil.getDouble(resultMap, "MM_20", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("benke", (int) m);
+        data.put("benkeMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+        //其他
+        m = MapUtil.getDouble(resultMap, "MM_21", MapUtil.ALLOW_NULL);
+        m = m > 0 ? m : 0;
+        data.put("qita", (int) m);
+        data.put("qitaMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
+
+        data.put("educationCount", sumCount);
+        dataMap.put("education", data);
+        //-----------------------------------------重点岗位离职员工-----------------------------------------
+        List<Map<String,Object>> mapList = ryxxlDao.queryOutEmpIsPoint(begDate,endDate,deptId,posId);
+        for(Map<String,Object> pointMap : mapList){
+            //离职类型
+            StringBuffer sb = new StringBuffer();
+            int a = pointMap.get("C1") == null ? 0 : Integer.parseInt(String.valueOf(pointMap.get("C1")));
+            int b = pointMap.get("C2") == null ? 0 : Integer.parseInt(String.valueOf(pointMap.get("C2")));
+            int c = pointMap.get("C3") == null ? 0 : Integer.parseInt(String.valueOf(pointMap.get("C3")));
+            if (a > 0) {
+                sb.append("辞职" + a + "人");
+            }
+            if (b > 0) {
+                sb.append(a > 0 ? "," : "");
+                sb.append("辞退" + b + "人");
+            }
+            if (c > 0) {
+                sb.append(a > 0 || b > 0 ? "," : "");
+                sb.append("其他" + c + "人");
+            }
+            pointMap.put("outPosType", sb.toString());
+        }
+        dataMap.put("outEmp", mapList);
+
+        //-----------------------------------------排名分析-----------------------------------------
+        mapList = ryxxlDao.queryOutEmpRank(begDate,endDate,deptId,posId);
+        for(Map<String,Object> pointMap : mapList){
+            //离职类型
+            StringBuffer sb = new StringBuffer();
+            int a = pointMap.get("C1") == null ? 0 : Integer.parseInt(String.valueOf(pointMap.get("C1")));
+            int b = pointMap.get("C2") == null ? 0 : Integer.parseInt(String.valueOf(pointMap.get("C2")));
+            int c = pointMap.get("C3") == null ? 0 : Integer.parseInt(String.valueOf(pointMap.get("C3")));
+            if (a > 0) {
+                sb.append("辞职" + a + "人");
+            }
+            if (b > 0) {
+                sb.append(a > 0 ? "," : "");
+                sb.append("辞退" + b + "人");
+            }
+            if (c > 0) {
+                sb.append(a > 0 || b > 0 ? "," : "");
+                sb.append("其他" + c + "人");
+            }
+            pointMap.put("outPosType", sb.toString());
+        }
+        dataMap.put("resignation", mapList);
+
+        //---------------------------------------不同岗位类型离职员工---------------------------------------
+        mapList = ryxxlDao.queryOutEmpPositionType(begDate, endDate, deptId, posId);
+        //保证json有键值
+        String[] positionName = {"teShuPuGang", "jiChuPuGang", "zuZhangGangWei", "zhuGuanGangWei", "buZhangZongJian", "zhuLiGangWei", "ziShenGangWei"};
+        dataMap.put("totalCount", 0);
+        for (String str : positionName) {
+            data = new HashMap<String, Object>();
+            data.put("positionTypeId", "");
+            data.put("positionTypeName", "");
+            data.put("positionTypeCount", 0);
+            data.put("totalCount", 0);
+            data.put("positionTypeMix", "0%");
+            dataMap.put(str, data);
+        }
+
+        //正式数据
+        for (Map<String, Object> map : mapList) {
+            data = new HashMap<String, Object>();
+            String name = MapUtil.getString(map, "POSITIONTYPE_NAME", MapUtil.ALLOW_NULL);
+            String positionTypeId = MapUtil.getString(map, "POSITIONTYPE_ID", MapUtil.ALLOW_NULL);
+            //每个岗位的人数
+            double count = MapUtil.getDouble(map, "SUMCOUNT", MapUtil.ALLOW_NULL);
+            //总人数
+            sumCount = MapUtil.getDouble(map, "AllCOUNT", MapUtil.ALLOW_NULL);
+            data.put("positionTypeId", positionTypeId);
+            data.put("positionTypeName", name);
+            data.put("positionTypeCount", (int) count);
+            dataMap.put("totalCount", sumCount);
+            data.put("positionTypeMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(count / sumCount * 100, 2) + "%");
+            switch (name) {
+                case "特殊普岗":
+                    dataMap.put("teShuPuGang", data);
+                    break;
+                case "基础普岗":
+                    dataMap.put("jiChuPuGang", data);
+                    break;
+                case "组长岗位":
+                    dataMap.put("zuZhangGangWei", data);
+                    break;
+                case "主管岗位":
+                    dataMap.put("zhuGuanGangWei", data);
+                    break;
+                case "部长总监":
+                    dataMap.put("buZhangZongJian", data);
+                    break;
+                case "主力岗位":
+                    dataMap.put("zhuLiGangWei", data);
+                    break;
+                case "资深岗位":
+                    dataMap.put("ziShenGangWei", data);
+                    break;
+            }
+        }
+        return dataMap;
+    }
+
+    //程序过于繁琐，不再使用
+    @Override
     public Map<String, Object> queryLzryReport(Map<String, Object> paraMap) throws Exception {
         String begDate = MapUtil.getString(paraMap, "begDate", MapUtil.NOT_NULL);
         String endDate = MapUtil.getString(paraMap, "endDate", MapUtil.NOT_NULL);
@@ -366,7 +552,7 @@ public class RyxxlServiceImpl implements RyxxlService {
             }
             if (b > 0) {
                 sb.append(a > 0 ? "," : "");
-                sb.append("辞退" + a + "人");
+                sb.append("辞退" + b + "人");
             }
             if (c > 0) {
                 sb.append(a > 0 || b > 0 ? "," : "");
@@ -375,6 +561,16 @@ public class RyxxlServiceImpl implements RyxxlService {
             map.put("outPosType", sb.toString());
             list.add(map);
         }
+        //对list从大到小排序
+        Collections.sort(list, new Comparator<Map<String,Object>>() {
+            @Override
+            public int compare(Map<String,Object> o1, Map<String,Object> o2) {
+                int i2 = o2.get("outEmpCount") == null ? 0 : (int)o2.get("outEmpCount");
+                int i1 = o1.get("outEmpCount") == null ? 0 : (int)o1.get("outEmpCount");
+                //降序
+                return i2 - i1;
+            }
+        });
         dataMap.put("outEmp", list);
 
         //---------------------------------------------查询所有岗位离职人数---------------------------------------------
@@ -498,13 +694,11 @@ public class RyxxlServiceImpl implements RyxxlService {
     private void addParam(List<DepartmentBean> departmentBeans){
         if(departmentBeans != null){
             for (DepartmentBean departmentBean : departmentBeans){
-                regCount += departmentBean.getResignation();
-                disCount += departmentBean.getDismiss();
-                unKcount += departmentBean.getUnKnow();
                addParam(departmentBean.getChildren());
             }
         }
     }
+
     @Override
     public Map<String, Object> getChanges(Map<String, Object> paraMap) throws MessageException {
         Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -517,18 +711,16 @@ public class RyxxlServiceImpl implements RyxxlService {
             begDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.getFirstDayOfMonth(date));
             endDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.getFirstDayOfMonth(TimeUtil.dateAdd(date, TimeUtil.UNIT_MONTH, 1)));
             List<DepartmentBean> list = ryxxlDao.getChanges(begDate,endDate);
+            //将父级部门与子部门组合对应
             list = kqParamSetService.composeDept(list);
-            addParam(list);
-            System.out.println("reg:"+regCount);
-            System.out.println("disCount:"+disCount);
-            System.out.println("unKcount:"+unKcount);
-            int outRegCount = 0;
-            int outDisCount = 0;
-            int outUnCount = 0;
+            //addParam(list);
+
             //统计各部门人数
             for (DepartmentBean departmentBean : list) {
                 int count = departmentBean.getResignation() + departmentBean.getDismiss() + departmentBean.getUnKnow();
+                //int count = (int) departmentBean.getCount();
                 int total = departmentBean.getJinSheng() + departmentBean.getJiangZhi() + departmentBean.getChange();
+                //int total = departmentBean.getTotal();
                 int begMon = departmentBean.getBegMonCount();
                 int endMon = departmentBean.getEndMonCount();
                 int resignationCount = departmentBean.getResignation();
@@ -542,6 +734,7 @@ public class RyxxlServiceImpl implements RyxxlService {
                 int changeCount = departmentBean.getChange();
 
                 addList(departmentBean, departmentBean.getChildren());
+
                 departmentBean.setCount(count + departmentBean.getCount());
                 departmentBean.setTotal(total + departmentBean.getTotal());
                 departmentBean.setBegMonCount(begMon + departmentBean.getBegMonCount());
@@ -549,7 +742,11 @@ public class RyxxlServiceImpl implements RyxxlService {
                 departmentBean.setResignation(resignationCount + departmentBean.getResignation());
                 departmentBean.setDismiss(dismissCount + departmentBean.getDismiss());
                 departmentBean.setUnKnow(unKnowCount + departmentBean.getUnKnow());
-
+                departmentBean.setDiaoRu(diaoRuCount + departmentBean.getDiaoRu());
+                departmentBean.setDiaoChu(diaoChuCount + departmentBean.getDiaoChu());
+                departmentBean.setJinSheng(jinShengCount + departmentBean.getJinSheng());
+                departmentBean.setJiangZhi(jiangZhiCount + departmentBean.getJiangZhi());
+                departmentBean.setChange(changeCount + departmentBean.getChange());
             }
 
             //选择了部门
@@ -595,8 +792,33 @@ public class RyxxlServiceImpl implements RyxxlService {
                 list = targetList;
             } else {
                 //平均人数
-                double avgCount = (totalBean.getBegMonCount() + totalBean.getEndMonCount()) / 2;
-                dataMap.put("avgCount", avgCount);
+                double avgCount = (totalBean.getBegMonCount() + totalBean.getEndMonCount()) / 2D;
+                DepartmentBean departmentBean = new DepartmentBean();
+                departmentBean.setPreFixName("合计");
+                departmentBean.setAvgCount(avgCount);
+                departmentBean.setBegMonCount(totalBean.getBegMonCount());
+                departmentBean.setEndMonCount(totalBean.getEntryCount());
+                departmentBean.setCount(totalBean.getCount());
+                departmentBean.setResignation(totalBean.getResignation());
+                departmentBean.setDismiss(totalBean.getDismiss());
+                departmentBean.setUnKnow(totalBean.getUnKnow());
+                //离职率
+                departmentBean.setQuitMix(avgCount == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(totalBean.getCount() / avgCount * 100, 2)));
+                departmentBean.setTotal(totalBean.getTotal());
+                departmentBean.setDiaoRu(totalBean.getDiaoRu());
+                departmentBean.setDiaoChu(totalBean.getDiaoChu());
+                departmentBean.setJinSheng(totalBean.getJinSheng());
+                departmentBean.setJiangZhi(totalBean.getJiangZhi());
+                departmentBean.setChange(totalBean.getChange());
+                //异动率
+                departmentBean.setChangeMix(avgCount == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(totalBean.getTotal() / avgCount * 100, 2)));
+                departmentBean.setEndMonCount(totalBean.getEndMonCount());
+
+                List<DepartmentBean> targetList = new ArrayList<DepartmentBean>();
+                kqParamSetService.addDeptPreFix(list,targetList);
+                list = targetList;
+                list.add(departmentBean);
+                /*dataMap.put("avgCount", avgCount);
                 dataMap.put("begMonCount", totalBean.getBegMonCount());
                 dataMap.put("entryCount", totalBean.getEntryCount());
                 dataMap.put("count", totalBean.getCount());
@@ -613,7 +835,7 @@ public class RyxxlServiceImpl implements RyxxlService {
                 dataMap.put("change", totalBean.getChange());
                 //异动率
                 dataMap.put("changeMix", avgCount == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(totalBean.getTotal() / avgCount * 100, 2)));
-                dataMap.put("endMonCount", totalBean.getEndMonCount());
+                dataMap.put("endMonCount", totalBean.getEndMonCount());*/
             }
             dataMap.put("outEmp", list);
         } catch (Exception e) {
@@ -622,7 +844,7 @@ public class RyxxlServiceImpl implements RyxxlService {
         }
         return dataMap;
     }
-
+    //查询过于繁琐，不再使用
     @Override
     public Map<String, Object> queryChanges(Map<String, Object> paraMap) throws MessageException {
         Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -739,11 +961,30 @@ public class RyxxlServiceImpl implements RyxxlService {
                 int total = departmentBean.getJinSheng() + departmentBean.getJiangZhi() + departmentBean.getChange();
                 int begMon = departmentBean.getBegMonCount();
                 int endMon = departmentBean.getEndMonCount();
+                int resignationCount = departmentBean.getResignation();
+                int dismissCount = departmentBean.getDismiss();
+                int unKnowCount = departmentBean.getUnKnow();
+
+                int diaoRuCount = departmentBean.getDiaoRu();
+                int diaoChuCount = departmentBean.getDiaoChu();
+                int jinShengCount = departmentBean.getJinSheng();
+                int jiangZhiCount = departmentBean.getJiangZhi();
+                int changeCount = departmentBean.getChange();
+
                 addList(departmentBean, departmentBean.getChildren());
+
                 departmentBean.setCount(count + departmentBean.getCount());
                 departmentBean.setTotal(total + departmentBean.getTotal());
                 departmentBean.setBegMonCount(begMon + departmentBean.getBegMonCount());
                 departmentBean.setEndMonCount(endMon + departmentBean.getEndMonCount());
+                departmentBean.setResignation(resignationCount + departmentBean.getResignation());
+                departmentBean.setDismiss(dismissCount + departmentBean.getDismiss());
+                departmentBean.setUnKnow(unKnowCount + departmentBean.getUnKnow());
+                departmentBean.setDiaoRu(diaoRuCount + departmentBean.getDiaoRu());
+                departmentBean.setDiaoChu(diaoChuCount + departmentBean.getDiaoChu());
+                departmentBean.setJinSheng(jinShengCount + departmentBean.getJinSheng());
+                departmentBean.setJiangZhi(jiangZhiCount + departmentBean.getJiangZhi());
+                departmentBean.setChange(changeCount + departmentBean.getChange());
             }
 
             //选择了部门
@@ -790,6 +1031,7 @@ public class RyxxlServiceImpl implements RyxxlService {
             } else {
                 //平均人数
                 double avgCount = (totalBean.getBegMonCount() + totalBean.getEndMonCount())  / 2D;
+                System.out.println("avgCount:"+avgCount);
                 dataMap.put("avgCount", avgCount);
                 dataMap.put("begMonCount", totalBean.getBegMonCount());
                 dataMap.put("entryCount", totalBean.getEntryCount());
@@ -817,11 +1059,12 @@ public class RyxxlServiceImpl implements RyxxlService {
         return dataMap;
     }
 
-    //从list寻找符合条件的bean
+    //根据部门id从list寻找符合条件的bean
     private void getBeanForList(String deptId, List<DepartmentBean> deptList, List<DepartmentBean> targetList) {
+        if (deptList == null)return;
         for (DepartmentBean bean : deptList) {
             if (bean.getID().equals(deptId)) {
-                bean.getChildren().clear();
+                if(bean.getChildren() != null)bean.getChildren().clear();
                 targetList.add(bean);
                 return;
             }
@@ -832,6 +1075,7 @@ public class RyxxlServiceImpl implements RyxxlService {
 
     //求bean中的和
     private void addBean(DepartmentBean departmentBean, DepartmentBean bean, boolean flag) {
+        bean.setPreFixName("├".concat(bean.getName()));
         if (flag) {
             departmentBean.setBegMonCount(departmentBean.getBegMonCount() + bean.getBegMonCount());
             departmentBean.setEndMonCount(departmentBean.getEndMonCount() + bean.getEndMonCount());
@@ -849,11 +1093,11 @@ public class RyxxlServiceImpl implements RyxxlService {
         }
 
         //平均人数 = （月初人数 + 月末人数 ）/ 2
-        bean.setAvgCount((bean.getBegMonCount() + bean.getEndMonCount()) / 2);
+        bean.setAvgCount((bean.getBegMonCount() + bean.getEndMonCount()) / 2D);
         //离职率 = 离职人数 / 平均人数
         bean.setQuitMix(bean.getAvgCount() == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(bean.getCount() / bean.getAvgCount() * 100, 2)));
         //异动率 = 异动人数 / 平均人数
-        bean.setChangeMix(bean.getAvgCount() == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(bean.getCount() / bean.getAvgCount() * 100, 2)));
+        bean.setChangeMix(bean.getAvgCount() == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(bean.getTotal() / bean.getAvgCount() * 100, 2)));
     }
 
 
@@ -893,9 +1137,7 @@ public class RyxxlServiceImpl implements RyxxlService {
             }
         }
     }
-    static int regCount = 0;
-    static int disCount = 0;
-    static int unKcount = 0;
+
     private void addList(DepartmentBean bean, List<DepartmentBean> list) {
         int count = 0;
         int sum = 0;
@@ -914,8 +1156,10 @@ public class RyxxlServiceImpl implements RyxxlService {
             for (DepartmentBean departmentBean : list) {
                 //离职人数
                 int total = departmentBean.getResignation() + departmentBean.getDismiss() + departmentBean.getUnKnow();
+                //int total = (int) departmentBean.getCount();
                 //异动人数
                 int total2 = departmentBean.getJinSheng() + departmentBean.getJiangZhi() + departmentBean.getChange();
+                //int total2 = departmentBean.getTotal();
                 int begMon = departmentBean.getBegMonCount();
                 int endMon = departmentBean.getEndMonCount();
                 int resignation = departmentBean.getResignation();
@@ -990,6 +1234,27 @@ public class RyxxlServiceImpl implements RyxxlService {
     }
 
     @Override
+    public Map<String, Object> getRecruit(Map<String, Object> paraMap) throws MessageException {
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        try {
+            String deptId = MapUtil.getString(paraMap, "deptId", MapUtil.ALLOW_NULL);
+            String posId = MapUtil.getString(paraMap, "posId", MapUtil.ALLOW_NULL);
+            String begDate = MapUtil.getString(paraMap, "begDate", MapUtil.NOT_NULL);
+            String endDate = MapUtil.getString(paraMap, "endDate", MapUtil.NOT_NULL);
+            begDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.getFirstDayOfMonth(TimeUtil.parseAnyDate(begDate)));
+            endDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.getFirstDayOfMonth(TimeUtil.dateAdd(TimeUtil.parseAnyDate(endDate), TimeUtil.UNIT_MONTH, 1)));
+            List<ZpxgpgBean> recruitChannelList = ryxxlDao.getRecruit(begDate,endDate,deptId,posId);
+            dataMap.put("candidates",recruitChannelList);
+            recruitChannelList = ryxxlDao.getRecruitChannel(begDate,endDate);
+            dataMap.put("recruitChannel",recruitChannelList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MessageException(e.getMessage());
+        }
+        return dataMap;
+    }
+
+    @Override
     public Map<String, Object> queryRecruit(Map<String, Object> paraMap) throws MessageException {
         Map<String, Object> dataMap = new HashMap<String, Object>();
         try {
@@ -1028,6 +1293,68 @@ public class RyxxlServiceImpl implements RyxxlService {
             throw new MessageException(e.getMessage());
         }
         return dataMap;
+    }
+    /*
+    返回json名称解释
+    jiangZhi:未打卡增加天数
+    jinSheng:总人数
+    change:系统打卡天数
+    diaoChu:排班休假天数
+    diaoRu:合理缺勤天数
+    resignation:本月天数
+    dismiss:小计
+    avgCount:月均出勤天数
+    count:合理缺勤人数
+    sumCount:超出缺勤人数
+    quitMix:未利用人力资源
+    changeMix:人力资源利用率
+     */
+    @Override
+    public List<DepartmentBean> getRlzylyReport(Map<String, Object> paraMap) throws MessageException {
+        List<DepartmentBean> departmentBeans = new ArrayList<DepartmentBean>();
+        try {
+            //部门id
+            String deptId = MapUtil.getString(paraMap, "deptId", MapUtil.ALLOW_NULL);
+            //查询时间
+            String begDate = MapUtil.getString(paraMap, "begDate", MapUtil.NOT_NULL);
+            Date date = TimeUtil.parseAnyDate(begDate);
+            Date lastDate = TimeUtil.getLastDayOfMonth(date);
+            int days = Integer.parseInt(TimeUtil.getDayStr(lastDate));
+            begDate = TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.getFirstDayOfMonth(date));
+            String endDate =  TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(lastDate,TimeUtil.UNIT_DAY,1));
+            //是否包括当月入职
+            String isEntry = MapUtil.getString(paraMap, "isEntry", MapUtil.NOT_NULL);
+            //是否包括当月离职
+            String isQuit = MapUtil.getString(paraMap, "isQuit", MapUtil.NOT_NULL);
+            List<DepartmentBean> deptEmpClock = ryxxlDao.getDeptEmpClock(begDate, endDate, isEntry, isQuit);
+            for (DepartmentBean dept : deptEmpClock){
+                dept.setPreFixName("├".concat(dept.getName()));
+                //本月天数
+                dept.setResignation(days);
+                //小计 = 系统打卡天数 + 未打卡天数
+                dept.setDismiss(dept.getChange() + dept.getJiangZhi());
+                //月均出勤天数 = 总出勤天数 / 本月天数
+                dept.setAvgCount(Double.valueOf(DoubleUtil.roundByScale((dept.getDismiss() / (days / 1D)) ,2)));
+                //合理缺勤人数 = 合理缺勤 / 本月天数
+                dept.setCount(Double.valueOf(DoubleUtil.roundByScale((dept.getDiaoRu() / (days  / 1D)),2)));
+                //超出缺勤人数 = 总人数 - 月平均出勤人数
+                dept.setSumCount(Double.valueOf(DoubleUtil.roundByScale(dept.getJinSheng() - dept.getAvgCount(),2)));
+                //未利用人力资源 = 超出缺勤人数 - 合理缺勤人数
+                dept.setQuitMix(Double.valueOf(DoubleUtil.roundByScale(dept.getSumCount() - dept.getCount(),2)));
+                //人力资源利用率 = （总人数 - 未利用人力资源）/ 总人数 * 100%
+                dept.setChangeMix(Double.valueOf(DoubleUtil.roundByScale((dept.getJinSheng() - dept.getQuitMix()) / dept.getJinSheng() * 100,2)));
+            }
+            deptEmpClock = kqParamSetService.composeDept(deptEmpClock);
+            if(!"0".equals(deptId) && StringUtils.isNotBlank(deptId)){
+                getBeanForList(deptId,deptEmpClock,departmentBeans);
+            }else{
+                kqParamSetService.addDeptPreFix(deptEmpClock,departmentBeans);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MessageException("系统错误！"+e.getMessage());
+        }
+        return departmentBeans;
     }
 
     @Override
