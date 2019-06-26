@@ -128,10 +128,10 @@ public class ZpglServiceImpl implements ZpglService {
 		if("0".equals(recruitDataBean.getPloitical())) {
 			recruitDataBean.setPloitical("群众");
 		}
-		if("1".equals(recruitDataBean.getMarital())) {
+		if("1".equals(recruitDataBean.getPloitical())) {
 			recruitDataBean.setPloitical("团员");
 		}
-		if("2".equals(recruitDataBean.getMarital())) {
+		if("2".equals(recruitDataBean.getPloitical())) {
 			recruitDataBean.setPloitical("党员");
 		}
 		// 性别
@@ -167,12 +167,27 @@ public class ZpglServiceImpl implements ZpglService {
 			recruitDataBean.setEducation("初中及以下");
 		}
 		
-		recruitDataBean.setUpdateAccount("");
+		// 是否合格
+		if("0".equals(recruitDataBean.getIsQualified())) {
+			recruitDataBean.setIsQualified("否");
+		}
+		if("1".equals(recruitDataBean.getIsQualified())) {
+			recruitDataBean.setIsQualified("是");
+		}
+		if("2".equals(recruitDataBean.getIsQualified())) {
+			recruitDataBean.setIsQualified("待定");
+		}
+		
+		recruitDataBean.setUpdateAccount("2143");
 		//是否有效（ 0：有效，1：失效）
 		recruitDataBean.setIsDelete("0");
 		//是否入职（0：未入职 1：在职 2：离职）
 		recruitDataBean.setIsEntry("0");
 		recruitDataBean.setUpdateDate(ToolClass.inquirNowDateTime());
+		
+		//logger.info(recruitDataBean.toString());
+		System.out.println(recruitDataBean.toString());
+		
 		zpglDao.addRecruitData(recruitDataBean);
 	}
 

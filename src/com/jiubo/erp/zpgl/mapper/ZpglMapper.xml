@@ -120,7 +120,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 						AND A.EDUCATION = '未知'
 					</when>
 					<when test="education ==1">
-						AND A.EDUCATION = '博士''
+						AND A.EDUCATION = '博士'
 					</when>
 					<when test="education ==2">
 						AND A.EDUCATION = '硕士研究生'
