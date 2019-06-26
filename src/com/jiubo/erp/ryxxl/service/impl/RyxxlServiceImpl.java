@@ -698,7 +698,7 @@ public class RyxxlServiceImpl implements RyxxlService {
             }
         }
     }
-    //查询过于繁琐，不再使用
+
     @Override
     public Map<String, Object> getChanges(Map<String, Object> paraMap) throws MessageException {
         Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -718,7 +718,9 @@ public class RyxxlServiceImpl implements RyxxlService {
             //统计各部门人数
             for (DepartmentBean departmentBean : list) {
                 int count = departmentBean.getResignation() + departmentBean.getDismiss() + departmentBean.getUnKnow();
+                //int count = (int) departmentBean.getCount();
                 int total = departmentBean.getJinSheng() + departmentBean.getJiangZhi() + departmentBean.getChange();
+                //int total = departmentBean.getTotal();
                 int begMon = departmentBean.getBegMonCount();
                 int endMon = departmentBean.getEndMonCount();
                 int resignationCount = departmentBean.getResignation();
@@ -842,7 +844,7 @@ public class RyxxlServiceImpl implements RyxxlService {
         }
         return dataMap;
     }
-
+    //查询过于繁琐，不再使用
     @Override
     public Map<String, Object> queryChanges(Map<String, Object> paraMap) throws MessageException {
         Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -1095,7 +1097,7 @@ public class RyxxlServiceImpl implements RyxxlService {
         //离职率 = 离职人数 / 平均人数
         bean.setQuitMix(bean.getAvgCount() == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(bean.getCount() / bean.getAvgCount() * 100, 2)));
         //异动率 = 异动人数 / 平均人数
-        bean.setChangeMix(bean.getAvgCount() == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(bean.getCount() / bean.getAvgCount() * 100, 2)));
+        bean.setChangeMix(bean.getAvgCount() == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(bean.getTotal() / bean.getAvgCount() * 100, 2)));
     }
 
 
@@ -1154,8 +1156,10 @@ public class RyxxlServiceImpl implements RyxxlService {
             for (DepartmentBean departmentBean : list) {
                 //离职人数
                 int total = departmentBean.getResignation() + departmentBean.getDismiss() + departmentBean.getUnKnow();
+                //int total = (int) departmentBean.getCount();
                 //异动人数
                 int total2 = departmentBean.getJinSheng() + departmentBean.getJiangZhi() + departmentBean.getChange();
+                //int total2 = departmentBean.getTotal();
                 int begMon = departmentBean.getBegMonCount();
                 int endMon = departmentBean.getEndMonCount();
                 int resignation = departmentBean.getResignation();
