@@ -18,12 +18,14 @@ import com.jiubo.erp.zpgl.bean.ZpPublishBean;
 import com.jiubo.erp.zpgl.dao.ZpglDao;
 import com.jiubo.erp.zpgl.service.ZpglService;
 import com.quicksand.push.ToolClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 @Transactional
 public class ZpglServiceImpl implements ZpglService {
 	
-//	Logger log = LoggerFactory.getLogger(ZpglServiceImpl.class);
+	Logger logger = LoggerFactory.getLogger(ZpglServiceImpl.class);
 	
 	@Autowired
 	private ZpglDao zpglDao;
@@ -66,6 +68,7 @@ public class ZpglServiceImpl implements ZpglService {
 		if(StringUtils.isBlank(recruitDataBean.getDepartment()))throw new MessageException("应聘部门不能为空！");
 		if(StringUtils.isBlank(recruitDataBean.getPosition()))throw new MessageException("应聘职位不能为空！");
 		if(StringUtils.isBlank(recruitDataBean.getRecruitDate()))throw new MessageException("面试时间不能为空！");
+		
 		zpglDao.updateRecruitData(recruitDataBean);
 	}
 
@@ -88,6 +91,83 @@ public class ZpglServiceImpl implements ZpglService {
 		if(StringUtils.isBlank(recruitDataBean.getDepartment()))throw new MessageException("应聘部门不能为空！");
 		if(StringUtils.isBlank(recruitDataBean.getPosition()))throw new MessageException("应聘职位不能为空！");
 		if(StringUtils.isBlank(recruitDataBean.getRecruitDate()))throw new MessageException("面试时间不能为空！");
+		
+		// 基本信息
+		
+		// 户口性质
+		if("0".equals(recruitDataBean.getAccountProp())) {
+			recruitDataBean.setAccountProp("农业");
+		}
+		if("1".equals(recruitDataBean.getAccountProp())) {
+			recruitDataBean.setAccountProp("非农业");
+		}
+		// 血型
+		if("0".equals(recruitDataBean.getBloodType())) {
+			recruitDataBean.setBloodType("A");
+		}
+		if("1".equals(recruitDataBean.getBloodType())) {
+			recruitDataBean.setBloodType("B");
+		}
+		if("2".equals(recruitDataBean.getBloodType())) {
+			recruitDataBean.setBloodType("O");
+		}
+		if("3".equals(recruitDataBean.getBloodType())) {
+			recruitDataBean.setBloodType("AB");
+		}
+		if("4".equals(recruitDataBean.getBloodType())) {
+			recruitDataBean.setBloodType("特殊");
+		}
+		// 婚否
+		if("0".equals(recruitDataBean.getMarital())) {
+			recruitDataBean.setMarital("未婚");
+		}
+		if("1".equals(recruitDataBean.getMarital())) {
+			recruitDataBean.setMarital("已婚");
+		}
+		// 政治面貌
+		if("0".equals(recruitDataBean.getPloitical())) {
+			recruitDataBean.setPloitical("群众");
+		}
+		if("1".equals(recruitDataBean.getMarital())) {
+			recruitDataBean.setPloitical("团员");
+		}
+		if("2".equals(recruitDataBean.getMarital())) {
+			recruitDataBean.setPloitical("党员");
+		}
+		// 性别
+		if("0".equals(recruitDataBean.getSex())) {
+			recruitDataBean.setSex("女");
+		}
+		if("1".equals(recruitDataBean.getSex())) {
+			recruitDataBean.setSex("男");
+		}
+		
+		// 学历经验
+		
+		// 学历
+		if("0".equals(recruitDataBean.getEducation())) {
+			recruitDataBean.setEducation("未知");
+		}
+		if("1".equals(recruitDataBean.getEducation())) {
+			recruitDataBean.setEducation("博士");
+		}
+		if("2".equals(recruitDataBean.getEducation())) {
+			recruitDataBean.setEducation("硕士研究生");
+		}
+		if("3".equals(recruitDataBean.getEducation())) {
+			recruitDataBean.setEducation("本科");
+		}
+		if("4".equals(recruitDataBean.getEducation())) {
+			recruitDataBean.setEducation("专科");
+		}
+		if("5".equals(recruitDataBean.getEducation())) {
+			recruitDataBean.setEducation("高中/中专");
+		}
+		if("6".equals(recruitDataBean.getEducation())) {
+			recruitDataBean.setEducation("初中及以下");
+		}
+		
+		recruitDataBean.setUpdateAccount("");
 		//是否有效（ 0：有效，1：失效）
 		recruitDataBean.setIsDelete("0");
 		//是否入职（0：未入职 1：在职 2：离职）
@@ -100,12 +180,11 @@ public class ZpglServiceImpl implements ZpglService {
 	public List<ZpPlanBean> queryZpPlan(ZpPlanBean zpPlanBean) throws MessageException {
 		if(StringUtils.isBlank(zpPlanBean.getBegDate()) || StringUtils.isBlank(zpPlanBean.getEndDate()))throw new MessageException("查询时间（begDate或endDate）为空！");
 		try {
-//			zpPlanBean.setBegDate(TimeUtil.getYearMonthStr(TimeUtil.parseAnyDate(zpPlanBean.getBegDate())));
-//			zpPlanBean.setEndDate(TimeUtil.getYearMonthStr(TimeUtil.dateAdd(TimeUtil.parseAnyDate(zpPlanBean.getEndDate()), TimeUtil.UNIT_MONTH, 1)));
 			zpPlanBean.setEndDate(TimeUtil.getDateYYYY_MM_DD_HH_MM_SS(TimeUtil.dateAdd(TimeUtil.parseAnyDate(zpPlanBean.getEndDate()), TimeUtil.UNIT_DAY, 1)));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+//		log.info(zpglDao.queryZpPlan(zpPlanBean).toString());
 		return zpglDao.queryZpPlan(zpPlanBean);
 	}
 
@@ -123,10 +202,13 @@ public class ZpglServiceImpl implements ZpglService {
 
 	@Override
 	public void updateZpPlan(ZpPlanBean zpPlanBean)throws MessageException  {
-		if(StringUtils.isBlank(zpPlanBean.getPlanId()))throw new MessageException("招聘信息id为空！");
-		if(StringUtils.isBlank(zpPlanBean.getPosition()))throw new MessageException("职位不能为空！");
-		if(StringUtils.isBlank(zpPlanBean.getPlanDate()))throw new MessageException("计划月份不能为空！");
-		zpglDao.updateZpPlan(zpPlanBean);
+		try {
+			if(StringUtils.isBlank(zpPlanBean.getPlanId()))throw new MessageException("招聘信息id为空！");
+			zpglDao.updateZpPlan(zpPlanBean);
+			logger.debug("----------------招聘计划更新成功--------------------");
+		} catch (Exception e) {
+			logger.debug("----------------招聘计划更新出错--------------------");
+		}	
 	}
 
 	@Override
@@ -137,6 +219,7 @@ public class ZpglServiceImpl implements ZpglService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
 		return zpglDao.queryZpPublish(zpPublishBean);
 	}
 
