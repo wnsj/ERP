@@ -160,8 +160,19 @@
     <!-- 查询不同岗位类型离职人数 -->
     <select id="queryOutEmpPositionType" resultType="java.util.Map">
         SELECT B.POSITIONTYPE_NAME,B.POSITIONTYPE_ID,COUNT(1) SUMCOUNT,
-        (SELECT COUNT(1) FROM T_EMPLOYEE_BASIC D,ACCOUNT_DATA C WHERE C.ACCOUNT_ID = D.ACCOUNT AND D.STATE = 2
-        AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate}) AllCOUNT
+        (
+            SELECT
+            COUNT(1)
+            FROM T_EMPLOYEE_BASIC D,ACCOUNT_DATA C
+            WHERE C.ACCOUNT_ID = D.ACCOUNT AND D.STATE = 2
+            AND D.RESIGNDATE >= #{begDate} AND D.RESIGNDATE &lt; #{endDate}
+            <if test="deptId != null and deptId != '' ">
+                AND D.DEPARTMENT_ID = #{deptId}
+            </if>
+            <if test="posId != null and posId != ''">
+                AND C.POSITION_ID = #{posId}
+            </if>
+        ) AllCOUNT
         FROM POSITION_DATA A,POSITION_TYPE B,ACCOUNT_DATA C,T_EMPLOYEE_BASIC D
         WHERE A.POSITIONTYPE_ID = B.POSITIONTYPE_ID AND C.POSITION_ID = A.POSITION_ID AND C.ACCOUNT_ID = D.ACCOUNT AND
         D.STATE = 2
@@ -653,28 +664,28 @@
     <select id="queryOutEmpRank" resultType="java.util.Map">
         SELECT TOP 5
             SUM(NUM) outEmpCount,TOTAL,
-            CASE WHEN TOTAL > 0 THEN CAST(CAST(SUM(NUM) * 1.0 / TOTAL * 100 AS DECIMAL(10,2)) AS VARCHAR(10)) + '%'     ELSE '0%' END AS RATE     ,
-            POSITION_NAME ,SUM(CASE RESIGNTYPE WHEN '´ÇÖ°' THEN NUM ELSE 0 END) AS C1,
-            SUM(CASE RESIGNTYPE WHEN '´ÇÍË' THEN NUM ELSE 0 END) AS C2     ,
-            SUM(CASE WHEN RESIGNTYPE = 'ÆäËû' OR RESIGNTYPE = '' OR RESIGNTYPE IS NULL THEN NUM ELSE 0 END) AS C3
-            FROM (
+            CASE WHEN TOTAL > 0 THEN CAST(CAST(SUM(NUM) * 1.0 / TOTAL * 100 AS DECIMAL(10,2)) AS VARCHAR(10)) + '%'     ELSE '0%' END AS RATE,
+            POSITION_NAME ,SUM(CASE RESIGNTYPE WHEN '辞职' THEN NUM ELSE 0 END) AS C1,
+            SUM(CASE RESIGNTYPE WHEN '辞退' THEN NUM ELSE 0 END) AS C2,
+            SUM(CASE WHEN RESIGNTYPE = '其他' OR RESIGNTYPE = '' OR RESIGNTYPE IS NULL THEN NUM ELSE 0 END) AS C3
+        FROM (
             SELECT
-            COUNT(B.ID) NUM,
-            P.POSITION_NAME,
-            B.RESIGNTYPE
-        FROM T_EMPLOYEE_BASIC B WITH (NOLOCK)
-        LEFT JOIN ACCOUNT_DATA A WITH (NOLOCK)
-        ON B.ACCOUNT = A.ACCOUNT_ID
-        LEFT JOIN POSITION_DATA P WITH (NOLOCK)
-        ON A.POSITION_ID = P.POSITION_ID
-        WHERE B.STATE = 2  AND RESIGNDATE >= #{begDate}  AND RESIGNDATE &lt;= #{endDate}
-        <if test="deptId != null and deptId != '' ">
-          AND B.DEPARTMENT_ID = #{deptId}
-        </if>
-        <if test="posId != null and posId != ''">
-          AND P.POSITION_ID = #{posId}
-        </if>
-        GROUP BY P.POSITION_NAME ,B.RESIGNTYPE
+                COUNT(B.ID) NUM,
+                P.POSITION_NAME,
+                B.RESIGNTYPE
+            FROM T_EMPLOYEE_BASIC B WITH (NOLOCK)
+            LEFT JOIN ACCOUNT_DATA A WITH (NOLOCK)
+            ON B.ACCOUNT = A.ACCOUNT_ID
+            LEFT JOIN POSITION_DATA P WITH (NOLOCK)
+            ON A.POSITION_ID = P.POSITION_ID
+            WHERE B.STATE = 2  AND RESIGNDATE >= #{begDate}  AND RESIGNDATE &lt;= #{endDate}
+            <if test="deptId != null and deptId != '' ">
+              AND B.DEPARTMENT_ID = #{deptId}
+            </if>
+            <if test="posId != null and posId != ''">
+              AND P.POSITION_ID = #{posId}
+            </if>
+            GROUP BY P.POSITION_NAME ,B.RESIGNTYPE
         )TAB1,  (
             SELECT
                 COUNT(ID) TOTAL
@@ -695,8 +706,8 @@
             ISNULL(TAB1.LACKNUM, 0) AS LACKNUM,
             ISNULL(TAB2.NUM, 0) AS BEGMONCOUNT,
             ISNULL(TAB1.PLANNUM, 0) AS PLANNUM,
-            ISNULL(TAB1.PHONENUM, 0) AS FACECOUNT ,
-            ISNULL(TAB3.RECRUITNUM, 0) AS RECRUITNUM,
+            ISNULL(TAB1.PHONENUM, 0) AS  RECRUITNUM,
+            ISNULL(TAB3.RECRUITNUM, 0) AS  FACECOUNT,
             ISNULL(TAB3.QNUM, 0) AS QUALIFIEDCOUNT ,
             ISNULL(TAB3.ENUM, 0) AS ENTRYCOUNT,
             ISNULL(TAB4.NUM, 0) AS ENDMONCOUNT ,
@@ -854,19 +865,19 @@
                 LEFT JOIN T_ATT_ATTENDANCE A
                 ON A.USERID = B.ACCOUNT  AND A.SHIFTID = TS.SHIFTID AND A.ATTTIME >=  #{begDate} AND A.ATTTIME &lt; #{endDate}
                 WHERE 1 = 1  AND B.ISDELETE = 0
-                <if test="isEntry = 0 and isQuit = 0">
-                   AND ((B.STATE = 1 AND B.ENTRYDATE &lt; #{endDate}) OR (B.ENTRYDATE &lt; #{endDate} AND B.RESIGNDATE >=  #{begDate}))
+                <if test="isEntry == 0 and isQuit == 0">
+                  AND ((B.STATE = 1 AND B.ENTRYDATE &lt; #{endDate}) OR (B.ENTRYDATE &lt; #{endDate} AND B.RESIGNDATE >=  #{begDate}))
                 </if>
-                <if test="isEntry = 1 and isQuit = 1">
-                   AND ((B.STATE = 1 AND B.ENTRYDATE &lt;  #{begDate}) OR (B.ENTRYDATE &lt; #{begDate} AND B.RESIGNDATE >= #{endDate}))
+                <if test="isEntry == 1 and isQuit == 1">
+                    AND ((B.STATE = 1 AND B.ENTRYDATE &lt;  #{begDate}) OR (B.ENTRYDATE &lt; #{begDate} AND B.RESIGNDATE >= #{endDate}))
                 </if>
-                <if test="isEntry = 1 and isQuit = 0">
-                   AND ((B.STATE = 1 AND B.ENTRYDATE &lt;  #{begDate} OR (B.ENTRYDATE &lt;  #{begDate} AND B.RESIGNDATE >= #{begDate}))
+                <if test="isEntry == 1 and isQuit == 0">
+                   AND ((B.STATE = 1 AND B.ENTRYDATE &lt;  #{begDate}) OR (B.ENTRYDATE &lt;  #{begDate} AND B.RESIGNDATE >= #{begDate}))
                 </if>
-                <if test="isEntry = 0 and isQuit = 1">
-                   AND ((B.STATE = 1 AND B.ENTRYDATE &lt; #{endDate}) OR (B.ENTRYDATE &lt; #{endDate} AND B.RESIGNDATE >= #{endDate}))
+                <if test="isEntry == 0 and isQuit == 1">
+                    AND ((B.STATE = 1 AND B.ENTRYDATE &lt; #{endDate}) OR (B.ENTRYDATE &lt; #{endDate} AND B.RESIGNDATE >= #{endDate}))
                 </if>
-                GROUP BY B.DEPARTMENT_ID, B.ACCOUNT, TS.SHIFTID, A.SHIFTID, TS.TYPE
+             GROUP BY B.DEPARTMENT_ID, B.ACCOUNT, TS.SHIFTID, A.SHIFTID, TS.TYPE
             )T
             GROUP BY DEPARTMENT_ID, ACCOUNT
         )TT2
