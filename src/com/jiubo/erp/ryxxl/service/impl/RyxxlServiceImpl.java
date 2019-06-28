@@ -259,37 +259,37 @@ public class RyxxlServiceImpl implements RyxxlService {
         double m = 0;
         data = new HashMap<String, Object>();
         //未转正
-        m = MapUtil.getDouble(resultMap, "MM_1", MapUtil.ALLOW_NULL);
+        m = MapUtil.getDouble(resultMap, "MM_0", MapUtil.ALLOW_NULL);
         m = m > 0 ? m : 0;
         data.put("noCorrection", (int) m);
         data.put("noCorrectionMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
         //1-3月
-        m = MapUtil.getDouble(resultMap, "MM_2", MapUtil.ALLOW_NULL);
+        m = MapUtil.getDouble(resultMap, "MM_1", MapUtil.ALLOW_NULL);
         m = m > 0 ? m : 0;
         data.put("oneThreeCount", (int) m);
         data.put("oneThreeMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
         //4-6月
-        m = MapUtil.getDouble(resultMap, "MM_3", MapUtil.ALLOW_NULL);
+        m = MapUtil.getDouble(resultMap, "MM_2", MapUtil.ALLOW_NULL);
         m = m > 0 ? m : 0;
         data.put("fourSixCount", (int) m);
         data.put("fourSixMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
         //7-1年
-        m = MapUtil.getDouble(resultMap, "MM_4", MapUtil.ALLOW_NULL);
+        m = MapUtil.getDouble(resultMap, "MM_3", MapUtil.ALLOW_NULL);
         m = m > 0 ? m : 0;
         data.put("sevenCount", (int) m);
         data.put("sevenMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
         //满一年
-        m = MapUtil.getDouble(resultMap, "MM_5", MapUtil.ALLOW_NULL);
+        m = MapUtil.getDouble(resultMap, "MM_4", MapUtil.ALLOW_NULL);
         m = m > 0 ? m : 0;
         data.put("oneYearCount", (int) m);
         data.put("oneYearMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
         //满两年
-        m = MapUtil.getDouble(resultMap, "MM_6", MapUtil.ALLOW_NULL);
+        m = MapUtil.getDouble(resultMap, "MM_5", MapUtil.ALLOW_NULL);
         m = m > 0 ? m : 0;
         data.put("twoYearCount", (int) m);
         data.put("twoYearMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
         //3年以上
-        m = MapUtil.getDouble(resultMap, "MM_7", MapUtil.ALLOW_NULL);
+        m = MapUtil.getDouble(resultMap, "MM_6", MapUtil.ALLOW_NULL);
         m = m > 0 ? m : 0;
         data.put("threeYearCount", (int) m);
         data.put("threeYearMix", sumCount == 0 ? 0 : DoubleUtil.roundByScale(m / sumCount * 100, 2) + "%");
@@ -1097,7 +1097,7 @@ public class RyxxlServiceImpl implements RyxxlService {
         //离职率 = 离职人数 / 平均人数
         bean.setQuitMix(bean.getAvgCount() == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(bean.getCount() / bean.getAvgCount() * 100, 2)));
         //异动率 = 异动人数 / 平均人数
-        bean.setChangeMix(bean.getAvgCount() == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(bean.getTotal() / bean.getAvgCount() * 100, 2)));
+        bean.setChangeMix(bean.getAvgCount() == 0 ? 0 : Double.valueOf(DoubleUtil.roundByScale(bean.getCount() / bean.getAvgCount() * 100, 2)));
     }
 
 

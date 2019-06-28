@@ -75,7 +75,6 @@ public class KqController {
 			ap = MapUtil.transJsonStrToObjectIgnoreCase(str, AttParam.class);
 
 			ap.setBeginDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getBeginDate()));
-//			ap.setEndDate(TimeUtil.YYYYMMDD_SHIFT_YYYYMMDDHHMMSSSSS(ap.getEndDate()));
 
 			List<KqInfoResult> kqInfoRes = this.service.selectKqInfoList(ap);
 
