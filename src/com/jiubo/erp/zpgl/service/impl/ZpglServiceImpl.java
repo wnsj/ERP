@@ -68,7 +68,6 @@ public class ZpglServiceImpl implements ZpglService {
 		if(StringUtils.isBlank(recruitDataBean.getDepartment()))throw new MessageException("应聘部门不能为空！");
 		if(StringUtils.isBlank(recruitDataBean.getPosition()))throw new MessageException("应聘职位不能为空！");
 		if(StringUtils.isBlank(recruitDataBean.getRecruitDate()))throw new MessageException("面试时间不能为空！");
-		
 		zpglDao.updateRecruitData(recruitDataBean);
 	}
 
