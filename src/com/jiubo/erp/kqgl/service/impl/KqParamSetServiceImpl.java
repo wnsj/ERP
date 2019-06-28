@@ -256,7 +256,7 @@ public class KqParamSetServiceImpl implements KqParamSetService {
     @Override
     public List<DepartmentBean> composeDept(List<DepartmentBean> deptList) throws MessageException {
         List<DepartmentBean> departmentBeans = new ArrayList<DepartmentBean>();
-        if (deptList == null)throw new MessageException("部门List为空!");
+        if (deptList == null) throw new MessageException("部门List为空!");
         Map<String, List<DepartmentBean>> sonMap = new HashMap<String, List<DepartmentBean>>();
         for (DepartmentBean departmentBean : deptList) {
             if ("0".equals(departmentBean.getParentID())) {
@@ -281,8 +281,8 @@ public class KqParamSetServiceImpl implements KqParamSetService {
     }
 
     //为list中bean的名字添加前缀
-    public void addDeptPreFix(List<DepartmentBean> sourceList, List<DepartmentBean> targetList)throws MessageException{
-        if (sourceList == null || targetList == null)throw new MessageException("sourceList or targetList is null!");
+    public void addDeptPreFix(List<DepartmentBean> sourceList, List<DepartmentBean> targetList) throws MessageException {
+        if (sourceList == null || targetList == null) throw new MessageException("sourceList or targetList is null!");
         for (int i = 0; i < sourceList.size(); i++) {
             DepartmentBean departmentBean = sourceList.get(i);
             DepartmentBean deptBean = new DepartmentBean();
@@ -324,7 +324,7 @@ public class KqParamSetServiceImpl implements KqParamSetService {
         List<DepartmentBean> sonBeanList = sonMap.get(parentBean.getID());
         if (sonBeanList == null) {
             sonBeanList = new ArrayList<DepartmentBean>();
-        }else{
+        } else {
             for (DepartmentBean departmentBean : sonBeanList) {
                 List<DepartmentBean> childBeanList = sonMap.get(departmentBean.getID());
                 if (childBeanList != null) setDeptChildren(departmentBean, sonMap);
@@ -514,7 +514,7 @@ public class KqParamSetServiceImpl implements KqParamSetService {
  * public List<DepartmentBean> queryDepartmentByLevel(int level)throws
  * MessageException{ //查询父级目录 List<DepartmentBean> departmentList =
  * queryDepartmentByPId("0"); if(level == 1) {
- * 
+ *
  * }else if(level == 2) { for(DepartmentBean departmentBean : departmentList) {
  * departmentBean.setChildren(queryDepartmentByPId(departmentBean.getID())); }
  * }else if(level == 3) { for(DepartmentBean departmentBean : departmentList) {

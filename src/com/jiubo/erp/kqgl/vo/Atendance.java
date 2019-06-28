@@ -1,55 +1,55 @@
 package com.jiubo.erp.kqgl.vo;
 
 public class Atendance {
-	private String AtendanceId;
-	private String name;
-	private String earlyMinutes;
-	private String laterMinutes;
-	private String isValid;
-	
-	public Atendance() {
-		// TODO Auto-generated constructor stub
-	}
+    private String AtendanceId;
+    private String name;
+    private String earlyMinutes;
+    private String laterMinutes;
+    private String isValid;
 
-	public String getAtendanceId() {
-		return AtendanceId;
-	}
+    public Atendance() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public void setAtendanceId(String atendanceId) {
-		AtendanceId = atendanceId;
-	}
+    public String getAtendanceId() {
+        return AtendanceId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setAtendanceId(String atendanceId) {
+        AtendanceId = atendanceId;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getEarlyMinutes() {
-		return earlyMinutes;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setEarlyMinutes(String earlyMinutes) {
-		this.earlyMinutes = earlyMinutes;
-	}
+    public String getEarlyMinutes() {
+        return earlyMinutes;
+    }
 
-	public String getLaterMinutes() {
-		return laterMinutes;
-	}
+    public void setEarlyMinutes(String earlyMinutes) {
+        this.earlyMinutes = earlyMinutes;
+    }
 
-	public void setLaterMinutes(String laterMinutes) {
-		this.laterMinutes = laterMinutes;
-	}
+    public String getLaterMinutes() {
+        return laterMinutes;
+    }
 
-	public String getIsValid() {
-		return isValid;
-	}
+    public void setLaterMinutes(String laterMinutes) {
+        this.laterMinutes = laterMinutes;
+    }
 
-	public void setIsValid(String isValid) {
-		this.isValid = isValid;
-	}
-	
-	
+    public String getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(String isValid) {
+        this.isValid = isValid;
+    }
+
+
 }

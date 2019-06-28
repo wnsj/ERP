@@ -12,30 +12,30 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 
 public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInterceptor {
 
-	@Override
+    @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-            Map<String, Object> attributes) throws Exception {
+                                   Map<String, Object> attributes) throws Exception {
         // TODO Auto-generated method stub
         System.out.println("Before Handshake");
         if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
             HttpSession session = servletRequest.getServletRequest().getSession(false);
             if (session != null) {
-                //Ê¹ÓÃuserNameÇø·ÖWebSocketHandler£¬ÒÔ±ã¶¨Ïò·¢ËÍÏûÏ¢
+                //Ê¹ï¿½ï¿½userNameï¿½ï¿½ï¿½ï¿½WebSocketHandlerï¿½ï¿½ï¿½Ô±ã¶¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
                 String userName = (String) session.getAttribute("SESSION_USERNAME");
-                if (userName==null) {
-                    userName="default-system";
+                if (userName == null) {
+                    userName = "default-system";
                 }
-                attributes.put("WEBSOCKET_USERNAME",userName);
+                attributes.put("WEBSOCKET_USERNAME", userName);
             }
         }
         return super.beforeHandshake(request, response, wsHandler, attributes);
-        
+
     }
-    
+
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-            Exception ex) {
+                               Exception ex) {
         // TODO Auto-generated method stub
         super.afterHandshake(request, response, wsHandler, ex);
     }

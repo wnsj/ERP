@@ -179,7 +179,7 @@ public interface KqParamSetService {
     /**
      * @desc:查询部门信息
      * @param:
-     * @return: List<Map<String,Object>>
+     * @return: List<Map < String , Object>>
      * @Create at: 2019-05-02
      * @author: dx
      * @version: 1.0
@@ -290,7 +290,7 @@ public interface KqParamSetService {
      * @desc:查询部门及部门下的员工
      * @param:flag,是否加载员工
      * @param:flag2,是否加载部门下的岗位
-     * @return: Map<String,Object>
+     * @return: Map<String , Object>
      * @Create at: 2019-05-04
      * @author: dx
      * @version: 1.0
@@ -310,7 +310,7 @@ public interface KqParamSetService {
     /**
      * @desc:查询全部员工的排班计划
      * @param:
-     * @return: List<Map<String,Object>>
+     * @return: List<Map < String , Object>>
      * @Create at: 2019-05-07
      * @author: dx
      * @version: 1.0
@@ -359,16 +359,16 @@ public interface KqParamSetService {
     public List<DepartmentBean> queryDeptTree(Map<String, Object> param) throws MessageException;
 
     /* *
-    * @desc:查询部门与职位关系
-    * @author: dx
-    * @date: 2019-06-19 17:24:58
-    * @param deptId : 部门id
-    * @param postId : 职位id
-    * @param isPoint : 是否是重点职位（传空表示不是重点职位，其他均表示重点职位）
-    * @return: java.util.List<com.jiubo.erp.kqgl.bean.PositionDataBean>
-    * @throws:
-    * @version: 1.0
-    **/
+     * @desc:查询部门与职位关系
+     * @author: dx
+     * @date: 2019-06-19 17:24:58
+     * @param deptId : 部门id
+     * @param postId : 职位id
+     * @param isPoint : 是否是重点职位（传空表示不是重点职位，其他均表示重点职位）
+     * @return: java.util.List<com.jiubo.erp.kqgl.bean.PositionDataBean>
+     * @throws:
+     * @version: 1.0
+     **/
     public List<PositionDataBean> queryDeptPost(String deptId, String postId, String isPoint);
 
     /* *
@@ -379,18 +379,18 @@ public interface KqParamSetService {
      * @throws:
      * @version: 1.0
      **/
-    public List<DepartmentBean> getDept()throws MessageException;
+    public List<DepartmentBean> getDept() throws MessageException;
 
     /* *
-    * @desc:将子部门与父级部门组合
-    * @author: dx
-    * @date: 2019-06-22 13:55:40
-    * @param deptList :所有部门
-    * @return: java.util.List<com.jiubo.erp.rygl.bean.DepartmentBean>
-    * @throws:
-    * @version: 1.0
-    **/
-    public List<DepartmentBean> composeDept(List<DepartmentBean> deptList)throws MessageException;
+     * @desc:将子部门与父级部门组合
+     * @author: dx
+     * @date: 2019-06-22 13:55:40
+     * @param deptList :所有部门
+     * @return: java.util.List<com.jiubo.erp.rygl.bean.DepartmentBean>
+     * @throws:
+     * @version: 1.0
+     **/
+    public List<DepartmentBean> composeDept(List<DepartmentBean> deptList) throws MessageException;
 
     /* *
      * @desc:为DepartmentBeanList中的Bean添加前缀
@@ -402,7 +402,7 @@ public interface KqParamSetService {
      * @throws:
      * @version: 1.0
      **/
-    public void addDeptPreFix(List<DepartmentBean> sourceList, List<DepartmentBean> targetList)throws MessageException;
+    public void addDeptPreFix(List<DepartmentBean> sourceList, List<DepartmentBean> targetList) throws MessageException;
 }
 //班次类别
 //public List<AttShift> queryAttShift();

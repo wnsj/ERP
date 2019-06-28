@@ -14,6 +14,7 @@ function boxheight() { //函数：获取尺寸
     document.getElementById("Adiv").style.height = winHeight + "px";
     document.getElementById("Cdiv").style.height = winHeight + "px";
 }
+
 window.onresize = boxheight; //窗口或框架被调整大小时执行
 
 $(document).ready(function () {

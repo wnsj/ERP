@@ -878,7 +878,7 @@ public class KqParamSetController {
             JSONObject jsObj = JSONObject.parseObject(str);
             if (!jsObj.containsKey("positionTypeName") || jsObj.get("positionTypeName") == null
                     || !jsObj.containsKey("positionTypeId") || jsObj.get("positionTypeId") == null
-                    ) throw new MessageException("岗位类型名字或岗位类型id为空！");
+            ) throw new MessageException("岗位类型名字或岗位类型id为空！");
             PositionTypeBean positionTypeBean = new PositionTypeBean();
             positionTypeBean.setPositionType_ID(jsObj.getString("positionTypeId"));
             positionTypeBean.setPositionType_Name(jsObj.getString("positionTypeName"));
@@ -1215,7 +1215,7 @@ public class KqParamSetController {
             /*if (StringUtils.isNotBlank(params)){
                 Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
             }*/
-            result.put(Constant.Result.RETDATA,KqParamSetService.queryDeptTree(null));
+            result.put(Constant.Result.RETDATA, KqParamSetService.queryDeptTree(null));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();

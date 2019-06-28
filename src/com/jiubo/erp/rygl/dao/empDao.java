@@ -17,58 +17,60 @@ import com.jiubo.erp.rygl.vo.UserFamily;
 import com.jiubo.erp.rygl.vo.UserInfo;
 
 public interface empDao {
-	
-	List<Account> selectAccountList(Account account);
-	
-	Integer updataAccountPwd(Account accountPwd);
-	
-	List<QueryResult> searchEmplist(QueryParam param);
-	
-	List<LeaveResign> selectLeaveList(LeaveResign lr);
-	
-	List<QueryFamilyResult> searchFamilyList(QueryFamilyResult param);
 
-	List<ProjectDataBean> selectProjectList();
-	
-	List<Position> selectPositionList();
-	
-	List<Nation> selectNationList();
-	
-	List<DepartmentBean> selectDepartList(DepartmentBean dbp);//查询用户部门ID
-	
-	List<UserInfo> searchUBInfo(UserInfo userInfo);
-	
-	List<QueryFamilyResult> singleFamilyList(QueryFamilyResult qfr);
-	
-	List<UserInfo> searchUDInfo(UserInfo userInfo);
-	
-	Integer insertBaseInfo(UserInfo userInfo);
-	
-	Integer insertAccountInfo(Account account);
-	
-	Integer updataBaseInfo(UserInfo userInfo);
-	
-	Integer shiftPosition(UserInfo userInfo);
-	Integer employeeResgin(UserInfo userInfo);
-	Integer deleteEmployee(UserInfo userInfo);
-	
-	
-	Integer insertDetailInfo(UserInfo userInfo);
-	
-	Integer updataDetialInfo(UserInfo userInfo);
-	
-	Integer insertfamilyInfo(QueryFamilyResult qfr);
-	
-	Integer updatafamilyInfo(QueryFamilyResult qfr);
-	
-	List<PositionShift> selectShiftInfo(PositionShift pShift);
+    List<Account> selectAccountList(Account account);
 
-	
-	Integer updateLeaveReason(LeaveResign lResign);
-	
-	Integer deleteLeaveReason(LeaveResign lResign);
-	
-	Integer addLeaveReason(LeaveResign lResign);
-	
-	
+    Integer updataAccountPwd(Account accountPwd);
+
+    List<QueryResult> searchEmplist(QueryParam param);
+
+    List<LeaveResign> selectLeaveList(LeaveResign lr);
+
+    List<QueryFamilyResult> searchFamilyList(QueryFamilyResult param);
+
+    List<ProjectDataBean> selectProjectList();
+
+    List<Position> selectPositionList();
+
+    List<Nation> selectNationList();
+
+    List<DepartmentBean> selectDepartList(DepartmentBean dbp);//查询用户部门ID
+
+    List<UserInfo> searchUBInfo(UserInfo userInfo);
+
+    List<QueryFamilyResult> singleFamilyList(QueryFamilyResult qfr);
+
+    List<UserInfo> searchUDInfo(UserInfo userInfo);
+
+    Integer insertBaseInfo(UserInfo userInfo);
+
+    Integer insertAccountInfo(Account account);
+
+    Integer updataBaseInfo(UserInfo userInfo);
+
+    Integer shiftPosition(UserInfo userInfo);
+
+    Integer employeeResgin(UserInfo userInfo);
+
+    Integer deleteEmployee(UserInfo userInfo);
+
+
+    Integer insertDetailInfo(UserInfo userInfo);
+
+    Integer updataDetialInfo(UserInfo userInfo);
+
+    Integer insertfamilyInfo(QueryFamilyResult qfr);
+
+    Integer updatafamilyInfo(QueryFamilyResult qfr);
+
+    List<PositionShift> selectShiftInfo(PositionShift pShift);
+
+
+    Integer updateLeaveReason(LeaveResign lResign);
+
+    Integer deleteLeaveReason(LeaveResign lResign);
+
+    Integer addLeaveReason(LeaveResign lResign);
+
+
 }

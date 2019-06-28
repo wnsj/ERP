@@ -15,17 +15,17 @@ import org.apache.http.HttpStatus;
 
 import com.aliyun.oss.common.utils.HttpUtil;
 
-public class CorsFilter implements Filter{
-	@Override
+public class CorsFilter implements Filter {
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
- 
+
     }
- 
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        HttpServletRequest request = (HttpServletRequest)servletRequest;
- 
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+
 //        String origin = request.getHeader("Origin");
 //        response.setHeader("Access-Control-Allow-Origin", origin);
 //        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
@@ -39,8 +39,7 @@ public class CorsFilter implements Filter{
 //            filterChain.doFilter(servletRequest, servletResponse);
 //        }
 
-        
-        
+
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "*");
@@ -48,18 +47,18 @@ public class CorsFilter implements Filter{
         response.setHeader("Access-Control-Expose-Headers", "*");
 //        response.setHeader("token", "xxx"); //设置响应头
         String method = request.getMethod();
-        if(method.equalsIgnoreCase("OPTIONS")){
+        if (method.equalsIgnoreCase("OPTIONS")) {
 //        	System.out.println("请求走-----1");
             servletResponse.getOutputStream().write("Success".getBytes("utf-8"));
-        }else{
+        } else {
 //        	System.out.println("请求走-----2");
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }
- 
+
     @Override
     public void destroy() {
- 
+
     }
 
 }

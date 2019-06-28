@@ -67,16 +67,16 @@ public interface RyxxlDao {
     public void updateAddDeptAttendance(DepartmentAttendanceBean departmentAttendanceBean);
 
     //人员异动查询报表
-    public List<DepartmentBean> getChanges(@Param("begDate") String begDate,@Param("endDate") String endDate);
+    public List<DepartmentBean> getChanges(@Param("begDate") String begDate, @Param("endDate") String endDate);
 
     //离职人员分析报表（查询工龄，教育结构）
-    public Map<String,Object> getOutEmpWorkEdu(@Param("begDate") String begDate, @Param("endDate") String endDate, @Param("deptId") String deptId, @Param("posId") String posId);
+    public Map<String, Object> getOutEmpWorkEdu(@Param("begDate") String begDate, @Param("endDate") String endDate, @Param("deptId") String deptId, @Param("posId") String posId);
 
     //离职人员分析报表（重点岗位查询）
-    public List<Map<String,Object>> queryOutEmpIsPoint(@Param("begDate") String begDate, @Param("endDate") String endDate, @Param("deptId") String deptId, @Param("posId") String posId);
+    public List<Map<String, Object>> queryOutEmpIsPoint(@Param("begDate") String begDate, @Param("endDate") String endDate, @Param("deptId") String deptId, @Param("posId") String posId);
 
     //离职人员分析报表（排名分析）
-    public List<Map<String,Object>> queryOutEmpRank(@Param("begDate") String begDate, @Param("endDate") String endDate, @Param("deptId") String deptId, @Param("posId") String posId);
+    public List<Map<String, Object>> queryOutEmpRank(@Param("begDate") String begDate, @Param("endDate") String endDate, @Param("deptId") String deptId, @Param("posId") String posId);
 
     //招聘效果分析报表（招聘分析）
     public List<ZpxgpgBean> getRecruit(@Param("begDate") String begDate, @Param("endDate") String endDate, @Param("deptId") String deptId, @Param("posId") String posId);
@@ -85,5 +85,5 @@ public interface RyxxlDao {
     public List<ZpxgpgBean> getRecruitChannel(@Param("begDate") String begDate, @Param("endDate") String endDate);
 
     //人力资源利用率分析报表
-    public List<DepartmentBean> getDeptEmpClock(@Param("begDate") String begDate, @Param("endDate") String endDate,@Param("isEntry") String isEntry, @Param("isQuit") String isQuit);
+    public List<DepartmentBean> getDeptEmpClock(@Param("begDate") String begDate, @Param("endDate") String endDate, @Param("isEntry") String isEntry, @Param("isQuit") String isQuit);
 }

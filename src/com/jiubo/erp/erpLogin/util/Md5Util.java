@@ -23,7 +23,7 @@ public class Md5Util {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("Huh, UTF-8 should be supported?", e);
         }
- 
+
         //转换为十六进制字符串
         StringBuilder hex = new StringBuilder(hash.length * 2);
         for (byte b : hash) {
@@ -32,7 +32,7 @@ public class Md5Util {
         }
         return hex.toString().toLowerCase();
     }
- 
+
     /**
      * 将二进制字节数组转换为十六进制字符串
      *
@@ -54,7 +54,7 @@ public class Md5Util {
         }
         return hexStr.toString().toUpperCase();
     }
- 
+
     /**
      * Unicode中文编码转换成字符串
      */
@@ -69,11 +69,11 @@ public class Md5Util {
         return str;
     }
 
-  
-   public static void main(String[] args) {
-	   String a=Md5Util.md5Encrypt32Lower("admin1234");
-	   System.out.println(a);  
-   } 
-   
-    
+
+    public static void main(String[] args) {
+        String a = Md5Util.md5Encrypt32Lower("admin1234");
+        System.out.println(a);
+    }
+
+
 }

@@ -3,59 +3,55 @@ package com.jiubo.erp.kqgl.vo;
 import java.util.Date;
 
 public class Vacation {
-	private String id;
-	private String name;
-	private String isDelete;
-	private String createDate;
-	private String creator;
-	
-	public Vacation() {
-		// TODO Auto-generated constructor stub
-	}
+    private String id;
+    private String name;
+    private String isDelete;
+    private String createDate;
+    private String creator;
 
-	public String getId() {
-		return id;
-	}
+    public Vacation() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getIsDelete() {
-		return isDelete;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setIsDelete(String isDelete) {
-		this.isDelete = isDelete;
-	}
+    public String getIsDelete() {
+        return isDelete;
+    }
 
-	public String getCreateDate() {
-		return createDate;
-	}
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
 
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
-	}
+    public String getCreateDate() {
+        return createDate;
+    }
 
-	public String getCreator() {
-		return creator;
-	}
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
 
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-		
-	
+    public String getCreator() {
+        return creator;
+    }
 
-	
-	
-	
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+
 }

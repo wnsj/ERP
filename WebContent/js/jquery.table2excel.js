@@ -15,31 +15,31 @@
  *  Under MIT License
  */
 //table2excel.js
-;(function ( $, window, document, undefined ) {
+;(function ($, window, document, undefined) {
     var pluginName = "table2excel",
 
-    defaults = {
-        exclude: ".noExl",
-        name: "Table2Excel",
-        filename: "table2excel",
-        fileext: ".xls",
-        exclude_img: true,
-        exclude_links: true,
-        exclude_inputs: true
-    };
+        defaults = {
+            exclude: ".noExl",
+            name: "Table2Excel",
+            filename: "table2excel",
+            fileext: ".xls",
+            exclude_img: true,
+            exclude_links: true,
+            exclude_inputs: true
+        };
 
     // The actual plugin constructor
-    function Plugin ( element, options ) {
-            this.element = element;
-            // jQuery has an extend method which merges the contents of two or
-            // more objects, storing the result in the first object. The first object
-            // is generally empty as we don't want to alter the default options for
-            // future instances of the plugin
-            //
-            this.settings = $.extend( {}, defaults, options );
-            this._defaults = defaults;
-            this._name = pluginName;
-            this.init();
+    function Plugin(element, options) {
+        this.element = element;
+        // jQuery has an extend method which merges the contents of two or
+        // more objects, storing the result in the first object. The first object
+        // is generally empty as we don't want to alter the default options for
+        // future instances of the plugin
+        //
+        this.settings = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
     }
 
     Plugin.prototype = {
@@ -64,12 +64,12 @@
             e.tableRows = [];
 
             // get contents of table except for exclude
-            $(e.element).each( function(i,o) {
+            $(e.element).each(function (i, o) {
                 var tempRows = "";
-                $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
+                $(o).find("tr").not(e.settings.exclude).each(function (i, p) {
 
                     tempRows += "<tr>";
-                    $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
+                    $(p).find("td,th").not(e.settings.exclude).each(function (i, q) { // p did not exist, I corrected
 
                         var rc = {
                             rows: $(this).attr("rowspan"),
@@ -77,14 +77,14 @@
                             flag: $(q).find(e.settings.exclude)
                         };
 
-                        if( rc.flag.length > 0 ) {
+                        if (rc.flag.length > 0) {
                             tempRows += "<td> </td>"; // exclude it!!
                         } else {
                             tempRows += "<td";
-                            if( rc.rows > 0) {
+                            if (rc.rows > 0) {
                                 tempRows += " rowspan=\'" + rc.rows + "\' ";
                             }
-                            if( rc.cols > 0) {
+                            if (rc.cols > 0) {
                                 tempRows += " colspan=\'" + rc.cols + "\' ";
                             }
                             tempRows += "/>" + $(q).html() + "</td>";
@@ -95,17 +95,17 @@
 
                 });
                 // exclude img tags
-                if(e.settings.exclude_img) {
+                if (e.settings.exclude_img) {
                     tempRows = exclude_img(tempRows);
                 }
 
                 // exclude link tags
-                if(e.settings.exclude_links) {
+                if (e.settings.exclude_links) {
                     tempRows = exclude_links(tempRows);
                 }
 
                 // exclude input tags
-                if(e.settings.exclude_inputs) {
+                if (e.settings.exclude_inputs) {
                     tempRows = exclude_inputs(tempRows);
                 }
                 e.tableRows.push(tempRows);
@@ -115,7 +115,7 @@
         },
 
         tableToExcel: function (table, name, sheetName) {
-            var e = this, fullTemplate="", i, link, a;
+            var e = this, fullTemplate = "", i, link, a;
 
             e.format = function (s, c) {
                 return s.replace(/{(\w+)}/g, function (m, p) {
@@ -131,19 +131,19 @@
                 sheetName: sheetName
             };
 
-            fullTemplate= e.template.head;
+            fullTemplate = e.template.head;
 
-            if ( $.isArray(table) ) {
-                 Object.keys(table).forEach(function(i){
-                      //fullTemplate += e.template.sheet.head + "{worksheet" + i + "}" + e.template.sheet.tail;
-                      fullTemplate += e.template.sheet.head + sheetName + i + e.template.sheet.tail;
+            if ($.isArray(table)) {
+                Object.keys(table).forEach(function (i) {
+                    //fullTemplate += e.template.sheet.head + "{worksheet" + i + "}" + e.template.sheet.tail;
+                    fullTemplate += e.template.sheet.head + sheetName + i + e.template.sheet.tail;
                 });
             }
 
             fullTemplate += e.template.mid;
 
-            if ( $.isArray(table) ) {
-                 Object.keys(table).forEach(function(i){
+            if ($.isArray(table)) {
+                Object.keys(table).forEach(function (i) {
                     fullTemplate += e.template.table.head + "{table" + i + "}" + e.template.table.tail;
                 });
             }
@@ -163,8 +163,8 @@
                     fullTemplate = e.format(fullTemplate, e.ctx); // with this, works with IE
                     fullTemplate = [fullTemplate];
                     //convert to array
-                    var blob1 = new Blob(fullTemplate, { type: "text/html" });
-                    window.navigator.msSaveBlob(blob1, getFileName(e.settings) );
+                    var blob1 = new Blob(fullTemplate, {type: "text/html"});
+                    window.navigator.msSaveBlob(blob1, getFileName(e.settings));
                 } else {
                     //otherwise use the iframe and save
                     //requires a blank iframe on page called txtArea1
@@ -172,7 +172,7 @@
                     txtArea1.document.write(e.format(fullTemplate, e.ctx));
                     txtArea1.document.close();
                     txtArea1.focus();
-                    sa = txtArea1.document.execCommand("SaveAs", true, getFileName(e.settings) );
+                    sa = txtArea1.document.execCommand("SaveAs", true, getFileName(e.settings));
                 }
 
             } else {
@@ -195,15 +195,15 @@
     };
 
     function getFileName(settings) {
-        return ( settings.filename ? settings.filename : "table2excel" );
+        return (settings.filename ? settings.filename : "table2excel");
     }
 
     // Removes all img tags
     function exclude_img(string) {
         var _patt = /(\s+alt\s*=\s*"([^"]*)"|\s+alt\s*=\s*'([^']*)')/i;
-        return string.replace(/<img[^>]*>/gi, function myFunction(x){
+        return string.replace(/<img[^>]*>/gi, function myFunction(x) {
             var res = _patt.exec(x);
-            if (res !== null && res.length >=2) {
+            if (res !== null && res.length >= 2) {
                 return res[2];
             } else {
                 return "";
@@ -219,9 +219,9 @@
     // Removes input params
     function exclude_inputs(string) {
         var _patt = /(\s+value\s*=\s*"([^"]*)"|\s+value\s*=\s*'([^']*)')/i;
-        return string.replace(/<input[^>]*>|<\/input>/gi, function myFunction(x){
+        return string.replace(/<input[^>]*>|<\/input>/gi, function myFunction(x) {
             var res = _patt.exec(x);
-            if (res !== null && res.length >=2) {
+            if (res !== null && res.length >= 2) {
                 return res[2];
             } else {
                 return "";
@@ -229,16 +229,16 @@
         });
     }
 
-    $.fn[ pluginName ] = function ( options ) {
+    $.fn[pluginName] = function (options) {
         var e = this;
-            e.each(function() {
-                if ( !$.data( e, "plugin_" + pluginName ) ) {
-                    $.data( e, "plugin_" + pluginName, new Plugin( this, options ) );
-                }
-            });
+        e.each(function () {
+            if (!$.data(e, "plugin_" + pluginName)) {
+                $.data(e, "plugin_" + pluginName, new Plugin(this, options));
+            }
+        });
 
         // chain jQuery functions
         return e;
     };
 
-})( jQuery, window, document );
+})(jQuery, window, document);

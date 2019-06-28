@@ -2,74 +2,74 @@ package com.jiubo.erp.kqgl.vo;
 
 //班次  班次表中使用的userId是accountId
 public class ClassTime {
-	private String accountId;
-	private String ctName;//班次名称
-	private String ctShiftDate;
-	private String ctStartTime;
-	private String ctEndTime;
-	
-	
-	private String ctStartDate;
-	private String ctEndDate;
-	
-	public ClassTime() {
-		// TODO Auto-generated constructor stub
-	}
+    private String accountId;
+    private String ctName;//班次名称
+    private String ctShiftDate;
+    private String ctStartTime;
+    private String ctEndTime;
 
-	public String getCtStartDate() {
-		return ctStartDate;
-	}
 
-	public void setCtStartDate(String ctStartDate) {
-		this.ctStartDate = ctStartDate;
-	}
+    private String ctStartDate;
+    private String ctEndDate;
 
-	public String getCtEndDate() {
-		return ctEndDate;
-	}
+    public ClassTime() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public void setCtEndDate(String ctEndDate) {
-		this.ctEndDate = ctEndDate;
-	}
+    public String getCtStartDate() {
+        return ctStartDate;
+    }
 
-	public String getAccountId() {
-		return accountId;
-	}
+    public void setCtStartDate(String ctStartDate) {
+        this.ctStartDate = ctStartDate;
+    }
 
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
-	}
+    public String getCtEndDate() {
+        return ctEndDate;
+    }
 
-	public String getCtName() {
-		return ctName;
-	}
+    public void setCtEndDate(String ctEndDate) {
+        this.ctEndDate = ctEndDate;
+    }
 
-	public void setCtName(String ctName) {
-		this.ctName = ctName;
-	}
+    public String getAccountId() {
+        return accountId;
+    }
 
-	public String getCtShiftDate() {
-		return ctShiftDate;
-	}
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
 
-	public void setCtShiftDate(String ctShiftDate) {
-		this.ctShiftDate = ctShiftDate;
-	}
+    public String getCtName() {
+        return ctName;
+    }
 
-	public String getCtStartTime() {
-		return ctStartTime;
-	}
+    public void setCtName(String ctName) {
+        this.ctName = ctName;
+    }
 
-	public void setCtStartTime(String ctStartTime) {
-		this.ctStartTime = ctStartTime;
-	}
+    public String getCtShiftDate() {
+        return ctShiftDate;
+    }
 
-	public String getCtEndTime() {
-		return ctEndTime;
-	}
+    public void setCtShiftDate(String ctShiftDate) {
+        this.ctShiftDate = ctShiftDate;
+    }
 
-	public void setCtEndTime(String ctEndTime) {
-		this.ctEndTime = ctEndTime;
-	}
-	
+    public String getCtStartTime() {
+        return ctStartTime;
+    }
+
+    public void setCtStartTime(String ctStartTime) {
+        this.ctStartTime = ctStartTime;
+    }
+
+    public String getCtEndTime() {
+        return ctEndTime;
+    }
+
+    public void setCtEndTime(String ctEndTime) {
+        this.ctEndTime = ctEndTime;
+    }
+
 }

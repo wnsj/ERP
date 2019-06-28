@@ -3,526 +3,524 @@ package com.jiubo.erp.rygl.vo;
 import java.util.List;
 
 public class UserInfo {
-	
-	//基础信息
-	private Integer id;
-	private String name;
-	private String sex;
-	private String jobNum;
-	private String departId;
-	private String positionId;
-	private String birth;
-	private String entryDate;
-	private String positiveDate;
-	private String resignDate;
-	private String photo;
-	private String isDelete;
-	private String state;
-	private String erpaaccount;
-	private String accountId;
-	private String parentId;
-	private String resignType;
-	private String resignReason;
-	
-	//详细信息
-	private Integer uEmployeeBasicID;
-	private String uIdNum;
-	private String uPloitical;
-	private String uContact;
-	private String uHomeTown;
-	private String uNationality;
-	private String uMarital;
-	private String uHomeAddress;
-	private String uCurrentAddress;
-	private String uSchools;
-	private String uEducation;
-	private String uProfession;
-	private String uGraduation;
-	private String uEmergencyContact;
-	private String uEmergencyphone;
-	private String uHeight;
-	private String uWeight;
-	private String uBloodType;
-	private String uLicenseType;
-	private String uDrivingExpe;
-	private String uDomicile;
-	private String uAccountProp;
-	private String uAtSchool;
-	
-	//相同参数
-	private String createDate;
-	private String updateDate;
-	private String createUser;
-	private String remark;
-	
-	//家庭成员
-	private List<QueryFamilyResult> qFRs;
-	
-	
-	public UserInfo() {
-	}
 
+    //基础信息
+    private Integer id;
+    private String name;
+    private String sex;
+    private String jobNum;
+    private String departId;
+    private String positionId;
+    private String birth;
+    private String entryDate;
+    private String positiveDate;
+    private String resignDate;
+    private String photo;
+    private String isDelete;
+    private String state;
+    private String erpaaccount;
+    private String accountId;
+    private String parentId;
+    private String resignType;
+    private String resignReason;
 
-	public Integer getId() {
-		return id;
-	}
+    //详细信息
+    private Integer uEmployeeBasicID;
+    private String uIdNum;
+    private String uPloitical;
+    private String uContact;
+    private String uHomeTown;
+    private String uNationality;
+    private String uMarital;
+    private String uHomeAddress;
+    private String uCurrentAddress;
+    private String uSchools;
+    private String uEducation;
+    private String uProfession;
+    private String uGraduation;
+    private String uEmergencyContact;
+    private String uEmergencyphone;
+    private String uHeight;
+    private String uWeight;
+    private String uBloodType;
+    private String uLicenseType;
+    private String uDrivingExpe;
+    private String uDomicile;
+    private String uAccountProp;
+    private String uAtSchool;
 
+    //相同参数
+    private String createDate;
+    private String updateDate;
+    private String createUser;
+    private String remark;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    //家庭成员
+    private List<QueryFamilyResult> qFRs;
 
 
-	public String getName() {
-		return name;
-	}
+    public UserInfo() {
+    }
 
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Integer getId() {
+        return id;
+    }
 
 
-	public String getSex() {
-		return sex;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
 
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
+    public String getName() {
+        return name;
+    }
 
 
-	public String getJobNum() {
-		return jobNum;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
-	public void setJobNum(String jobNum) {
-		this.jobNum = jobNum;
-	}
+    public String getSex() {
+        return sex;
+    }
 
 
-	public String getDepartId() {
-		return departId;
-	}
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 
 
-	public void setDepartId(String departId) {
-		this.departId = departId;
-	}
+    public String getJobNum() {
+        return jobNum;
+    }
 
 
-	public String getPositionId() {
-		return positionId;
-	}
+    public void setJobNum(String jobNum) {
+        this.jobNum = jobNum;
+    }
 
 
-	public void setPositionId(String positionId) {
-		this.positionId = positionId;
-	}
+    public String getDepartId() {
+        return departId;
+    }
 
 
-	public String getBirth() {
-		return birth;
-	}
+    public void setDepartId(String departId) {
+        this.departId = departId;
+    }
 
 
-	public void setBirth(String birth) {
-		this.birth = birth;
-	}
+    public String getPositionId() {
+        return positionId;
+    }
 
 
-	public String getEntryDate() {
-		return entryDate;
-	}
+    public void setPositionId(String positionId) {
+        this.positionId = positionId;
+    }
 
 
-	public void setEntryDate(String entryDate) {
-		this.entryDate = entryDate;
-	}
+    public String getBirth() {
+        return birth;
+    }
 
 
-	public String getPositiveDate() {
-		return positiveDate;
-	}
+    public void setBirth(String birth) {
+        this.birth = birth;
+    }
 
 
-	public void setPositiveDate(String positiveDate) {
-		this.positiveDate = positiveDate;
-	}
+    public String getEntryDate() {
+        return entryDate;
+    }
 
 
-	public String getResignDate() {
-		return resignDate;
-	}
+    public void setEntryDate(String entryDate) {
+        this.entryDate = entryDate;
+    }
 
 
-	public void setResignDate(String resignDate) {
-		this.resignDate = resignDate;
-	}
+    public String getPositiveDate() {
+        return positiveDate;
+    }
 
 
-	public String getPhoto() {
-		return photo;
-	}
+    public void setPositiveDate(String positiveDate) {
+        this.positiveDate = positiveDate;
+    }
 
 
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
+    public String getResignDate() {
+        return resignDate;
+    }
 
 
-	public String getIsDelete() {
-		return isDelete;
-	}
+    public void setResignDate(String resignDate) {
+        this.resignDate = resignDate;
+    }
 
 
-	public void setIsDelete(String isDelete) {
-		this.isDelete = isDelete;
-	}
+    public String getPhoto() {
+        return photo;
+    }
 
 
-	public String getState() {
-		return state;
-	}
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    public String getIsDelete() {
+        return isDelete;
+    }
 
 
-	public String getErpaaccount() {
-		return erpaaccount;
-	}
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
 
 
-	public void setErpaaccount(String erpaaccount) {
-		this.erpaaccount = erpaaccount;
-	}
+    public String getState() {
+        return state;
+    }
 
 
-	public String getAccountId() {
-		return accountId;
-	}
+    public void setState(String state) {
+        this.state = state;
+    }
 
 
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
-	}
+    public String getErpaaccount() {
+        return erpaaccount;
+    }
 
 
-	public String getParentId() {
-		return parentId;
-	}
+    public void setErpaaccount(String erpaaccount) {
+        this.erpaaccount = erpaaccount;
+    }
 
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
+    public String getAccountId() {
+        return accountId;
+    }
 
 
-	public String getResignType() {
-		return resignType;
-	}
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
 
 
-	public void setResignType(String resignType) {
-		this.resignType = resignType;
-	}
+    public String getParentId() {
+        return parentId;
+    }
 
 
-	public String getResignReason() {
-		return resignReason;
-	}
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
 
-	public void setResignReason(String resignReason) {
-		this.resignReason = resignReason;
-	}
+    public String getResignType() {
+        return resignType;
+    }
 
 
-	public Integer getuEmployeeBasicID() {
-		return uEmployeeBasicID;
-	}
+    public void setResignType(String resignType) {
+        this.resignType = resignType;
+    }
 
 
-	public void setuEmployeeBasicID(Integer uEmployeeBasicID) {
-		this.uEmployeeBasicID = uEmployeeBasicID;
-	}
+    public String getResignReason() {
+        return resignReason;
+    }
 
 
-	public String getuIdNum() {
-		return uIdNum;
-	}
+    public void setResignReason(String resignReason) {
+        this.resignReason = resignReason;
+    }
 
 
-	public void setuIdNum(String uIdNum) {
-		this.uIdNum = uIdNum;
-	}
+    public Integer getuEmployeeBasicID() {
+        return uEmployeeBasicID;
+    }
 
 
-	public String getuPloitical() {
-		return uPloitical;
-	}
+    public void setuEmployeeBasicID(Integer uEmployeeBasicID) {
+        this.uEmployeeBasicID = uEmployeeBasicID;
+    }
 
 
-	public void setuPloitical(String uPloitical) {
-		this.uPloitical = uPloitical;
-	}
+    public String getuIdNum() {
+        return uIdNum;
+    }
 
 
-	public String getuContact() {
-		return uContact;
-	}
+    public void setuIdNum(String uIdNum) {
+        this.uIdNum = uIdNum;
+    }
 
 
-	public void setuContact(String uContact) {
-		this.uContact = uContact;
-	}
+    public String getuPloitical() {
+        return uPloitical;
+    }
 
 
-	public String getuHomeTown() {
-		return uHomeTown;
-	}
+    public void setuPloitical(String uPloitical) {
+        this.uPloitical = uPloitical;
+    }
 
 
-	public void setuHomeTown(String uHomeTown) {
-		this.uHomeTown = uHomeTown;
-	}
+    public String getuContact() {
+        return uContact;
+    }
 
 
-	public String getuNationality() {
-		return uNationality;
-	}
+    public void setuContact(String uContact) {
+        this.uContact = uContact;
+    }
 
 
-	public void setuNationality(String uNationality) {
-		this.uNationality = uNationality;
-	}
+    public String getuHomeTown() {
+        return uHomeTown;
+    }
 
 
-	public String getuMarital() {
-		return uMarital;
-	}
+    public void setuHomeTown(String uHomeTown) {
+        this.uHomeTown = uHomeTown;
+    }
 
 
-	public void setuMarital(String uMarital) {
-		this.uMarital = uMarital;
-	}
+    public String getuNationality() {
+        return uNationality;
+    }
 
 
-	public String getuHomeAddress() {
-		return uHomeAddress;
-	}
+    public void setuNationality(String uNationality) {
+        this.uNationality = uNationality;
+    }
 
 
-	public void setuHomeAddress(String uHomeAddress) {
-		this.uHomeAddress = uHomeAddress;
-	}
+    public String getuMarital() {
+        return uMarital;
+    }
 
 
-	public String getuCurrentAddress() {
-		return uCurrentAddress;
-	}
+    public void setuMarital(String uMarital) {
+        this.uMarital = uMarital;
+    }
 
 
-	public void setuCurrentAddress(String uCurrentAddress) {
-		this.uCurrentAddress = uCurrentAddress;
-	}
+    public String getuHomeAddress() {
+        return uHomeAddress;
+    }
 
 
-	public String getuSchools() {
-		return uSchools;
-	}
+    public void setuHomeAddress(String uHomeAddress) {
+        this.uHomeAddress = uHomeAddress;
+    }
 
 
-	public void setuSchools(String uSchools) {
-		this.uSchools = uSchools;
-	}
+    public String getuCurrentAddress() {
+        return uCurrentAddress;
+    }
 
 
-	public String getuEducation() {
-		return uEducation;
-	}
+    public void setuCurrentAddress(String uCurrentAddress) {
+        this.uCurrentAddress = uCurrentAddress;
+    }
 
 
-	public void setuEducation(String uEducation) {
-		this.uEducation = uEducation;
-	}
+    public String getuSchools() {
+        return uSchools;
+    }
 
 
-	public String getuProfession() {
-		return uProfession;
-	}
+    public void setuSchools(String uSchools) {
+        this.uSchools = uSchools;
+    }
 
 
-	public void setuProfession(String uProfession) {
-		this.uProfession = uProfession;
-	}
+    public String getuEducation() {
+        return uEducation;
+    }
 
 
-	public String getuGraduation() {
-		return uGraduation;
-	}
+    public void setuEducation(String uEducation) {
+        this.uEducation = uEducation;
+    }
 
 
-	public void setuGraduation(String uGraduation) {
-		this.uGraduation = uGraduation;
-	}
+    public String getuProfession() {
+        return uProfession;
+    }
 
 
-	public String getuEmergencyContact() {
-		return uEmergencyContact;
-	}
+    public void setuProfession(String uProfession) {
+        this.uProfession = uProfession;
+    }
 
 
-	public void setuEmergencyContact(String uEmergencyContact) {
-		this.uEmergencyContact = uEmergencyContact;
-	}
+    public String getuGraduation() {
+        return uGraduation;
+    }
 
 
-	public String getuEmergencyphone() {
-		return uEmergencyphone;
-	}
+    public void setuGraduation(String uGraduation) {
+        this.uGraduation = uGraduation;
+    }
 
 
-	public void setuEmergencyphone(String uEmergencyphone) {
-		this.uEmergencyphone = uEmergencyphone;
-	}
+    public String getuEmergencyContact() {
+        return uEmergencyContact;
+    }
 
 
-	public String getuHeight() {
-		return uHeight;
-	}
+    public void setuEmergencyContact(String uEmergencyContact) {
+        this.uEmergencyContact = uEmergencyContact;
+    }
 
 
-	public void setuHeight(String uHeight) {
-		this.uHeight = uHeight;
-	}
+    public String getuEmergencyphone() {
+        return uEmergencyphone;
+    }
 
 
-	public String getuWeight() {
-		return uWeight;
-	}
+    public void setuEmergencyphone(String uEmergencyphone) {
+        this.uEmergencyphone = uEmergencyphone;
+    }
 
 
-	public void setuWeight(String uWeight) {
-		this.uWeight = uWeight;
-	}
+    public String getuHeight() {
+        return uHeight;
+    }
 
 
-	public String getuBloodType() {
-		return uBloodType;
-	}
+    public void setuHeight(String uHeight) {
+        this.uHeight = uHeight;
+    }
 
 
-	public void setuBloodType(String uBloodType) {
-		this.uBloodType = uBloodType;
-	}
+    public String getuWeight() {
+        return uWeight;
+    }
 
 
-	public String getuLicenseType() {
-		return uLicenseType;
-	}
+    public void setuWeight(String uWeight) {
+        this.uWeight = uWeight;
+    }
 
 
-	public void setuLicenseType(String uLicenseType) {
-		this.uLicenseType = uLicenseType;
-	}
+    public String getuBloodType() {
+        return uBloodType;
+    }
 
 
-	public String getuDrivingExpe() {
-		return uDrivingExpe;
-	}
+    public void setuBloodType(String uBloodType) {
+        this.uBloodType = uBloodType;
+    }
 
 
-	public void setuDrivingExpe(String uDrivingExpe) {
-		this.uDrivingExpe = uDrivingExpe;
-	}
+    public String getuLicenseType() {
+        return uLicenseType;
+    }
 
 
-	public String getuDomicile() {
-		return uDomicile;
-	}
+    public void setuLicenseType(String uLicenseType) {
+        this.uLicenseType = uLicenseType;
+    }
 
 
-	public void setuDomicile(String uDomicile) {
-		this.uDomicile = uDomicile;
-	}
+    public String getuDrivingExpe() {
+        return uDrivingExpe;
+    }
 
 
-	public String getuAccountProp() {
-		return uAccountProp;
-	}
+    public void setuDrivingExpe(String uDrivingExpe) {
+        this.uDrivingExpe = uDrivingExpe;
+    }
 
 
-	public void setuAccountProp(String uAccountProp) {
-		this.uAccountProp = uAccountProp;
-	}
+    public String getuDomicile() {
+        return uDomicile;
+    }
 
 
-	public String getuAtSchool() {
-		return uAtSchool;
-	}
+    public void setuDomicile(String uDomicile) {
+        this.uDomicile = uDomicile;
+    }
 
 
-	public void setuAtSchool(String uAtSchool) {
-		this.uAtSchool = uAtSchool;
-	}
+    public String getuAccountProp() {
+        return uAccountProp;
+    }
 
 
-	public String getCreateDate() {
-		return createDate;
-	}
+    public void setuAccountProp(String uAccountProp) {
+        this.uAccountProp = uAccountProp;
+    }
 
 
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
-	}
+    public String getuAtSchool() {
+        return uAtSchool;
+    }
 
 
-	public String getUpdateDate() {
-		return updateDate;
-	}
+    public void setuAtSchool(String uAtSchool) {
+        this.uAtSchool = uAtSchool;
+    }
 
 
-	public void setUpdateDate(String updateDate) {
-		this.updateDate = updateDate;
-	}
+    public String getCreateDate() {
+        return createDate;
+    }
 
 
-	public String getCreateUser() {
-		return createUser;
-	}
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
 
 
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
-	}
+    public String getUpdateDate() {
+        return updateDate;
+    }
 
 
-	public String getRemark() {
-		return remark;
-	}
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
 
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public String getCreateUser() {
+        return createUser;
+    }
 
 
-	public List<QueryFamilyResult> getqFRs() {
-		return qFRs;
-	}
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
 
 
-	public void setqFRs(List<QueryFamilyResult> qFRs) {
-		this.qFRs = qFRs;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
 
-	
-	
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+
+    public List<QueryFamilyResult> getqFRs() {
+        return qFRs;
+    }
+
+
+    public void setqFRs(List<QueryFamilyResult> qFRs) {
+        this.qFRs = qFRs;
+    }
+
+
 }
