@@ -85,7 +85,7 @@ public class EmpController {
             if (StringUtils.isBlank(str))
                 throw new MessageException("参数接收失败！");
             qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
-            System.out.println("getSearchContent：" + qp.getSearchContent());
+            System.out.println("getSearchContent：" + qp.getSearchContent()+qp.toString());
             result.put("resData", this.service.initEmpList(qp, request));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
