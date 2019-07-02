@@ -21,11 +21,11 @@ target/
 
 ### NetBeans ###
 /nbproject/private/
-/nbbuild/
+/build/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
+build
 
 ### VS Code ###
 .vscode/
