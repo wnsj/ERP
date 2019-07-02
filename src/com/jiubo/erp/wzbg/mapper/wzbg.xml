@@ -53,12 +53,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!--  查询报备审批权限表 -->
-	<select id="queryApprovalLeaveAccount" resultType="java.lang.String">
+	<select id="queryApprovalLeave" resultType="ApprovalBaoBeiBean">
 		SELECT APP.CHECK_POSITIONID FROM APPROVAL_BAOBEI
 	</select>
 	
 	<!--  查询请假报备审批权限账户信息 -->
-	<select id="queryApprovalLeaveAccount" resultType="com.jiubo.erp.erpLogin.AccountDataBean">
+	<select id="queryApprovalLeaveAccount" resultType="com.jiubo.erp.erpLogin.bean.AccountDataBean">
 		SELECT 
 			ACC.ACCOUNT_ID ACC.ACCOUNT_NAME
 		FROM 
