@@ -2,21 +2,21 @@ package com.jiubo.erp.rygl.service;
 
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.jiubo.erp.common.Position;
 import com.jiubo.erp.rygl.bean.DepartmentBean;
+import com.jiubo.erp.rygl.bean.EmployeeBasicBean;
 import com.jiubo.erp.rygl.bean.ProjectDataBean;
 import com.jiubo.erp.rygl.vo.Account;
+import com.jiubo.erp.rygl.vo.DeptEmp;
 import com.jiubo.erp.rygl.vo.LeaveResign;
 import com.jiubo.erp.rygl.vo.Nation;
 import com.jiubo.erp.rygl.vo.PositionShift;
 import com.jiubo.erp.rygl.vo.QueryFamilyResult;
 import com.jiubo.erp.rygl.vo.QueryParam;
 import com.jiubo.erp.rygl.vo.QueryResult;
-import com.jiubo.erp.rygl.vo.UserFamily;
 import com.jiubo.erp.rygl.vo.UserInfo;
 
 public interface EmpService {
@@ -105,4 +105,15 @@ public interface EmpService {
 	
 	//添加离职原因
 	Integer addLeaveReason(LeaveResign lResign);
+	
+	/**
+	 * @Description: 查询该部门下的员工姓名以及ERP账户信息
+	 * @param  String id(部门id)
+	 * @return List<DeptEmp>
+	 * @author: DingDong
+	 * @date: 2019年7月1日
+	 * @version: V1.0
+	 */
+	public List<DeptEmp> selectEmpBasicByDept(EmployeeBasicBean employeeBasicBean);
+	
 }

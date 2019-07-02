@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 @Transactional
 public class ZpglServiceImpl implements ZpglService {
 	
-	Logger logger = LoggerFactory.getLogger(ZpglServiceImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(ZpglServiceImpl.class);
 	
 	@Autowired
 	private ZpglDao zpglDao;

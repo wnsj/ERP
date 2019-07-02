@@ -21,6 +21,7 @@ public class EmployeeBasicBean {
 	private String Parent_ID;
 	private String ResignType;
 	private String ResignReason;
+	
 	public String getID() {
 		return ID;
 	}
