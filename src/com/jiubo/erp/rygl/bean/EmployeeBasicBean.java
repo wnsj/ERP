@@ -1,6 +1,7 @@
 package com.jiubo.erp.rygl.bean;
 
 public class EmployeeBasicBean {
+
 	private String ID;
 	private String Name;
 	private String Sex;
@@ -142,8 +143,5 @@ public class EmployeeBasicBean {
 	public void setResignReason(String resignReason) {
 		ResignReason = resignReason;
 	}
-	
-	
-
-
+   
 }

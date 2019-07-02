@@ -74,6 +74,4 @@ public interface empDao {
 	 
     // 根据部门id查询该部门下的员工基本信息
     public List<EmployeeBasicBean> selectEmpBasicByDept(EmployeeBasicBean employeeBasicBean);
-	
-	
 }

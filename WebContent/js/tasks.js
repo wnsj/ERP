@@ -1,1 +1,3 @@
-$(document).ready(function(){$(".handles").sortable({handle:"span"});});
+$(document).ready(function () {
+    $(".handles").sortable({handle: "span"});
+});

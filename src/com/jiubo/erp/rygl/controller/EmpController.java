@@ -53,377 +53,373 @@ import com.jiubo.erp.rygl.vo.QueryParam;
 import com.jiubo.erp.rygl.vo.QueryResult;
 import com.jiubo.erp.rygl.vo.UserFamily;
 import com.jiubo.erp.rygl.vo.UserInfo;
-import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
-import com.jiubo.erp.zpgl.bean.ZpPlanBean;
 import com.quicksand.push.ToolClass;
 
 @Controller
 @RequestMapping("/search")
 public class EmpController {
+	
+    public static Logger log = LoggerFactory.getLogger(EmpController.class);
 
-	private final static Logger log = LoggerFactory.getLogger(EmpController.class);
+    @Autowired
+    private EmpService service;
 
-	@Autowired
-	private EmpService service;
+    /**
+     * 全员搜索
+     *
+     * @param param    属性包括所有人员信息
+     * @param response
+     * @param request
+     * @return
+     */
+    @SuppressWarnings("finally")
+    @ResponseBody
+    @RequestMapping(value = "/allList")
+    public JSONObject allList(HttpServletResponse response, HttpServletRequest request) {
+        QueryParam qp = new QueryParam();
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            String str = ToolClass.getStrFromInputStream(request);
+            if (StringUtils.isBlank(str))
+                throw new MessageException("参数接收失败！");
+            qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
+            System.out.println("getSearchContent：" + qp.getSearchContent());
+            result.put("resData", this.service.initEmpList(qp, request));
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            log.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
 
-	/**
-	 * 全员搜索
-	 * 
-	 * @param param
-	 *            属性包括所有人员信息
-	 * @param response
-	 * @param request
-	 * @return
-	 */
-	@SuppressWarnings("finally")
-	@ResponseBody
-	@RequestMapping(value = "/allList")
-	public JSONObject allList(HttpServletResponse response, HttpServletRequest request) {
-		QueryParam qp = new QueryParam();
-		JSONObject result = new JSONObject();
-		String retCode = Constant.Result.SUCCESS;
-		String retMsg = Constant.Result.SUCCESS_MSG;
-		try {
-			String str = ToolClass.getStrFromInputStream(request);
-			if (StringUtils.isBlank(str))
-				throw new MessageException("参数接收失败！");
-			qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
-			System.out.println("getSearchContent："+qp.getSearchContent());
-			result.put("resData", this.service.initEmpList(qp, request)) ;
-		} catch (MessageException e) {
-			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
-		} catch (Exception e) {
-			retCode = Constant.Result.ERROR;
-			retMsg = Constant.Result.ERROR_MSG;
-			log.error(Constant.Result.RETMSG, e);
-		} finally {
-			result.put(Constant.Result.RETCODE, retCode);
-			result.put(Constant.Result.RETMSG, retMsg);
-			return result;
-		}
-	}
+    /**
+     * 高级查询,入职、离职、转正
+     *
+     * @param param
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("finally")
+    @ResponseBody
+    @RequestMapping(value = "/advanceAllList")
+    public JSONObject advanceQuery(HttpServletResponse response, HttpServletRequest request) throws Exception {
+        QueryParam qp = new QueryParam();
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            String str = ToolClass.getStrFromInputStream(request);
+            if (StringUtils.isBlank(str))
+                throw new MessageException("参数接收失败！");
+            qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
+            if (qp.getSearchType().equals("1")) {
+                qp.setEnterStartDate(qp.getStartDate());
+                qp.setEnterEndDate(qp.getEndDate());
+            } else if (qp.getSearchType().equals("2")) {
+                qp.setZzStartDate(qp.getStartDate());
+                qp.setZzEndDate(qp.getEndDate());
+            } else if (qp.getSearchType().equals("3")) {
+                qp.setLeaveStartDate(qp.getStartDate());
+                qp.setLeaveEndDate(qp.getEndDate());
+            }
+            result.put("resData", this.service.initEmpList(qp, request));
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            log.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
 
-	/**
-	 * 高级查询,入职、离职、转正
-	 * 
-	 * @param param
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("finally")
-	@ResponseBody
-	@RequestMapping(value = "/advanceAllList")
-	public JSONObject advanceQuery(HttpServletResponse response, HttpServletRequest request) throws Exception {
-		QueryParam qp = new QueryParam();
-		JSONObject result = new JSONObject();
-		String retCode = Constant.Result.SUCCESS;
-		String retMsg = Constant.Result.SUCCESS_MSG;
-		try {
-			String str = ToolClass.getStrFromInputStream(request);
-			if (StringUtils.isBlank(str))
-				throw new MessageException("参数接收失败！");
-			qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
-			if (qp.getSearchType().equals("1")) {
-				qp.setEnterStartDate(qp.getStartDate());
-				qp.setEnterEndDate(qp.getEndDate());
-			}else if (qp.getSearchType().equals("2")) {
-				qp.setZzStartDate(qp.getStartDate());
-				qp.setZzEndDate(qp.getEndDate());
-			}else if (qp.getSearchType().equals("3")) {
-				qp.setLeaveStartDate(qp.getStartDate());
-				qp.setLeaveEndDate(qp.getEndDate());
-			}
-			result.put("resData", this.service.initEmpList(qp, request)) ;
-		} catch (MessageException e) {
-			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
-		} catch (Exception e) {
-			retCode = Constant.Result.ERROR;
-			retMsg = Constant.Result.ERROR_MSG;
-			log.error(Constant.Result.RETMSG, e);
-		} finally {
-			result.put(Constant.Result.RETCODE, retCode);
-			result.put(Constant.Result.RETMSG, retMsg);
-			return result;
-		}
-	}
-	/**
-	 * 生日查询
-	 * @param response
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 * @return 返回值类型  JSONObject
-	 * @author 作者 mwl
-	 * @date   时间 2019年5月10日上午9:25:48
-	 */
-	@SuppressWarnings("finally")
-	@ResponseBody
-	@RequestMapping(value = "/advanceBirthQuery")
-	public JSONObject advanceBirthQuery(HttpServletResponse response, HttpServletRequest request) throws Exception {
-		QueryParam qp = new QueryParam();
+    /**
+     * 生日查询
+     *
+     * @param response
+     * @param request
+     * @return 返回值类型  JSONObject
+     * @throws Exception
+     * @author 作者 mwl
+     * @date 时间 2019年5月10日上午9:25:48
+     */
+    @SuppressWarnings("finally")
+    @ResponseBody
+    @RequestMapping(value = "/advanceBirthQuery")
+    public JSONObject advanceBirthQuery(HttpServletResponse response, HttpServletRequest request) throws Exception {
+        QueryParam qp = new QueryParam();
 
-		JSONObject result = new JSONObject();
-		String retCode = Constant.Result.SUCCESS;
-		String retMsg = Constant.Result.SUCCESS_MSG;
-		try {
-			String str = ToolClass.getStrFromInputStream(request);
-			if (StringUtils.isBlank(str))
-				throw new MessageException("参数接收失败！");
-			qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
-			System.out.println("QueryParam:categry:"+qp.getSearchType());
-			
-			qp.setState("1");
-			result.put("resData", this.service.initEmpList(qp, request)) ;
-		} catch (MessageException e) {
-			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
-		} catch (Exception e) {
-			retCode = Constant.Result.ERROR;
-			retMsg = Constant.Result.ERROR_MSG;
-			log.error(Constant.Result.RETMSG, e);
-		} finally {
-			result.put(Constant.Result.RETCODE, retCode);
-			result.put(Constant.Result.RETMSG, retMsg);
-			return result;
-		}
-	}
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            String str = ToolClass.getStrFromInputStream(request);
+            if (StringUtils.isBlank(str))
+                throw new MessageException("参数接收失败！");
+            qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
+            System.out.println("QueryParam:categry:" + qp.getSearchType());
 
-	/**
-	 * 首页模糊查询
-	 * 
-	 * @param param
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	public List<QueryResult> fuzzyQuery(QueryParam param, HttpServletRequest request) throws Exception {
-		List<QueryResult> emplist = this.service.initEmpList(param, request);
+            qp.setState("1");
+            result.put("resData", this.service.initEmpList(qp, request));
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            log.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
 
-		// 首页的模糊搜索
-		if (param.getSearchContent() != null & emplist.size() > 0) {
-			List<QueryResult> qrListCource = new ArrayList<>();
-			List<QueryResult> qrListRes = new ArrayList<>();
-			String searchStr = param.getSearchContent();
-			qrListCource = this.service.initEmpList(param, request);
-			for (QueryResult qrListCour : qrListCource) {
-				if (qrListCour.getJobNum().contains(searchStr) || qrListCour.getName().contains(searchStr)
-						|| qrListCour.getDepartName().contains(searchStr)
-						|| qrListCour.getPositionName().contains(searchStr)) {
-					qrListRes.add(qrListCour);
-				}
-			}
-			// System.out.println("-------模糊查询fuzzyQuery-----"+qrListRes.size());
+    /**
+     * 首页模糊查询
+     *
+     * @param param
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public List<QueryResult> fuzzyQuery(QueryParam param, HttpServletRequest request) throws Exception {
+        List<QueryResult> emplist = this.service.initEmpList(param, request);
 
-			return qrListRes;
-		}
-		return emplist;
-	}
+        // 首页的模糊搜索
+        if (param.getSearchContent() != null & emplist.size() > 0) {
+            List<QueryResult> qrListCource = new ArrayList<>();
+            List<QueryResult> qrListRes = new ArrayList<>();
+            String searchStr = param.getSearchContent();
+            qrListCource = this.service.initEmpList(param, request);
+            for (QueryResult qrListCour : qrListCource) {
+                if (qrListCour.getJobNum().contains(searchStr) || qrListCour.getName().contains(searchStr)
+                        || qrListCour.getDepartName().contains(searchStr)
+                        || qrListCour.getPositionName().contains(searchStr)) {
+                    qrListRes.add(qrListCour);
+                }
+            }
+            // System.out.println("-------模糊查询fuzzyQuery-----"+qrListRes.size());
 
-	/**
-	 * 赛选家庭人员列表
-	 * 
-	 * @param param
-	 * @param response
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("finally")
-	@ResponseBody
-	@RequestMapping(value = "/fmList")
-	public JSONObject fmList(HttpServletResponse response, HttpServletRequest request) throws Exception {
+            return qrListRes;
+        }
+        return emplist;
+    }
 
-		QueryFamilyResult qfr = new QueryFamilyResult();
-		
-		JSONObject result = new JSONObject();
-		String retCode = Constant.Result.SUCCESS;
-		String retMsg = Constant.Result.SUCCESS_MSG;
-		try {
-			List<QueryFamilyResult> fmList = new ArrayList<>();
-			String str = ToolClass.getStrFromInputStream(request);
-			if (StringUtils.isBlank(str))
-				throw new MessageException("参数接收失败！");
-			qfr = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryFamilyResult.class);
-			fmList = this.service.familyfuzzyQuery(qfr);
-			result.put("resData", fmList) ;
-		} catch (MessageException e) {
-			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
-		} catch (Exception e) {
-			retCode = Constant.Result.ERROR;
-			retMsg = Constant.Result.ERROR_MSG;
-			log.error(Constant.Result.RETMSG, e);
-		} finally {
-			result.put(Constant.Result.RETCODE, retCode);
-			result.put(Constant.Result.RETMSG, retMsg);
-			return result;
-		}
-	}
+    /**
+     * 赛选家庭人员列表
+     *
+     * @param param
+     * @param response
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("finally")
+    @ResponseBody
+    @RequestMapping(value = "/fmList")
+    public JSONObject fmList(HttpServletResponse response, HttpServletRequest request) throws Exception {
 
-	/**
-	 * 查看所有人员列表
-	 * 
-	 * @param param
-	 *            所有人
-	 * @param response
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/ryAllList")
-	public List<QueryResult> ryAllList(QueryParam param, HttpServletResponse response, HttpServletRequest request) {
-		List<QueryResult> qrList = new ArrayList<>();
-		try {
-			qrList = this.service.initEmpList(param, request);
-			// System.out.println("查询到了---------" + qrList.size());
-			return qrList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResponseMessageUtils.responseMessage(response, "查询失败!");
-			return null;
-		}
-	}
+        QueryFamilyResult qfr = new QueryFamilyResult();
 
-	/**
-	 * 项目列表
-	 * 
-	 * @param response
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/projectList")
-	public List<ProjectDataBean> projectList(HttpServletResponse response, HttpServletRequest request) {
-		List<ProjectDataBean> qrList = new ArrayList<>();
-		try {
-			qrList = this.service.initProjectList(request);
-			System.out.println("项目列表" + qrList.size());
-			return qrList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResponseMessageUtils.responseMessage(response, "查询失败!");
-			return null;
-		}
-	}
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            List<QueryFamilyResult> fmList = new ArrayList<>();
+            String str = ToolClass.getStrFromInputStream(request);
+            if (StringUtils.isBlank(str))
+                throw new MessageException("参数接收失败！");
+            qfr = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryFamilyResult.class);
+            fmList = this.service.familyfuzzyQuery(qfr);
+            result.put("resData", fmList);
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            log.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
 
-	/**
-	 * 部门列表
-	 * 
-	 * @param response
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/departList")
-	public List<DepartmentBean> departList(HttpServletResponse response, HttpServletRequest request) {
+    /**
+     * 查看所有人员列表
+     *
+     * @param param    所有人
+     * @param response
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/ryAllList")
+    public List<QueryResult> ryAllList(QueryParam param, HttpServletResponse response, HttpServletRequest request) {
+        List<QueryResult> qrList = new ArrayList<>();
+        try {
+            qrList = this.service.initEmpList(param, request);
+            // System.out.println("查询到了---------" + qrList.size());
+            return qrList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseMessageUtils.responseMessage(response, "查询失败!");
+            return null;
+        }
+    }
 
-		DepartmentBean dbp = new DepartmentBean();
-		try {
-			List<DepartmentBean> sorceList = this.service.initDepartList(dbp);
-			return sorceList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResponseMessageUtils.responseMessage(response, "查询失败!");
-			return null;
-		}
-	}
+    /**
+     * 项目列表
+     *
+     * @param response
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/projectList")
+    public List<ProjectDataBean> projectList(HttpServletResponse response, HttpServletRequest request) {
+        List<ProjectDataBean> qrList = new ArrayList<>();
+        try {
+            qrList = this.service.initProjectList(request);
+            System.out.println("项目列表" + qrList.size());
+            return qrList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseMessageUtils.responseMessage(response, "查询失败!");
+            return null;
+        }
+    }
 
-	/**
-	 * 民族列表
-	 * 
-	 * @param response
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/nationList")
-	public List<Nation> positionList(HttpServletResponse response, HttpServletRequest request) {
-		List<Nation> nList = new ArrayList<>();
-		try {
-			nList = this.service.initNationList();
-			System.out.println("项目列表" + nList.size());
-			return nList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResponseMessageUtils.responseMessage(response, "查询失败!");
-			return null;
-		}
-	}
+    /**
+     * 部门列表
+     *
+     * @param response
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/departList")
+    public List<DepartmentBean> departList(HttpServletResponse response, HttpServletRequest request) {
 
-	/**
-	 * 职位列表
-	 * 
-	 * @param response
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/positionList")
-	public List<Position> nationList(HttpServletResponse response, HttpServletRequest request) {
-		List<Position> pList = new ArrayList<>();
-		try {
-			pList = this.service.initPositionList();
-			return pList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResponseMessageUtils.responseMessage(response, "查询失败!");
-			return null;
-		}
-	}
+        DepartmentBean dbp = new DepartmentBean();
+        try {
+            List<DepartmentBean> sorceList = this.service.initDepartList(dbp);
+            return sorceList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseMessageUtils.responseMessage(response, "查询失败!");
+            return null;
+        }
+    }
 
-	/**
-	 * 离职原因列表
-	 * 
-	 * @param response
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/leaveReasonList")
-	public List<LeaveResign> leaveReasonList(HttpServletResponse response, HttpServletRequest request) {
-		List<LeaveResign> lrList = new ArrayList<>();
-		try {
-			lrList = this.service.initLeaveList(null);
-			System.out.println("lrList" + lrList.size());
-			return lrList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResponseMessageUtils.responseMessage(response, "查询失败!");
-			return null;
-		}
-	}
+    /**
+     * 民族列表
+     *
+     * @param response
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/nationList")
+    public List<Nation> positionList(HttpServletResponse response, HttpServletRequest request) {
+        List<Nation> nList = new ArrayList<>();
+        try {
+            nList = this.service.initNationList();
+            System.out.println("项目列表" + nList.size());
+            return nList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseMessageUtils.responseMessage(response, "查询失败!");
+            return null;
+        }
+    }
 
-	/**
-	 * 查询部门名称
-	 * 
-	 * @param dpList
-	 *            部门列表 dpId部门id
-	 * @return
-	 */
-	public String departName(List<DepartmentBean> dpList, String dpId) {
-		String dpName = new String();
-		// System.out.println("-------部门列表和部门id----------"+dpList.size());
-		for (DepartmentBean departmentBean : dpList) {
-			DepartmentBean dp = departmentBean;
-			if (dp.getID().equals(dpId)) {
-				dpName = dp.getName();
-				return dpName;
-			}
-		}
-		return "";
-	}
+    /**
+     * 职位列表
+     *
+     * @param response
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/positionList")
+    public List<Position> nationList(HttpServletResponse response, HttpServletRequest request) {
+        List<Position> pList = new ArrayList<>();
+        try {
+            pList = this.service.initPositionList();
+            return pList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseMessageUtils.responseMessage(response, "查询失败!");
+            return null;
+        }
+    }
 
-	/**
-	 * 家庭成员列表
-	 * 
-	 * @param param
-	 * @param response
-	 * @param request
-	 * @return
-	 */
+    /**
+     * 离职原因列表
+     *
+     * @param response
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/leaveReasonList")
+    public List<LeaveResign> leaveReasonList(HttpServletResponse response, HttpServletRequest request) {
+        List<LeaveResign> lrList = new ArrayList<>();
+        try {
+            lrList = this.service.initLeaveList(null);
+            System.out.println("lrList" + lrList.size());
+            return lrList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseMessageUtils.responseMessage(response, "查询失败!");
+            return null;
+        }
+    }
+
+    /**
+     * 查询部门名称
+     *
+     * @param dpList 部门列表 dpId部门id
+     * @return
+     */
+    public String departName(List<DepartmentBean> dpList, String dpId) {
+        String dpName = new String();
+        // System.out.println("-------部门列表和部门id----------"+dpList.size());
+        for (DepartmentBean departmentBean : dpList) {
+            DepartmentBean dp = departmentBean;
+            if (dp.getID().equals(dpId)) {
+                dpName = dp.getName();
+                return dpName;
+            }
+        }
+        return "";
+    }
+
+    /**
+     * 家庭成员列表
+     *
+     * @param param
+     * @param response
+     * @param request
+     * @return
+     */
 //	@ResponseBody
 //	@RequestMapping(value = "/familyList")
 //	public List<QueryFamilyResult> familyList(HttpServletResponse response, HttpServletRequest request) {
@@ -443,6 +439,7 @@ public class EmpController {
 //			return null;
 //		}
 //	}
+
 
 	/**
 	 * ------------------------------------------------------------------个人信息----------------------------------------------------------------------
@@ -1363,6 +1360,5 @@ public class EmpController {
 		wb.write(out); // 将响应流输入到Excel表格中
 		out.flush();
 	}
-
 }
 

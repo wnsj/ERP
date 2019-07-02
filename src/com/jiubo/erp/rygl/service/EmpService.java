@@ -115,5 +115,5 @@ public interface EmpService {
 	 * @version: V1.0
 	 */
 	public List<DeptEmp> selectEmpBasicByDept(EmployeeBasicBean employeeBasicBean);
-	
+
 }

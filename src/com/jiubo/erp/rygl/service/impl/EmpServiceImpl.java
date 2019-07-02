@@ -6,11 +6,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.common.Position;
 import com.jiubo.erp.rygl.bean.DepartmentBean;
 import com.jiubo.erp.rygl.bean.EmployeeBasicBean;
@@ -29,6 +27,7 @@ import com.jiubo.erp.rygl.vo.UserInfo;
 
 @Service
 public class EmpServiceImpl implements EmpService {
+
 	@Autowired
 	private empDao dao;
 

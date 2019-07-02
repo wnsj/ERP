@@ -1,27 +1,27 @@
 package com.jiubo.erp.rygl.vo;
 
 public class PostStation {
-	private String positionTypeId;
-	private String positionTypeName;
-	
-	public PostStation() {
-		// TODO Auto-generated constructor stub
-	}
+    private String positionTypeId;
+    private String positionTypeName;
 
-	public String getPositionTypeId() {
-		return positionTypeId;
-	}
+    public PostStation() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public void setPositionTypeId(String positionTypeId) {
-		this.positionTypeId = positionTypeId;
-	}
+    public String getPositionTypeId() {
+        return positionTypeId;
+    }
 
-	public String getPositionTypeName() {
-		return positionTypeName;
-	}
+    public void setPositionTypeId(String positionTypeId) {
+        this.positionTypeId = positionTypeId;
+    }
 
-	public void setPositionTypeName(String positionTypeName) {
-		this.positionTypeName = positionTypeName;
-	}
-	
+    public String getPositionTypeName() {
+        return positionTypeName;
+    }
+
+    public void setPositionTypeName(String positionTypeName) {
+        this.positionTypeName = positionTypeName;
+    }
+
 }

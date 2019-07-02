@@ -1,28 +1,28 @@
 package com.jiubo.erp.rygl.vo;
 
 public class Nation {
-	private String ID;
-	private String nation;
-	
-	public Nation() {
-		// TODO Auto-generated constructor stub
-	}
+    private String ID;
+    private String nation;
 
-	public String getID() {
-		return ID;
-	}
+    public Nation() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public void setNationId(String ID) {
-		this.ID = ID;
-	}
+    public String getID() {
+        return ID;
+    }
 
-	public String getNation() {
-		return nation;
-	}
+    public void setNationId(String ID) {
+        this.ID = ID;
+    }
 
-	public void setNation(String nation) {
-		this.nation = nation;
-	}
-	
-	
+    public String getNation() {
+        return nation;
+    }
+
+    public void setNation(String nation) {
+        this.nation = nation;
+    }
+
+
 }

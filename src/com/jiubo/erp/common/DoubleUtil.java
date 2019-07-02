@@ -9,32 +9,33 @@ public class DoubleUtil {
 
     /**
      * 保留两位小数 四舍五入
+     *
      * @param d
      * @return
      */
-    public static double DoubleRef(double d){
+    public static double DoubleRef(double d) {
         DecimalFormat df = new DecimalFormat("#.00");
         return Double.valueOf(df.format(d));
     }
 
-    public static String DoubleRefl(double d){
-        DecimalFormat df =null;
-        if(d>0){
+    public static String DoubleRefl(double d) {
+        DecimalFormat df = null;
+        if (d > 0) {
             df = new DecimalFormat("###,###,##0.00");
 
-        }else{
+        } else {
             df = new DecimalFormat("0");
 
         }
         return df.format(d);
     }
-    
-    public static String DoubleRefSale(double d){
-        DecimalFormat df =null;
-        if(d>0){
+
+    public static String DoubleRefSale(double d) {
+        DecimalFormat df = null;
+        if (d > 0) {
             df = new DecimalFormat("###,###,##0");
 
-        }else{
+        } else {
             df = new DecimalFormat("0");
         }
         return df.format(d);
@@ -47,11 +48,11 @@ public class DoubleUtil {
         if (scale < 0) {
             throw new IllegalArgumentException("The   scale   must   be   a   positive   integer   or   zero");
         }
-        if(scale == 0){
+        if (scale == 0) {
             return new DecimalFormat("0").format(v);
         }
         String formatStr = "0.";
-        for(int i = 0;i < scale; i++){
+        for (int i = 0; i < scale; i++) {
             formatStr = formatStr + "0";
         }
         return new DecimalFormat(formatStr).format(v);

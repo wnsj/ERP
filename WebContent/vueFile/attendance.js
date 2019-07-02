@@ -157,7 +157,7 @@ var vm = new Vue({
 
                     dataList[11].menu_nume = '    &nbsp;&nbsp;├─天津总院客服'
                     tempList.push(dataList[11])
-                    
+
                     dataList[39].menu_nume = '    &nbsp;&nbsp;├─天津米悦运营'
                     tempList.push(dataList[39])
 
@@ -248,7 +248,7 @@ var vm = new Vue({
                     dataList[24].menu_nume = '  └─总务科'
                     tempList.push(dataList[24])
 
-                    tempList.forEach(function(item){
+                    tempList.forEach(function (item) {
                         console.log(item.menu_nume)
                     })
                     vm.departmentList = tempList
@@ -382,7 +382,7 @@ var vm = new Vue({
             this.getNation()
             this.getPosition()
             vm.employee_ID = ID
-            console.log('ID',ID)
+            console.log('ID', ID)
             // 获取员工基础信息
             $.ajax({
                 type: "get",
@@ -459,7 +459,7 @@ var vm = new Vue({
             });
         },
         // 修改员工信息
-        updateEmployeeInfo: function(){
+        updateEmployeeInfo: function () {
             // 修改基本信息
             $.ajax({
                 type: "post",
@@ -469,16 +469,16 @@ var vm = new Vue({
                     Name: vm.updateName,
                     State: vm.updateState,
                     Sex: vm.updateSex,
-                    Birth: vm.updateBirth+' '+'00:00:00',
+                    Birth: vm.updateBirth + ' ' + '00:00:00',
                     JobNum: vm.updateJobNum,
 
                     Account_Name: vm.updateAccount,
                     Department: vm.updateDepartment,
                     Position_Name: vm.updatePosition,
 
-                    EntryDate: vm.updateEntryDate+' '+'00:00:00',
-                    PositiveDate: vm.updatePositiveDate+' '+'00:00:00',
-                    ResignDate: vm.updateResignDate+' '+'00:00:00',
+                    EntryDate: vm.updateEntryDate + ' ' + '00:00:00',
+                    PositiveDate: vm.updatePositiveDate + ' ' + '00:00:00',
+                    ResignDate: vm.updateResignDate + ' ' + '00:00:00',
                     ResignType: vm.updateResignType,
                     Remark: vm.updateRemark
                 },
@@ -490,14 +490,14 @@ var vm = new Vue({
                         data: "data",
                         dataType: "dataType",
                         success: function (response) {
-                            
+
                         }
                     });
 
                     $("#myModalUpdate").modal('hide')
                     alert('修改成功！')
                 },
-                error: function(){
+                error: function () {
                     $("#myModalUpdate").modal('hide')
                     alert('修改失败！')
                 }
@@ -532,14 +532,14 @@ var vm = new Vue({
                     $("#myModalUpdate").modal('hide')
                     alert('修改成功！')
                 },
-                error: function(){
+                error: function () {
                     $("#myModalUpdate").modal('hide')
                     alert('修改失败！')
                 }
             });
         },
         // 修改员工家庭成员信息
-        updateEmployeeFamily: function(account_ID){
+        updateEmployeeFamily: function (account_ID) {
             $.ajax({
                 type: "post",
                 url: 'http://' + vm.hostPath + '/ERP/Erp/UpdateFamily.action',
@@ -555,7 +555,7 @@ var vm = new Vue({
                     address: vm.updateAddress
                 },
                 success: function (data) {
-                    
+
                 }
             });
         },
@@ -571,7 +571,7 @@ var vm = new Vue({
             });
         },
         // 获取所有职位
-        getPosition: function(){
+        getPosition: function () {
             $.ajax({
                 type: "get",
                 url: 'http://' + vm.hostPath + '/ERP/Erp/chooseposition.action',

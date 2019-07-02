@@ -1,64 +1,64 @@
 package com.jiubo.erp.rygl.vo;
 
 public class Account {
-	private String accountId;
-	private String accountName;
-	private String accountPwd;
-	private String accountState;
-	private String positionId;
-	private String accountMac;
-	
-	public Account() {
-		// TODO Auto-generated constructor stub
-	}
+    private String accountId;
+    private String accountName;
+    private String accountPwd;
+    private String accountState;
+    private String positionId;
+    private String accountMac;
 
-	public String getAccountId() {
-		return accountId;
-	}
-	
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
-	}
+    public Account() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public String getAccountName() {
-		return accountName;
-	}
+    public String getAccountId() {
+        return accountId;
+    }
 
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
-	}
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
 
-	public String getAccountPwd() {
-		return accountPwd;
-	}
+    public String getAccountName() {
+        return accountName;
+    }
 
-	public void setAccountPwd(String accountPwd) {
-		this.accountPwd = accountPwd;
-	}
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
 
-	public String getAccountState() {
-		return accountState;
-	}
+    public String getAccountPwd() {
+        return accountPwd;
+    }
 
-	public void setAccountState(String accountState) {
-		this.accountState = accountState;
-	}
+    public void setAccountPwd(String accountPwd) {
+        this.accountPwd = accountPwd;
+    }
 
-	public String getPositionId() {
-		return positionId;
-	}
+    public String getAccountState() {
+        return accountState;
+    }
 
-	public void setPositionId(String positionId) {
-		this.positionId = positionId;
-	}
+    public void setAccountState(String accountState) {
+        this.accountState = accountState;
+    }
 
-	public String getAccountMac() {
-		return accountMac;
-	}
+    public String getPositionId() {
+        return positionId;
+    }
 
-	public void setAccountMac(String accountMac) {
-		this.accountMac = accountMac;
-	}
-	
-	
+    public void setPositionId(String positionId) {
+        this.positionId = positionId;
+    }
+
+    public String getAccountMac() {
+        return accountMac;
+    }
+
+    public void setAccountMac(String accountMac) {
+        this.accountMac = accountMac;
+    }
+
+
 }

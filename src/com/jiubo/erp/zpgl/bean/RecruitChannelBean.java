@@ -1,38 +1,39 @@
 package com.jiubo.erp.zpgl.bean;
 
 import java.io.Serializable;
+
 //招聘渠道
-public class RecruitChannelBean implements Serializable{
-	
-	private static final long serialVersionUID = -944158054506370982L;
-	
-	private String recruitChannelId;//招聘渠道id
-	
-	private String recruitChannelName;//招聘渠道名
+public class RecruitChannelBean implements Serializable {
 
-	public RecruitChannelBean() {
-		super();
-	}
+    private static final long serialVersionUID = -944158054506370982L;
 
-	public String getRecruitChannelId() {
-		return recruitChannelId;
-	}
+    private String recruitChannelId;//招聘渠道id
 
-	public void setRecruitChannelId(String recruitChannelId) {
-		this.recruitChannelId = recruitChannelId;
-	}
+    private String recruitChannelName;//招聘渠道名
 
-	public String getRecruitChannelName() {
-		return recruitChannelName;
-	}
+    public RecruitChannelBean() {
+        super();
+    }
 
-	public void setRecruitChannelName(String recruitChannelName) {
-		this.recruitChannelName = recruitChannelName;
-	}
+    public String getRecruitChannelId() {
+        return recruitChannelId;
+    }
 
-	@Override
-	public String toString() {
-		return "RecruitChannelBean [recruitChannelId=" + recruitChannelId + ", recruitChannelName=" + recruitChannelName
-				+ "]";
-	}
+    public void setRecruitChannelId(String recruitChannelId) {
+        this.recruitChannelId = recruitChannelId;
+    }
+
+    public String getRecruitChannelName() {
+        return recruitChannelName;
+    }
+
+    public void setRecruitChannelName(String recruitChannelName) {
+        this.recruitChannelName = recruitChannelName;
+    }
+
+    @Override
+    public String toString() {
+        return "RecruitChannelBean [recruitChannelId=" + recruitChannelId + ", recruitChannelName=" + recruitChannelName
+                + "]";
+    }
 }
