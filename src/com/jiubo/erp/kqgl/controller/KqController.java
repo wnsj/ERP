@@ -121,7 +121,7 @@ public class KqController {
 
 
             List<KqInfoResult> kqInfoRes = this.service.searchKqInfoList(ap);
-//			System.out.println("kqInfoRes"+kqInfoRes.size()+ ap.toString());
+			System.out.println("kqInfoRes"+kqInfoRes.size()+ ap.toString());
             if (kqInfoRes.size() < 1) {
                 kqInfoRes = this.service.selectKqInfoList(ap);
             } else {
@@ -733,6 +733,7 @@ public class KqController {
 
             List<PersonalKQBean> rykqLsit = new ArrayList<>();
 
+            System.out.println("kqTableList:" + ap.toString());
             List<KqInfoResult> kqInfoRes = this.service.selectKqInfoList(ap);
             System.out.println("kqTableList:" + kqInfoRes.size() + ap.toString());
             for (KqInfoResult kqInfoResult : kqInfoRes) {

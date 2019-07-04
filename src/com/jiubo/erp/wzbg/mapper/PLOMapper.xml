@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.jiubo.erp.wzbg.dao.PLODao">
+    <!-- 请假列表 -->
+<select id="selectAskForLeaveList" parameterType="com.jiubo.erp.wzbg.vo.PLOParam"
+        resultType="com.jiubo.erp.wzbg.bean.AskForLeaveBean">
+SELECT
+LQ.ID AS id
+,LQ.LeaveType AS LeaveType
+,LQ.AddTime AS AddTime
+,LQ.LeaveAccount AS LeaveAccount
+,LQ.AgentAccount AS AgentAccount
+,LQ.StartTime AS StartTime
+,LQ.EndTime AS EndTime
+,LQ.Leave_Remark AS Leave_Remark
+,LQ.photo AS photo
+,LQ.Account1 AS Account1
+,LQ.Time1 AS Time1
+,CASE WHEN LQ.Result1 = 1 THEN '同意'
+WHEN LQ.Result1 = 0 THEN '不同意'
+ELSE '' END AS result1 
+,LQ.Remark1 AS remark1
+,LQ.Account2 AS account2
+,LQ.Time2 AS time2
+,CASE WHEN LQ.Result2 = 1 THEN '同意'
+WHEN LQ.Result2 = 0 THEN '不同意'
+ELSE '' END AS result2 
+,LQ.Remark2 AS remark2
+,LQ.Account3 AS account3
+,LQ.Time3 AS time3
+,CASE WHEN LQ.Result3 = 1 THEN '同意'
+WHEN LQ.Result3 = 0 THEN '不同意'
+ELSE '' END AS result3 
+,LQ.Remark3 AS remark3
+,LQ.Account4 AS account4
+,LQ.Time4 AS time4
+,CASE WHEN LQ.Result4 = 1 THEN '同意'
+WHEN LQ.Result4 = 0 THEN '不同意'
+ELSE '' END AS result4 
+,LQ.Remark4 AS remark4
+,LQ.update_Time AS updateTime
+,LQ.isSee AS isSee
+,LQ.step AS step
+,LQ.BaobeiID AS baobeiID
+FROM
+Leave_Qingjia LQ 
+LEFT JOIN Account_Data AD ON LQ.LeaveAccount=AD.Account_ID
+LEFT JOIN T_Employee_Basic TEB ON AD.Account_ID=TEB.Account
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+        <if test="startTime!=null and startTime!=''">
+            AND LQ.AddTime &gt;=#{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND LQ.AddTime &lt;=#{endTime}
+        </if>
+        <if test="accountId!=null and accountId!=''">
+            AND (LQ.AgentAccount =#{accountId} OR LQ.Account1 =#{accountId} 
+                OR LQ.Account2 =#{accountId} OR LQ.Account3 =#{accountId} OR LQ.Account4 =#{accountId})
+        </if>
+        <if test=" departId !=null and departId !=''">
+            AND TEB.Department_ID =#{departId}
+        </if>
+        <if test=" name !=null and name !=''">
+            AND LQ.LeaveAccount =#{name}
+        </if>
+        <if test=" handleState == '待处理'">
+            AND LQ.Result1 IS NULL AND LQ.Result2 IS NULL AND LQ.Result3 IS NULL AND LQ.Result4 IS NULL
+        </if>
+        <if test=" handleState == '处理中'">
+            AND AND LQ.Result4 IS NULL AND LQ.Result1 IS NOT NULL AND LQ.Result1 != 0 
+            AND (LQ.Result2 IS NULL OR LQ.Result2 != 0) AND (LQ.Result3 IS NULL OR LQ.Result3 != 0)
+        </if>
+        <if test=" handleState == '已通过'">
+            AND AND L.Time4 IS NOT NULL  AND L.Result4 = 1
+        </if>
+        <if test=" handleState == '未通过'">
+            AND (L.Result1 = 0 OR L.Result2 = 0 OR L.Result3 = 0  OR L.Result4 = 0)
+        </if>
+        
+    </trim>
+</select>
+<!-- 部门ID  查询部门人员 -->
+<select id="selectDepartOfEmpList" parameterType="com.jiubo.erp.wzbg.vo.PLOParam"
+        resultType="com.jiubo.erp.wzbg.bean.EmployeeOfDepartBean">
+    SELECT 
+TD.ID AS departId
+,TD.Name AS departName
+,TEB.ID AS employeeId
+,TEB.Name AS employeeName
+	from 
+T_Department TD 
+LEFT JOIN T_Employee_Basic TEB ON TD.ID = TEB.Department_ID
+LEFT JOIN Account_Data AD ON AD.Account_ID= TEB.Account
+<trim prefix="WHERE" prefixOverrides="AND | OR">
+        <if test=" departId !=null and departId !=''">
+            AND TD.ID =#{departId}
+        </if>
+        AND TEB.IsDelete = '0' AND TEB.State='1' AND AD.Account_ID != #{accountId}
+    </trim>
+ORDER BY AD.Account_Name
+</select>
+</mapper>

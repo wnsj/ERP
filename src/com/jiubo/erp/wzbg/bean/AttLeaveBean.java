@@ -9,8 +9,8 @@ public class AttLeaveBean implements Serializable {
 
     private static final long serialVersionUID = -1632154974077532588L;
     private String id;
-    private String userId;//用户ID
-    private String jobNum;//工号
+    private String accountId;//用户ID
+	private String jobNum;//工号
     private String leaveTypeId;//请假类别
     private String startTime;//开始时间
     private String endTime;//结束时间
@@ -48,13 +48,14 @@ public class AttLeaveBean implements Serializable {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
-    }
+    public String getAccountId() {
+		return accountId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
 
     public String getJobNum() {
         return jobNum;
@@ -241,7 +242,7 @@ public class AttLeaveBean implements Serializable {
     public String toString() {
         return "AttLeaveBean{" +
                 "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
+                ", accountId='" + accountId + '\'' +
                 ", jobNum='" + jobNum + '\'' +
                 ", leaveTypeId='" + leaveTypeId + '\'' +
                 ", startTime='" + startTime + '\'' +
