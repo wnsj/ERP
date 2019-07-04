@@ -85,5 +85,6 @@ public interface RyxxlDao {
     public List<ZpxgpgBean> getRecruitChannel(@Param("begDate") String begDate, @Param("endDate") String endDate);
 
     //人力资源利用率分析报表
-    public List<DepartmentBean> getDeptEmpClock(@Param("begDate") String begDate, @Param("endDate") String endDate, @Param("isEntry") String isEntry, @Param("isQuit") String isQuit);
+    public List<DepartmentBean> getDeptEmpClock(@Param("begDate") String begDate, @Param("endDate") String endDate,@Param("isEntry") String isEntry, @Param("isQuit") String isQuit);
+   
 }

@@ -1,7 +1,5 @@
 package com.jiubo.erp.wzbg.bean;
 
-import org.springframework.beans.BeanUtils;
-
 import java.io.Serializable;
 
 //请假信息

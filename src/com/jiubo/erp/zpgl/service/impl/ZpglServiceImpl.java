@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 @Transactional
 public class ZpglServiceImpl implements ZpglService {
 
-    Logger logger = LoggerFactory.getLogger(ZpglServiceImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(ZpglServiceImpl.class);
 
     @Autowired
     private ZpglDao zpglDao;
@@ -54,7 +54,6 @@ public class ZpglServiceImpl implements ZpglService {
                 }
             }
         }
-//		log.info(zpglDao.queryRecruitData(recruitDataBean).toString());
 
 		return zpglDao.queryRecruitData(recruitDataBean);
 		

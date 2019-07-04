@@ -10,8 +10,14 @@ import com.jiubo.erp.erpLogin.vo.PositionInfoOutPut;
 
 public interface LoginDAO {
 
-    LoginOutput userLogin(AccountDataBean input);
+    //根据用户名查询账号信息
+    AccountDataBean userLogin(AccountDataBean input);
 
+    //根据用户id查询权限
+    List<RuleDataBean> queryRuleData(String accountId);
+
+}
+/*
     List<PositionInfoOutPut> selectPositionInfoByAccoutname(AccountDataBean input);
 
     AccountDataBean selectByUserName(AccountDataBean input);
@@ -21,5 +27,4 @@ public interface LoginDAO {
     Integer addRuleData(RuleDataBean input);
 
     Integer addAccountRuleData(AccountRuleData input);
-
-}
+*/

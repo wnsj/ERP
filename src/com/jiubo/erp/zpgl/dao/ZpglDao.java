@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.jiubo.erp.common.MessageException;
-import com.jiubo.erp.wzbg.bean.AttLeaveBean;
 import com.jiubo.erp.zpgl.bean.RecruitChannelBean;
 import com.jiubo.erp.zpgl.bean.RecruitDataBean;
 import com.jiubo.erp.zpgl.bean.ZpPlanBean;

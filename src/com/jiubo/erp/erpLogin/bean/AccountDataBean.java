@@ -57,4 +57,16 @@ public class AccountDataBean {
     public void setAccount_Mac(String account_Mac) {
         Account_Mac = account_Mac;
     }
+
+    @Override
+    public String toString() {
+        return "AccountDataBean{" +
+                "Account_ID='" + Account_ID + '\'' +
+                ", Account_Name='" + Account_Name + '\'' +
+                ", Account_Pwd='" + Account_Pwd + '\'' +
+                ", Account_State='" + Account_State + '\'' +
+                ", Position_ID='" + Position_ID + '\'' +
+                ", Account_Mac='" + Account_Mac + '\'' +
+                '}';
+    }
 }
