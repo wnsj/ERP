@@ -9,9 +9,9 @@ package com.jiubo.erp.wzbg.vo;
  * @data: 2019-07-02
  **/
 public class AccWithApprovalLeaveAuth {
-	
 	private String accountID; // 账户ID
 	private String accountName;// 账户名
+	
 	public String getAccountID() {
 		return accountID;
 	}
@@ -23,6 +23,10 @@ public class AccWithApprovalLeaveAuth {
 	}
 	public void setAccountName(String accountName) {
 		this.accountName = accountName;
+	}
+	@Override
+	public String toString() {
+		return "AccWithApprovalLeaveAuth [accountID=" + accountID + ", accountName=" + accountName + "]";
 	}
 	
 }

@@ -2,68 +2,171 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jiubo.erp.wzgb.dao.ZpglDao">
+<mapper namespace="com.jiubo.erp.wzbg.dao.WzbgDao">
 	
 	<!-- 添加请假报备 -->
 	<insert id="addLeavePrepare" parameterType="LeavePrepareBean">
 		INSERT INTO 
 		Leave_Baobei(
-			TYPE, TYPE, FILL_ACCOUNT, FILL_TIME, LEAVE_ACCOUNT, STARTTIME, ENDTIME,
-			LEAVE_REMARK, CHECK_ACCOUNT, CHECK_TIME, CHECK_RESULT, UPDATE_TIME, ISSEE, STATE
+			TYPE, FILL_ACCOUNT, FILL_TIME, LEAVE_ACCOUNT, STARTTIME, ENDTIME,
+			LEAVE_REMARK, CHECK_ACCOUNT, UPDATE_TIME
 		)VALUES(
 			#{type}, #{fillAccount}, #{fillTime}, #{leaveAccount}, #{startTime}, #{endTime}, 
-			#{leaveRemark}, #{checkAccount}, #{checkTime}, #{checkResult}, #{updateTime}, #{isSee} ,#{state}
+			#{leaveRemark}, #{checkAccount}, #{updateTime}
 		)
 	</insert>
 	
 	<!-- 查询请假报备 -->
 	<select id="queryLeavePrepare" resultType="LeavePrepareBean">
-		SELECT 
-			A.* , B.NAME 
-		FROM (SELECT 
-				LB.ID, LB.TYPE, LB.FILL_ACCOUNT, LB.FILL_TIME, LB.LEAVE_ACCOUNT,
-				LB.STARTTIME, LB.ENDTIME, LB.LEAVE_REMARK, LB.CHECK_ACCOUNT, LB.CHECK_TIME,
-				LB.CHECK_RESULT, LB.UPDATE_TIME, LB.ISSEE, LB.STATE, A.NAME 
+		SELECT
+			A.ID,
+			A.TYPE,
+			B.LEAVE_EMP_NAME leaveEmpName,
+			B.LEAVE_DEPT_ID leaveDeptId,
+			B.LEAVE_DEPT_NAME leaveDepartmentName,
+			A.STARTTIME,
+			A.ENDTIME,
+			A.LEAVE_REMARK,
+			A.FILL_EMP_NAME fillEmpName,
+			A.FILL_DEPT_NAME fillDepartmentName,
+			A.FILL_TIME,
+			C.CHECK_NAME checkEmpName,
+			A.CHECK_TIME,
+			A.CHECK_RESULT,
+			A.CHECK_REMARK,
+			A.STATE
+		FROM
+			(
+			SELECT
+				LB.ID,
+				LB.TYPE,
+				LB.FILL_ACCOUNT,
+				LB.FILL_TIME,
+				LB.LEAVE_ACCOUNT,
+				LB.STARTTIME,
+				LB.ENDTIME,
+				LB.LEAVE_REMARK,
+				LB.CHECK_ACCOUNT,
+				LB.CHECK_TIME,
+				LB.CHECK_RESULT,
+				LB.CHECK_REMARK,
+				LB.UPDATE_TIME,
+				LB.ISSEE,
+				LB.STATE,
+				A.FILL_EMP_NAME,
+				A.FILL_DEPT_NAME 
 			FROM
-				(SELECT
+				(
+				SELECT
 					LB.FILL_ACCOUNT,
-					DEPT.NAME 
+					ACC.ACCOUNT_NAME AS FILL_EMP_NAME,
+					DEPT.NAME AS FILL_DEPT_NAME 
 				FROM
 					Leave_Baobei AS LB
-					LEFT JOIN T_Employee_Basic AS EMP ON LB.FILL_ACCOUNT = EMP.ACCOUNT
-					LEFT JOIN T_Department AS DEPT ON EMP.DEPARTMENT_ID = DEPT.ID
+					LEFT JOIN Account_Data AS ACC ON LB.FILL_ACCOUNT = ACC.ACCOUNT_ID
+					LEFT JOIN T_EMPLOYEE_BASIC AS EMP ON ACC.ACCOUNT_ID = EMP.ACCOUNT
+					LEFT JOIN T_Department AS DEPT ON EMP.DEPARTMENT_ID = DEPT.ID 
 				GROUP BY
-					LB.FILL_ACCOUNT,DEPT.NAME 
+					LB.FILL_ACCOUNT,
+					ACC.ACCOUNT_NAME,
+					DEPT.NAME 
 				) AS A,
 				Leave_Baobei AS LB 
 			WHERE
 				A.FILL_ACCOUNT = LB.FILL_ACCOUNT 
-		) AS A,
-			(SELECT
+			) AS A,
+			(
+			SELECT
 				LB.LEAVE_ACCOUNT,
-				DEPT.NAME 
+				ACC.ACCOUNT_NAME AS LEAVE_EMP_NAME,
+				DEPT.ID AS LEAVE_DEPT_ID,
+				DEPT.NAME AS LEAVE_DEPT_NAME 
 			FROM
 				Leave_Baobei AS LB
-				LEFT JOIN T_Employee_Basic AS EMP ON LB.LEAVE_ACCOUNT = EMP.ACCOUNT
-				LEFT JOIN T_Department AS DEPT ON EMP.DEPARTMENT_ID = DEPT.ID
-			GROUP BY LB.LEAVE_ACCOUNT, DEPT.NAME 
-		) AS B 
+				LEFT JOIN Account_Data AS ACC ON LB.LEAVE_ACCOUNT = ACC.ACCOUNT_ID
+				LEFT JOIN T_EMPLOYEE_BASIC AS EMP ON ACC.ACCOUNT_ID = EMP.ACCOUNT
+				LEFT JOIN T_Department AS DEPT ON EMP.DEPARTMENT_ID = DEPT.ID  
+			GROUP BY
+				LB.LEAVE_ACCOUNT,
+				ACC.ACCOUNT_NAME,
+				DEPT.ID,
+				DEPT.NAME 
+			) AS B,
+			(
+			SELECT
+				LB.CHECK_ACCOUNT,
+				EMP.NAME AS CHECK_NAME	
+			FROM
+				Leave_Baobei AS LB
+				LEFT JOIN Account_Data AS ACC ON LB.CHECK_ACCOUNT = ACC.ACCOUNT_ID
+				LEFT JOIN T_Employee_Basic AS EMP ON ACC.ACCOUNT_ID = EMP.ACCOUNT 
+			GROUP BY
+				LB.CHECK_ACCOUNT,
+				EMP.NAME 
+			) AS C 
 		WHERE
-			A.LEAVE_ACCOUNT = B.LEAVE_ACCOUNT
+			A.LEAVE_ACCOUNT = B.LEAVE_ACCOUNT  
+			AND A.CHECK_ACCOUNT = C.CHECK_ACCOUNT  
+			<if test="startTime !=null and startTime !='' ">
+				AND A.FILL_TIME <![CDATA[ >= ]]> #{startTime}
+			</if>
+			<if test="endTime !=null and endTime !='' ">
+				AND A.FILL_TIME <![CDATA[ <= ]]> #{endTime}
+			</if>
+			<if test="leaveDeptId !=null and leaveDeptId !='' ">
+				AND B.LEAVE_DEPT_ID = #{leaveDeptId}
+			</if>
+			<if test="leaveEmpName !=null and leaveEmpName !='' ">
+				AND B.LEAVE_EMP_NAME LIKE '%' + #{leaveEmpName} + '%'
+			</if>
+			<if test="state !=null and state !='' ">
+				<choose>
+					<when test="state==1">
+						AND A.CHECK_RESULT IS NULL
+					</when>
+					<when test="state==2">
+						AND A.CHECK_RESULT = '1'
+					</when>
+					<when test="state==3">
+						AND A.CHECK_RESULT = '0'
+					</when>
+					<when test="state==4">
+						AND A.STATE = '1'
+					</when>
+					<when test="state==5">
+						AND A.STATE IS NULL
+					</when>
+					<when test="state==6">
+						AND A.STATE = '2'
+					</when>
+				</choose>
+			</if>
+		ORDER BY A.ID
 	</select>
 	
-	<!--  查询报备审批权限表 -->
-	<select id="queryApprovalLeave" resultType="ApprovalBaoBeiBean">
-		SELECT APP.CHECK_POSITIONID FROM APPROVAL_BAOBEI
+	<!--  报备审批权限映射表 -->	
+	<resultMap type="ApprovalBaoBeiBean" id="ApprovalResultMap">
+        <id property="id" column="ID" />
+        <result property="leavePositionID" column="Leave_PositionID" />
+        <result property="checkPositionID" column="Check_PositionID" />
+    </resultMap>
+	<!--  查询报备审批权限表 -->	
+	<select id="queryApprovalAuth" resultMap="ApprovalResultMap">
+		SELECT 
+			ID, LEAVE_POSITIONID, CHECK_POSITIONID 
+		FROM 
+			APPROVAL_BAOBEI
 	</select>
 	
 	<!--  查询请假报备审批权限账户信息 -->
-	<select id="queryApprovalLeaveAccount" resultType="com.jiubo.erp.erpLogin.bean.AccountDataBean">
+	<select id="queryAuthAccount" resultType="AccWithApprovalLeaveAuth">
 		SELECT 
-			ACC.ACCOUNT_ID ACC.ACCOUNT_NAME
+			ACC.ACCOUNT_ID AS accountID, ACC.ACCOUNT_NAME AS accountName
 		FROM 
-			Account_Data 
-		WHERE 
-			ACC.POSITION_ID IN #{args}
+			Account_Data AS ACC
+		WHERE
+			ACC.POSITION_ID = #{id}
+		AND 
+			ACC.ACCOUNT_STATE = '在用'
 	</select>
 </mapper>

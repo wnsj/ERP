@@ -57,4 +57,5 @@ public class AccountDataBean {
     public void setAccount_Mac(String account_Mac) {
         Account_Mac = account_Mac;
     }
+    
 }

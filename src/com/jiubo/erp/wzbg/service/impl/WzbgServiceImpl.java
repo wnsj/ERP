@@ -1,15 +1,19 @@
 package com.jiubo.erp.wzbg.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jiubo.erp.erpLogin.bean.AccountDataBean;
+import com.jiubo.erp.common.MessageException;
+import com.jiubo.erp.common.TimeUtil;
+import com.jiubo.erp.wzbg.bean.ApprovalBaoBeiBean;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
 import com.jiubo.erp.wzbg.dao.WzbgDao;
 import com.jiubo.erp.wzbg.service.WzbgService;
@@ -40,13 +44,8 @@ public class WzbgServiceImpl implements WzbgService {
 	 * @version: V1.0
 	 */
 	@Override
-	public void addLeavePrepareBean(LeavePrepareBean leavePrepareBean) {
-		try {
-			logger.debug("-----------------添加请假报备成功-------------------------");
-			wzbgDao.addLeavePrepare(leavePrepareBean);
-		} catch (Exception e) {
-			logger.error("---------------添加请假报备失败-----------------------------");
-		}
+	public void addLeavePrepareBean(LeavePrepareBean leavePrepareBean) throws MessageException {
+		wzbgDao.addLeavePrepare(leavePrepareBean);
 	}
 	
 	/**
@@ -58,22 +57,48 @@ public class WzbgServiceImpl implements WzbgService {
 	 * @version: V1.0
 	 */
 	@Override
-	public List<AccWithApprovalLeaveAuth> queryApprovalLeaveAccount() {
+	public List<AccWithApprovalLeaveAuth> queryApprovalAuthAccount() throws MessageException {
+		logger.info("---------------开始执行queryApprovalAuthAccount方法-------------------");
+		// 查询审批报备
+		ApprovalBaoBeiBean approval = wzbgDao.queryApprovalAuth();
+		// 创建Map用于封装集合数据
 		List<AccWithApprovalLeaveAuth> accList = new ArrayList<AccWithApprovalLeaveAuth>();
-		String str = wzbgDao.queryApprovalLeave();
-		String[] args = str.split("|");
-		List<AccountDataBean> list = wzbgDao.queryApprovalLeaveAccount(args);
-		for(AccountDataBean accData:list) {
-			AccWithApprovalLeaveAuth acc = new AccWithApprovalLeaveAuth();
-			acc.setAccountID(accData.getAccount_ID());
-			acc.setAccountName(accData.getAccount_Name());
-			accList.add(acc);
+		// 获取报备表的审批职位id并去掉首尾符号
+		String str = approval.getCheckPositionID().substring(1, approval.getCheckPositionID().length()-1);
+		// 截取字符串
+		String[] pidStr = str.split("\\|");
+		for(String pid:pidStr) {
+			List<AccWithApprovalLeaveAuth> list = wzbgDao.queryAuthAccount(pid);
+			accList.addAll(list);
 		}
 		return accList;
 	}
-
 	
-	
+	/**
+	 * @Description: 查询请假报备
+	 * @param  
+	 * @return 
+	 * @author: DingDong
+	 * @date: 2019年07月4日
+	 * @version: V1.0
+	 */
+	@Override
+	public List<LeavePrepareBean> queryLeavePrepareBean(LeavePrepareBean leavePrepareBean) throws MessageException {
+		List<LeavePrepareBean> list = wzbgDao.queryLeavePrepare(leavePrepareBean);
+		for(LeavePrepareBean leave:list) {
+			if(!StringUtils.isEmpty(leave.getCheckResult())) {
+				switch (leave.getCheckResult()) {
+					case "0":
+						leave.setCheckResult("不同意");
+						break;
+					case "1":
+						leave.setCheckResult("同意");
+						break;
+				}
+			}
+		}
+		return list;
+	}
 	
 
 }

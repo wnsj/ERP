@@ -5,12 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.hp.hpl.sparta.xpath.ThisNodeTest;
 
 public class TimeUtil {
 
@@ -96,7 +93,6 @@ public class TimeUtil {
     public final static int UNIT_SECOND = Calendar.SECOND;
     //24进制小时
     public final static int UNIT_HOUR_OF_DAY = Calendar.HOUR_OF_DAY;
-
     /**
      * 返回日期增减
      */

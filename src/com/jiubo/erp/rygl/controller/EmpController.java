@@ -1288,7 +1288,6 @@ public class EmpController {
 			String id = MapUtil.getString(params, "departmentId", MapUtil.ALLOW_NULL);
 			EmployeeBasicBean emp = new EmployeeBasicBean();
 			emp.setDepartment_ID(id);
-			log.info("------------查询成功 selectEmpBasicByDept----------");
 			List<DeptEmp> list = service.selectEmpBasicByDept(emp);
 			result.put(Constant.Result.RETDATA, list);
 		} catch (Exception e) {
