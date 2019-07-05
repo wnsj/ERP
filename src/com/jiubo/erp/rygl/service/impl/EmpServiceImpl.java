@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.jiubo.erp.common.Position;
 import com.jiubo.erp.rygl.bean.DepartmentBean;
-import com.jiubo.erp.rygl.bean.EmployeeBasicBean;
 import com.jiubo.erp.rygl.bean.ProjectDataBean;
 import com.jiubo.erp.rygl.dao.empDao;
 import com.jiubo.erp.rygl.service.EmpService;
 import com.jiubo.erp.rygl.vo.Account;
-import com.jiubo.erp.rygl.vo.DeptEmp;
 import com.jiubo.erp.rygl.vo.LeaveResign;
 import com.jiubo.erp.rygl.vo.Nation;
 import com.jiubo.erp.rygl.vo.PositionShift;
@@ -302,25 +300,5 @@ public class EmpServiceImpl implements EmpService {
 	public Integer addLeaveReason(LeaveResign lResign) {
 		// TODO Auto-generated method stub
 		return this.dao.addLeaveReason(lResign);
-	}
-	
-	/**
-	 * @author: DingDong
-	 * @date: 2019年7月1日
-	 * @version: V1.0
-	 */
-	@Override
-	public List<DeptEmp> selectEmpBasicByDept(EmployeeBasicBean employeeBasicBean) {
-		List<DeptEmp> deptEmpList = new ArrayList<DeptEmp>();
-		List<EmployeeBasicBean> list = dao.selectEmpBasicByDept(employeeBasicBean);
-		for(EmployeeBasicBean emp:list) {
-			DeptEmp deptEmp = new DeptEmp();
-			deptEmp.setId(emp.getID());
-			deptEmp.setName(emp.getName());
-			deptEmp.setDeptId(emp.getDepartment_ID());
-			deptEmp.setAccount(emp.getAccount());
-			deptEmpList.add(deptEmp);
-		}
-		return deptEmpList;
 	}
 }

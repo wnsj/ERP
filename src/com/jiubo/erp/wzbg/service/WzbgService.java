@@ -5,6 +5,7 @@ import java.util.List;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
 import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
+import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 
 /**
  * @version: V1.0
@@ -14,6 +15,16 @@ import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
  * @data: 2019-06-29
  **/
 public interface WzbgService {
+	
+	/**
+	 * @Description: 查询部门下的员工姓名以及ERP账户信息
+	 * @param  String id(部门id)
+	 * @return List<DeptWithEmp>
+	 * @author: DingDong
+	 * @date: 2019年7月1日
+	 * @version: V1.0
+	 */
+	public List<DeptWithEmp> queryEmpInfoByDept(String id) throws MessageException;
 	
 	/**
 	 * @Description: 添加请假报备

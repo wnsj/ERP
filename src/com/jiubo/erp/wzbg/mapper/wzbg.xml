@@ -3,6 +3,23 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.erp.wzbg.dao.WzbgDao">
+
+	<!-- 查询某个部门下的员工姓名和员工ERP账户-->
+	<select id="queryEmpInfoByDept" resultType="DeptWithEmp">
+		SELECT
+			ACC.ACCOUNT_NAME name,
+			ACC.ACCOUNT_ID account
+		FROM
+			T_Employee_Basic AS EMP
+			LEFT JOIN Account_Data AS ACC ON EMP.ACCOUNT = ACC.ACCOUNT_ID 
+		WHERE
+			EMP.Department_ID = #{id}
+			AND state = '1' 
+			AND IsDelete = '0' 
+		ORDER BY
+			ACC.ACCOUNT_NAME,
+			ACC.ACCOUNT_ID
+	</select>
 	
 	<!-- 添加请假报备 -->
 	<insert id="addLeavePrepare" parameterType="LeavePrepareBean">

@@ -2,6 +2,7 @@ package com.jiubo.erp.wzbg.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,17 +13,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.Constant;
+import com.jiubo.erp.common.CookieTools;
 import com.jiubo.erp.common.MapUtil;
 import com.jiubo.erp.common.MessageException;
+import com.jiubo.erp.erpLogin.bean.AccountDataBean;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
 import com.jiubo.erp.wzbg.service.WzbgService;
 import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
+import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 import com.quicksand.push.ToolClass;
 
 /**
@@ -41,6 +47,48 @@ public class WzbgController {
 	
 	@Autowired
 	private WzbgService wzbgService;
+	/**
+	 * @Description: 查询部门下的员工姓名以及ERP账户信息
+	 * @param  
+	 * @return  JSONObject
+	 * @author: DingDong
+	 * @date: 2019年7月1日
+	 * @version: V1.0
+	 */
+	//http://127.0.0.1:8080/Erp/wzbgController/queryEmpInfoByDept
+	@ResponseBody
+	@RequestMapping(value="/queryEmpInfoByDept", method=RequestMethod.POST)
+	public JSONObject queryEmpInfoByDept(@RequestBody Map<String,Object> params,HttpServletRequest request,HttpServletResponse response) {
+		JSONObject result = new JSONObject();
+		String retCode = null;
+		String retMsg = null;
+	    String retData = null;
+		try {
+			String id = MapUtil.getString(params, "departmentId", MapUtil.ALLOW_NULL);
+			List<DeptWithEmp> list = wzbgService.queryEmpInfoByDept(id);
+			
+			retCode = Constant.Result.SUCCESS;
+			retMsg = Constant.Result.SUCCESS_MSG;
+			retData = Constant.Result.RETDATA;
+			
+			result.put(retData, list);
+			logger.info("--------------查询部门下的员工姓名以及ERP账户信息成功 返回json数据-------------------");
+			return result;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+			logger.error("--------------MessageException-------------------");
+			return result;
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error("--------------查询部门下的员工姓名以及ERP账户信息失败-------------------");
+            return result;
+		}finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+		}
+	}
 	
 	/**
 	 * @Description: 请假报备审批人列表
@@ -104,6 +152,7 @@ public class WzbgController {
 			retData = Constant.Result.RETDATA;
 			
 			result.put(retData, list);
+			logger.info("--------------查询请假报备成功 返回json数据-------------------");
 			return result;
 		} catch (IOException e) {
 			retCode = Constant.Result.ERROR;
@@ -113,7 +162,7 @@ public class WzbgController {
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error("--------------参数接收失败-------------------");
+			logger.error("--------------MessageException-------------------");
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
@@ -151,6 +200,7 @@ public class WzbgController {
 			
 			retCode = Constant.Result.SUCCESS;
 			retMsg = Constant.Result.SUCCESS_MSG;
+			logger.info("--------------添加请假报备成功-------------------");
 			return result;
 		} catch (IOException e) {
 			retCode = Constant.Result.ERROR;

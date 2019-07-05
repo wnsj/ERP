@@ -1,23 +1,26 @@
 package com.jiubo.erp.wzbg.service.impl;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.common.TimeUtil;
+
 import com.jiubo.erp.wzbg.bean.ApprovalBaoBeiBean;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
 import com.jiubo.erp.wzbg.dao.WzbgDao;
 import com.jiubo.erp.wzbg.service.WzbgService;
 import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
+import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 
 /**
  * @version: V1.0
@@ -30,10 +33,21 @@ import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
 @Transactional
 public class WzbgServiceImpl implements WzbgService {
 	
-	private final static Logger logger  = LoggerFactory.getLogger(WzbgService.class);
+	private final static Logger logger  = LoggerFactory.getLogger(WzbgServiceImpl.class);
 	
 	@Autowired
 	private WzbgDao wzbgDao;
+	
+	/**
+	 * @author: DingDong
+	 * @date: 2019年7月1日
+	 * @version: V1.0
+	 */
+	@Override
+	public List<DeptWithEmp> queryEmpInfoByDept(String id) throws MessageException {
+		List<DeptWithEmp> list = wzbgDao.queryEmpInfoByDept(id);
+		return list;
+	}
 	
 	/**
 	 * @Description: 添加请假报备
@@ -45,6 +59,49 @@ public class WzbgServiceImpl implements WzbgService {
 	 */
 	@Override
 	public void addLeavePrepareBean(LeavePrepareBean leavePrepareBean) throws MessageException {
+		logger.info("---------------开始执行addLeavePrepareBean方法-------------------");
+		if(!StringUtils.isBlank(leavePrepareBean.getType())) {
+			logger.info("---------------开始假期类型-------------------");
+			switch (leavePrepareBean.getType()) {
+				case "1":
+					leavePrepareBean.setType("病假");
+					break;
+				case "2":
+					leavePrepareBean.setType("事假");
+					break;
+				case "3":
+					leavePrepareBean.setType("婚嫁");
+					break;
+				case "4":
+					leavePrepareBean.setType("产检");
+					break;
+				case "5":
+					leavePrepareBean.setType("产假");
+					break;
+				case "6":
+					leavePrepareBean.setType("哺乳假");
+					break;
+				case "7":
+					leavePrepareBean.setType("丧假");
+					break;
+				case "8":
+					leavePrepareBean.setType("倒休");
+					break;
+				case "9":
+					leavePrepareBean.setType("其他");
+					break;
+			}
+		}
+		if(!StringUtils.isBlank(leavePrepareBean.getStartTime())) {
+			logger.info("---------------开始转换startTme格式-------------------");
+			String startTime = TimeUtil.convertDateT(leavePrepareBean.getStartTime());
+			leavePrepareBean.setStartTime(startTime);
+		}
+		if(!StringUtils.isBlank(leavePrepareBean.getEndTime())) {
+			logger.info("---------------开始转换endTime格式-------------------");
+			String endTime = TimeUtil.convertDateT(leavePrepareBean.getEndTime());
+			leavePrepareBean.setEndTime(endTime);
+		}
 		wzbgDao.addLeavePrepare(leavePrepareBean);
 	}
 	
@@ -85,20 +142,7 @@ public class WzbgServiceImpl implements WzbgService {
 	@Override
 	public List<LeavePrepareBean> queryLeavePrepareBean(LeavePrepareBean leavePrepareBean) throws MessageException {
 		List<LeavePrepareBean> list = wzbgDao.queryLeavePrepare(leavePrepareBean);
-		for(LeavePrepareBean leave:list) {
-			if(!StringUtils.isEmpty(leave.getCheckResult())) {
-				switch (leave.getCheckResult()) {
-					case "0":
-						leave.setCheckResult("不同意");
-						break;
-					case "1":
-						leave.setCheckResult("同意");
-						break;
-				}
-			}
-		}
 		return list;
 	}
-	
 
 }
