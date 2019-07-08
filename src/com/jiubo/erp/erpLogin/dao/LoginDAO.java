@@ -14,7 +14,7 @@ public interface LoginDAO {
     AccountDataBean userLogin(AccountDataBean input);
 
     //根据用户id查询权限
-    List<RuleDataBean> queryRuleData(String accountId);
+    List<AccountRuleData> queryRuleData(String accountId);
 
 }
 /*
