@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.common.Result;
 import com.jiubo.erp.erpLogin.bean.AccountDataBean;
+import com.jiubo.erp.erpLogin.bean.AccountRuleData;
 import com.jiubo.erp.erpLogin.bean.RuleDataBean;
 import com.jiubo.erp.erpLogin.vo.LoginInput;
 import com.jiubo.erp.erpLogin.vo.LoginOutput;
@@ -20,5 +21,5 @@ public interface UserService {
 
     public JSONObject login(AccountDataBean bean) throws MessageException;
 
-    List<RuleDataBean> queryRuleData(String accountId) throws MessageException;
+    List<AccountRuleData> queryRuleData(String accountId) throws MessageException;
 }
