@@ -15,6 +15,7 @@
 	<typeAliases>
 		<package name="com.jiubo.erp.zpgl.bean"/>
 		<package name="com.jiubo.erp.wzbg.bean"/>
+		<package name="com.jiubo.erp.wzbg.vo"/>
 	</typeAliases>
 	
 	<plugins>    

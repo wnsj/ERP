@@ -10,7 +10,6 @@ import com.jiubo.erp.rygl.bean.DepartmentBean;
 import com.jiubo.erp.rygl.bean.EmployeeBasicBean;
 import com.jiubo.erp.rygl.bean.ProjectDataBean;
 import com.jiubo.erp.rygl.vo.Account;
-import com.jiubo.erp.rygl.vo.DeptEmp;
 import com.jiubo.erp.rygl.vo.LeaveResign;
 import com.jiubo.erp.rygl.vo.Nation;
 import com.jiubo.erp.rygl.vo.PositionShift;
@@ -105,15 +104,5 @@ public interface EmpService {
 	
 	//添加离职原因
 	Integer addLeaveReason(LeaveResign lResign);
-	
-	/**
-	 * @Description: 查询该部门下的员工姓名以及ERP账户信息
-	 * @param  String id(部门id)
-	 * @return List<DeptEmp>
-	 * @author: DingDong
-	 * @date: 2019年7月1日
-	 * @version: V1.0
-	 */
-	public List<DeptEmp> selectEmpBasicByDept(EmployeeBasicBean employeeBasicBean);
 
 }

@@ -70,8 +70,5 @@ public interface empDao {
 	Integer deleteLeaveReason(LeaveResign lResign);
 	
 	Integer addLeaveReason(LeaveResign lResign);
-	
-	 
-    // 根据部门id查询该部门下的员工基本信息
-    public List<EmployeeBasicBean> selectEmpBasicByDept(EmployeeBasicBean employeeBasicBean);
+
 }

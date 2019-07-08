@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -24,9 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
@@ -40,11 +37,9 @@ import com.jiubo.erp.common.TimeUtil;
 import com.jiubo.erp.erpLogin.util.ResponseMessageUtils;
 
 import com.jiubo.erp.rygl.bean.DepartmentBean;
-import com.jiubo.erp.rygl.bean.EmployeeBasicBean;
 import com.jiubo.erp.rygl.bean.ProjectDataBean;
 import com.jiubo.erp.rygl.service.EmpService;
 import com.jiubo.erp.rygl.vo.Account;
-import com.jiubo.erp.rygl.vo.DeptEmp;
 import com.jiubo.erp.rygl.vo.LeaveResign;
 import com.jiubo.erp.rygl.vo.Nation;
 import com.jiubo.erp.rygl.vo.PositionShift;
@@ -1269,39 +1264,6 @@ public class EmpController {
 	}
 	
 	
-	/**
-	 * @Description: 查询该部门下的员工姓名以及ERP账户信息
-	 * @param  
-	 * @return  JSONObject
-	 * @author: DingDong
-	 * @date: 2019年7月1日
-	 * @version: V1.0
-	 */
-	//http://127.0.0.1:8080/Erp/search/selectDeptEmpByDept
-	@ResponseBody
-	@RequestMapping(value="/selectDeptEmpByDept", method=RequestMethod.POST)
-	public JSONObject selectEmpBasicByDept(@RequestBody Map<String,Object> params,HttpServletRequest request,HttpServletResponse response) {
-		JSONObject result = new JSONObject();
-		String retCode = Constant.Result.SUCCESS;
-		String retMsg = Constant.Result.SUCCESS_MSG;
-		try {
-			String id = MapUtil.getString(params, "departmentId", MapUtil.ALLOW_NULL);
-			EmployeeBasicBean emp = new EmployeeBasicBean();
-			emp.setDepartment_ID(id);
-			log.info("------------查询成功 selectEmpBasicByDept----------");
-			List<DeptEmp> list = service.selectEmpBasicByDept(emp);
-			result.put(Constant.Result.RETDATA, list);
-		} catch (Exception e) {
-			retCode = Constant.Result.ERROR;
-	        retMsg = Constant.Result.ERROR_MSG;
-	        // 日志记录
-	        log.error(Constant.Result.RETMSG,e);
-		}finally {
-			result.put(Constant.Result.RETCODE, retCode);
-	        result.put(Constant.Result.RETMSG, retMsg);
-		}
-		return result;
-	}
 	
 
 	/**
