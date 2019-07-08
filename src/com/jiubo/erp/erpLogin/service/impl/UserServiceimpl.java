@@ -1,12 +1,17 @@
 package com.jiubo.erp.erpLogin.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.erp.common.Constant;
 import com.jiubo.erp.common.CookieTools;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.erpLogin.bean.RuleDataBean;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,6 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 @Transactional
 public class UserServiceimpl implements UserService {
+
+    public static Logger log = LoggerFactory.getLogger(UserServiceimpl.class);
 
     @Autowired
     private LoginDAO dao;
@@ -54,28 +61,30 @@ public class UserServiceimpl implements UserService {
 //    }
 
     @Override
-    public JSONObject login(AccountDataBean bean) throws MessageException{
+    public JSONObject login(AccountDataBean bean) throws MessageException {
         JSONObject jsonObject = new JSONObject();
-        String pwd = Md5Util.md5Encrypt32Lower(bean.getAccount_Pwd());
-        System.out.println("pwd:"+pwd);
-        bean.setAccount_Pwd(pwd);
-        AccountDataBean accountDataBean = dao.userLogin(bean);
-        if (accountDataBean == null)throw new MessageException("账号或密码错误!");
-        if ("停用".equals(accountDataBean.getAccount_State()))throw new MessageException("该账号已被停用!");
-        jsonObject.put("account",accountDataBean);
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        //String token = (String) request.getSession(true).getAttribute("Access-Token");
-        String token = Md5Util.md5Encrypt32Lower(accountDataBean.getAccount_Name()+accountDataBean.getAccount_Pwd());
-        accountDataBean.setAccount_Pwd("");
-        request.getSession().setAttribute(token,accountDataBean);
-        jsonObject.put("accessToken",token);
-        jsonObject.put("permission",queryRuleData(accountDataBean.getAccount_ID()));
-//        System.out.println("tokenLife:"+tokenLife+"##accountLife:"+accountLife);
-//        CookieTools.addCookie(response,"accessToken",token,StringUtils.isBlank(tokenLife) ? 0 :Integer.parseInt(tokenLife));
-//        CookieTools.addCookie(response,"accountData","16515", StringUtils.isBlank(accountLife) ? 0 :Integer.parseInt(accountLife));
-        CookieTools.addCookie(response,"accessToken",token,tokenLife);
-        CookieTools.addCookie(response,"accountData","16515", accountLife);
+        try {
+            String pwd = Md5Util.md5Encrypt32Lower(bean.getAccount_Pwd());
+            log.error("accountName:{},pwd:{}",bean.getAccount_Name(),pwd);
+            bean.setAccount_Pwd(pwd);
+            AccountDataBean accountDataBean = dao.userLogin(bean);
+            if (accountDataBean == null)throw new MessageException("账号或密码错误!");
+            if ("停用".equals(accountDataBean.getAccount_State()))throw new MessageException("该账号已被停用!");
+            jsonObject.put("account",accountDataBean);
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+            //String token = (String) request.getSession(true).getAttribute("Access-Token");
+            String token = Md5Util.md5Encrypt32Lower(accountDataBean.getAccount_Name()+accountDataBean.getAccount_Pwd());
+            accountDataBean.setAccount_Pwd("");
+            request.getSession().setAttribute(token,accountDataBean);
+            jsonObject.put("accessToken",token);
+            jsonObject.put("permission",queryRuleData(accountDataBean.getAccount_ID()));
+            CookieTools.addCookie(response,"accessToken",token,tokenLife);
+            CookieTools.addCookie(response,"accountData", URLEncoder.encode(jsonObject.toJSONString(), Constant.Charset.UTF8), accountLife);
+        } catch (Exception e) {
+            log.error(Constant.Result.RETMSG, e);
+            throw new MessageException(e.getMessage());
+        }
         return jsonObject;
     }
 
