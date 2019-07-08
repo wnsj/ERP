@@ -5,102 +5,327 @@
 
 
 <mapper namespace="com.jiubo.erp.wzbg.dao.PLODao">
-    <!-- 请假列表 -->
-<select id="selectAskForLeaveList" parameterType="com.jiubo.erp.wzbg.vo.PLOParam"
-        resultType="com.jiubo.erp.wzbg.bean.AskForLeaveBean">
-SELECT
-LQ.ID AS id
-,LQ.LeaveType AS LeaveType
-,LQ.AddTime AS AddTime
-,LQ.LeaveAccount AS LeaveAccount
-,LQ.AgentAccount AS AgentAccount
-,LQ.StartTime AS StartTime
-,LQ.EndTime AS EndTime
-,LQ.Leave_Remark AS Leave_Remark
-,LQ.photo AS photo
-,LQ.Account1 AS Account1
-,LQ.Time1 AS Time1
-,CASE WHEN LQ.Result1 = 1 THEN '同意'
-WHEN LQ.Result1 = 0 THEN '不同意'
-ELSE '' END AS result1 
-,LQ.Remark1 AS remark1
-,LQ.Account2 AS account2
-,LQ.Time2 AS time2
-,CASE WHEN LQ.Result2 = 1 THEN '同意'
-WHEN LQ.Result2 = 0 THEN '不同意'
-ELSE '' END AS result2 
-,LQ.Remark2 AS remark2
-,LQ.Account3 AS account3
-,LQ.Time3 AS time3
-,CASE WHEN LQ.Result3 = 1 THEN '同意'
-WHEN LQ.Result3 = 0 THEN '不同意'
-ELSE '' END AS result3 
-,LQ.Remark3 AS remark3
-,LQ.Account4 AS account4
-,LQ.Time4 AS time4
-,CASE WHEN LQ.Result4 = 1 THEN '同意'
-WHEN LQ.Result4 = 0 THEN '不同意'
-ELSE '' END AS result4 
-,LQ.Remark4 AS remark4
-,LQ.update_Time AS updateTime
-,LQ.isSee AS isSee
-,LQ.step AS step
-,LQ.BaobeiID AS baobeiID
-FROM
-Leave_Qingjia LQ 
-LEFT JOIN Account_Data AD ON LQ.LeaveAccount=AD.Account_ID
-LEFT JOIN T_Employee_Basic TEB ON AD.Account_ID=TEB.Account
-    <trim prefix="WHERE" prefixOverrides="AND | OR">
-        <if test="startTime!=null and startTime!=''">
-            AND LQ.AddTime &gt;=#{startTime}
-        </if>
-        <if test="endTime!=null and endTime!=''">
-            AND LQ.AddTime &lt;=#{endTime}
-        </if>
-        <if test="accountId!=null and accountId!=''">
-            AND (LQ.AgentAccount =#{accountId} OR LQ.Account1 =#{accountId} 
-                OR LQ.Account2 =#{accountId} OR LQ.Account3 =#{accountId} OR LQ.Account4 =#{accountId})
-        </if>
-        <if test=" departId !=null and departId !=''">
-            AND TEB.Department_ID =#{departId}
-        </if>
-        <if test=" name !=null and name !=''">
-            AND LQ.LeaveAccount =#{name}
-        </if>
-        <if test=" handleState == '待处理'">
-            AND LQ.Result1 IS NULL AND LQ.Result2 IS NULL AND LQ.Result3 IS NULL AND LQ.Result4 IS NULL
-        </if>
-        <if test=" handleState == '处理中'">
-            AND AND LQ.Result4 IS NULL AND LQ.Result1 IS NOT NULL AND LQ.Result1 != 0 
-            AND (LQ.Result2 IS NULL OR LQ.Result2 != 0) AND (LQ.Result3 IS NULL OR LQ.Result3 != 0)
-        </if>
-        <if test=" handleState == '已通过'">
-            AND AND L.Time4 IS NOT NULL  AND L.Result4 = 1
-        </if>
-        <if test=" handleState == '未通过'">
-            AND (L.Result1 = 0 OR L.Result2 = 0 OR L.Result3 = 0  OR L.Result4 = 0)
-        </if>
-        
-    </trim>
-</select>
-<!-- 部门ID  查询部门人员 -->
-<select id="selectDepartOfEmpList" parameterType="com.jiubo.erp.wzbg.vo.PLOParam"
-        resultType="com.jiubo.erp.wzbg.bean.EmployeeOfDepartBean">
-    SELECT 
-TD.ID AS departId
-,TD.Name AS departName
-,TEB.ID AS employeeId
-,TEB.Name AS employeeName
-	from 
-T_Department TD 
-LEFT JOIN T_Employee_Basic TEB ON TD.ID = TEB.Department_ID
-LEFT JOIN Account_Data AD ON AD.Account_ID= TEB.Account
-<trim prefix="WHERE" prefixOverrides="AND | OR">
-        <if test=" departId !=null and departId !=''">
-            AND TD.ID =#{departId}
-        </if>
-        AND TEB.IsDelete = '0' AND TEB.State='1' AND AD.Account_ID != #{accountId}
-    </trim>
-ORDER BY AD.Account_Name
-</select>
+	<!-- 请假列表 -->
+	<select
+		id="selectAskForLeaveList"
+		parameterType="com.jiubo.erp.wzbg.vo.PLOParam"
+		resultType="com.jiubo.erp.wzbg.bean.AskForLeaveBean">
+		SELECT
+		DISTINCT
+		LQ.ID AS id
+		,LQ.LeaveType AS leaveType
+		,LQ.AddTime AS
+		addTime
+		,LQ.LeaveAccount AS leaveAccount
+		,AD.Account_Name AS
+		leaveAccountName
+		,TEB.Department_ID AS departId
+		,TD.Name AS departName
+		,PD.Position_ID AS positionId
+		,PD.Position_Name AS positionName
+		,LQ.AgentAccount AS agentAccount
+		,ADA.Account_Name AS agentAccountName
+		,LQ.StartTime AS startTime
+		,LQ.EndTime AS endTime
+		,LQ.Leave_Remark AS
+		leaveRemark
+		,LQ.Account1 AS account1
+		,AD1.Account_Name AS accountName1
+		,LQ.Time1 AS time1
+		,CASE WHEN LQ.Result1 = 1 THEN '同意'
+		WHEN LQ.Result1 =
+		0 THEN '不同意'
+		ELSE '' END AS result1
+		,LQ.Remark1 AS remark1
+		,LQ.Account2
+		AS account2
+		,AD2.Account_Name AS accountName2
+		,LQ.Time2 AS time2
+		,CASE
+		WHEN LQ.Result2 = 1 THEN '同意'
+		WHEN LQ.Result2 =
+		0 THEN '不同意'
+		ELSE '' END
+		AS result2
+		,LQ.Remark2 AS remark2
+		,LQ.Account3 AS account3
+		,AD3.Account_Name AS accountName3
+		,LQ.Time3 AS time3
+		,CASE WHEN
+		LQ.Result3 = 1 THEN '同意'
+		WHEN LQ.Result3 =
+		0 THEN '不同意'
+		ELSE '' END AS
+		result3
+		,LQ.Remark3 AS remark3
+		,LQ.Account4 AS account4
+		,AD4.Account_Name AS accountName4
+		,LQ.Time4 AS time4
+		,CASE WHEN
+		LQ.Result4 = 1 THEN '同意'
+		WHEN LQ.Result4 =
+		0 THEN '不同意'
+		ELSE '' END AS
+		result4
+		,LQ.Remark4 AS remark4
+		,LQ.update_Time AS updateTime
+		,LQ.isSee AS
+		isSee
+		,LQ.step AS
+		step
+		,LQ.BaobeiID AS baobeiID
+		FROM
+		Leave_Qingjia LQ
+		LEFT
+		JOIN Account_Data AD ON LQ.LeaveAccount=AD.Account_ID
+		LEFT JOIN
+		Account_Data ADA ON LQ.AgentAccount=ADA.Account_ID
+		LEFT JOIN
+		T_Employee_Basic TEB ON AD.Account_ID=TEB.Account
+		LEFT JOIN
+		Position_Data PD ON PD.Position_ID=AD.Position_ID
+		LEFT JOIN
+		T_Department TD ON TD.ID=TEB.Department_ID
+		LEFT JOIN Account_Data AD1
+		ON LQ.Account1=AD1.Account_ID
+		LEFT JOIN Account_Data AD2 ON
+		LQ.Account2=AD2.Account_ID
+		LEFT JOIN Account_Data AD3 ON
+		LQ.Account3=AD3.Account_ID
+		LEFT JOIN Account_Data AD4 ON
+		LQ.Account4=AD4.Account_ID
+		<trim
+			prefix="WHERE"
+			prefixOverrides="AND | OR">
+			<if test="beginDate !=null and beginDate !=''">
+				AND LQ.AddTime &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				AND LQ.AddTime &lt;=#{endDate}
+			</if>
+			<if test="accountId!=null and accountId!=''">
+				AND (LQ.AgentAccount =#{accountId} OR LQ.Account1
+				=#{accountId}
+				OR LQ.Account2 =#{accountId} OR LQ.Account3
+				=#{accountId} OR
+				LQ.Account4 =#{accountId})
+			</if>
+			<if test=" departId !=null and departId !=''">
+				AND TEB.Department_ID =#{departId}
+			</if>
+			<if test=" name !=null and name !=''">
+				AND LQ.LeaveAccount =#{name}
+			</if>
+			<if test=" handleState == '待处理'">
+				AND LQ.Result1 IS NULL AND LQ.Result2 IS NULL AND
+				LQ.Result3 IS NULL
+				AND LQ.Result4 IS NULL
+			</if>
+			<if test=" handleState == '处理中'">
+				AND LQ.Result4 IS NULL AND LQ.Result1 IS NOT NULL AND
+				LQ.Result1 != 0
+				AND (LQ.Result2 IS NULL OR LQ.Result2 != 0) AND
+				(LQ.Result3 IS NULL
+				OR LQ.Result3 != 0)
+			</if>
+			<if test=" handleState == '已通过'">
+				AND LQ.Time4 IS NOT NULL AND LQ.Result4 = 1
+			</if>
+			<if test=" handleState == '未通过'">
+				AND (LQ.Result1 = 0 OR LQ.Result2 = 0 OR LQ.Result3 = 0 OR
+				LQ.Result4 = 0)
+			</if>
+
+		</trim>
+	</select>
+
+	<!-- 部门ID 查询部门人员 -->
+	<select
+		id="selectDepartOfEmpList"
+		parameterType="com.jiubo.erp.wzbg.vo.PLOParam"
+		resultType="com.jiubo.erp.wzbg.bean.EmployeeOfDepartBean">
+		SELECT
+		TD.ID AS departId
+		,TD.Name AS departName
+		,TEB.ID AS employeeId
+		,TEB.Name AS employeeName
+		from
+		T_Department TD
+		LEFT JOIN T_Employee_Basic
+		TEB ON TD.ID = TEB.Department_ID
+		LEFT JOIN Account_Data AD ON
+		AD.Account_ID= TEB.Account
+		<trim
+			prefix="WHERE"
+			prefixOverrides="AND | OR">
+			<if test=" departId !=null and departId !=''">
+				AND TD.ID =#{departId}
+			</if>
+			AND TEB.IsDelete = '0' AND TEB.State='1' AND AD.Account_ID !=
+			#{accountId}
+		</trim>
+		ORDER BY AD.Account_Name
+	</select>
+
+	<!-- 请假申请 -->
+	<insert
+		id="insertLeaveApplication"
+		parameterType="com.jiubo.erp.wzbg.bean.AskForLeaveBean">
+		INSERT INTO
+		Leave_Qingjia
+		LeaveType,AddTime,LeaveAccount,AgentAccount,StartTime,EndTime,Leave_Remark
+		,Account1,Time1,Result1,Remark1
+		,Account2,Time2,Result2,Remark2
+		,Account3,Time3,Result3,Remark3
+		,Account4,Time4,Result4,Remark4
+		,update_Time,isSee,step,BaobeiID
+		VALUES
+		#{leaveType},#{addTime},#{leaveAccount},#{agentAccount},#{startTime},#{endTime},#{leaveRemark}
+		,#{account1},#{time1},#{result1},#{remark1}
+		,#{account2},#{time2},#{result2},#{remark2}
+		,#{account3},#{time3},#{result3},#{remark3}
+		,#{account4},#{time4},#{result4},#{remark4}
+		,#{updateTime},#{isSee},#{step},#{baobeiID}
+	</insert>
+
+
+	<!-- 审查人员列表 -->
+	<select
+		id="checkOfEmpList"
+		resultType="com.jiubo.erp.wzbg.bean.EmployeeOfCheck">
+		SELECT
+		AD.Account_ID AS accountId
+		AD.Account_Name AS accountName
+		FROM
+		Account_Data AD
+		LEFT JOIN Position_Data PD ON PD.Position_ID=AD.Position_ID
+		<trim
+			prefix="WHERE"
+			prefixOverrides="AND | OR">
+			<if test=" level=='4'">
+				AND PD.PositionType_ID =#{level}
+			</if>
+			<if test=" level=='5'">
+				AND PD.PositionType_ID =#{level}
+			</if>
+			<if test=" level=='6'">
+				AND PD.PositionType_ID =#{level}
+			</if>
+			<if test=" level=='45'">
+				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5)
+			</if>
+			<if test=" level=='56'">
+				AND (PD.PositionType_ID= 5 OR PD.PositionType_ID= 6)
+			</if>
+			<if test=" level=='456'">
+				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5 OR
+				PD.PositionType_ID= 6)
+			</if>
+		</trim>
+
+	</select>
+
+	<!-- 倒休列表 -->
+
+	<select
+		id="selectRestDown"
+		parameterType="com.jiubo.erp.wzbg.vo.PLOParam"
+		resultType="com.jiubo.erp.wzbg.bean.AskForLeaveBean">
+		SELECT
+		,Reason AS reason
+      ,LeaveAccount AS leaveAccount
+      ,AddTime AS addTime
+      ,StartTime AS startTime
+      ,EndTime AS endTime
+      ,LeaveTotal AS leaveTotal
+      ,WorkTime AS workTime
+      ,WorkTotal AS workTotal
+      ,Leave_Remark AS leave_Remark
+      ,Account1 AS account1
+      ,Time1 AS time1
+      ,Result1 AS result1
+      ,Remark1 AS remark1
+      ,Account2 AS account2
+      ,Time2 AS time2
+      ,Result2 AS result2
+      ,Remark2 AS remark2
+      ,Account3 AS account3
+      ,Time3 AS time3
+      ,Result3 AS result3
+      ,Remark3 AS remark3
+      ,Account4 AS account4
+      ,Time4 AS time4
+      ,Result4 AS result4
+      ,Remark4 AS remark4
+      ,update_Time AS update_Time 
+      ,isSee AS isSee
+      ,step AS step
+      FROM Leave_Daoxiu LD
+      LEFT
+		JOIN Account_Data AD ON LD.LeaveAccount=AD.Account_ID
+		LEFT JOIN
+		Account_Data ADA ON LD.AgentAccount=ADA.Account_ID
+		LEFT JOIN
+		T_Employee_Basic TEB ON AD.Account_ID=TEB.Account
+		LEFT JOIN
+		Position_Data PD ON PD.Position_ID=AD.Position_ID
+		LEFT JOIN
+		T_Department TD ON TD.ID=TEB.Department_ID
+		LEFT JOIN Account_Data AD1
+		ON LD.Account1=AD1.Account_ID
+		LEFT JOIN Account_Data AD2 ON
+		LD.Account2=AD2.Account_ID
+		LEFT JOIN Account_Data AD3 ON
+		LD.Account3=AD3.Account_ID
+		LEFT JOIN Account_Data AD4 ON
+		LD.Account4=AD4.Account_ID
+      <trim
+			prefix="WHERE"
+			prefixOverrides="AND | OR">
+			<if test="beginDate !=null and beginDate !=''">
+				AND LD.AddTime &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				AND LD.AddTime &lt;=#{endDate}
+			</if>
+			<if test="accountId!=null and accountId!=''">
+				AND (LD.AgentAccount =#{accountId} OR LD.Account1
+				=#{accountId}
+				OR LD.Account2 =#{accountId} OR LD.Account3
+				=#{accountId} OR
+				LD.Account4 =#{accountId})
+			</if>
+			<if test=" restReason !=null and restReason !=''">
+				AND TEB.Reason =#{restReason}
+			</if>
+			<if test=" departId !=null and departId !=''">
+				AND TEB.Department_ID =#{departId}
+			</if>
+			<if test=" name !=null and name !=''">
+				AND LD.LeaveAccount =#{name}
+			</if>
+			<if test=" handleState == '待处理'">
+				AND LD.Result1 IS NULL AND LD.Result2 IS NULL AND
+				LQ.Result3 IS NULL
+				AND LD.Result4 IS NULL
+			</if>
+			<if test=" handleState == '处理中'">
+				AND LD.Result4 IS NULL AND LD.Result1 IS NOT NULL AND
+				LQ.Result1 != 0
+				AND (LD.Result2 IS NULL OR LD.Result2 != 0) AND
+				(LD.Result3 IS NULL
+				OR LD.Result3 != 0)
+			</if>
+			<if test=" handleState == '已通过'">
+				AND LD.Time4 IS NOT NULL AND LD.Result4 = 1
+			</if>
+			<if test=" handleState == '未通过'">
+				AND (LD.Result1 = 0 OR LD.Result2 = 0 OR LD.Result3 = 0 OR
+				LD.Result4 = 0)
+			</if>
+
+		</trim>
+		
+
+	</select>
 </mapper>

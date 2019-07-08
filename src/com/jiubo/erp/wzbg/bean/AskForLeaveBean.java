@@ -12,24 +12,34 @@ public class AskForLeaveBean {
 	private String leaveType;
 	private String addTime;
 	private String leaveAccount;
+	private String leaveAccountName;
+	private String departId;
+	private String departName;
+	private String positionId;
+	private String positionName;
 	private String agentAccount;
+	private String agentAccountName;
 	private String startTime;
 	private String endTime; 	
 	private String leaveRemark;
 	private String photo;
 	private String account1;
+	private String accountName1;
 	private String time1;
 	private String result1; 
 	private String remark1;
 	private String account2;
+	private String accountName2;
 	private String time2;
 	private String result2; 
 	private String remark2;
 	private String account3;
+	private String accountName3;
 	private String time3;
 	private String result3 ;
 	private String remark3;
 	private String account4;
+	private String accountName4;
 	private String time4;
 	private String result4; 
 	private String remark4;
@@ -47,13 +57,17 @@ public class AskForLeaveBean {
 	@Override
 	public String toString() {
 		return "AskForLeaveBean [id=" + id + ", leaveType=" + leaveType + ", addTime=" + addTime + ", leaveAccount="
-				+ leaveAccount + ", agentAccount=" + agentAccount + ", startTime=" + startTime + ", endTime=" + endTime
-				+ ", leave_Remark=" + leaveRemark + ", photo=" + photo + ", account1=" + account1 + ", time1=" + time1
-				+ ", result1=" + result1 + ", remark1=" + remark1 + ", account2=" + account2 + ", time2=" + time2
-				+ ", result2=" + result2 + ", remark2=" + remark2 + ", account3=" + account3 + ", time3=" + time3
-				+ ", result3=" + result3 + ", remark3=" + remark3 + ", account4=" + account4 + ", time4=" + time4
-				+ ", result4=" + result4 + ", remark4=" + remark4 + ", updateTime=" + updateTime + ", isSee=" + isSee
-				+ ", step=" + step + ", baobeiId=" + baobeiId + "]";
+				+ leaveAccount + ", leaveAccountName=" + leaveAccountName + ", departId=" + departId + ", departName="
+				+ departName + ", positionId=" + positionId + ", positionName=" + positionName + ", agentAccount="
+				+ agentAccount + ", agentAccountName=" + agentAccountName + ", startTime=" + startTime + ", endTime="
+				+ endTime + ", leaveRemark=" + leaveRemark + ", photo=" + photo + ", account1=" + account1
+				+ ", accountName1=" + accountName1 + ", time1=" + time1 + ", result1=" + result1 + ", remark1="
+				+ remark1 + ", account2=" + account2 + ", accountName2=" + accountName2 + ", time2=" + time2
+				+ ", result2=" + result2 + ", remark2=" + remark2 + ", account3=" + account3 + ", accountName3="
+				+ accountName3 + ", time3=" + time3 + ", result3=" + result3 + ", remark3=" + remark3 + ", account4="
+				+ account4 + ", accountName4=" + accountName4 + ", time4=" + time4 + ", result4=" + result4
+				+ ", remark4=" + remark4 + ", updateTime=" + updateTime + ", isSee=" + isSee + ", step=" + step
+				+ ", baobeiId=" + baobeiId + "]";
 	}
 
 
@@ -65,6 +79,94 @@ public class AskForLeaveBean {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public String getPositionId() {
+		return positionId;
+	}
+
+	public void setPositionId(String positionId) {
+		this.positionId = positionId;
+	}
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
+
+	public String getLeaveAccountName() {
+		return leaveAccountName;
+	}
+
+
+
+	public void setLeaveAccountName(String leaveAccountName) {
+		this.leaveAccountName = leaveAccountName;
+	}
+
+
+
+	public String getAgentAccountName() {
+		return agentAccountName;
+	}
+
+
+
+	public void setAgentAccountName(String agentAccountName) {
+		this.agentAccountName = agentAccountName;
+	}
+
+
+
+	public String getAccountName1() {
+		return accountName1;
+	}
+
+
+
+	public void setAccountName1(String accountName1) {
+		this.accountName1 = accountName1;
+	}
+
+
+
+	public String getAccountName2() {
+		return accountName2;
+	}
+
+
+
+	public void setAccountName2(String accountName2) {
+		this.accountName2 = accountName2;
+	}
+
+
+
+	public String getAccountName3() {
+		return accountName3;
+	}
+
+
+
+	public void setAccountName3(String accountName3) {
+		this.accountName3 = accountName3;
+	}
+
+
+
+	public String getAccountName4() {
+		return accountName4;
+	}
+
+
+
+	public void setAccountName4(String accountName4) {
+		this.accountName4 = accountName4;
+	}
+
+
 
 	public String getLeaveType() {
 		return leaveType;
@@ -81,6 +183,30 @@ public class AskForLeaveBean {
 	public void setAddTime(String addTime) {
 		this.addTime = addTime;
 	}
+
+	public String getDepartId() {
+		return departId;
+	}
+
+
+
+	public void setDepartId(String departId) {
+		this.departId = departId;
+	}
+
+
+
+	public String getDepartName() {
+		return departName;
+	}
+
+
+
+	public void setDepartName(String departName) {
+		this.departName = departName;
+	}
+
+
 
 	public String getLeaveAccount() {
 		return leaveAccount;

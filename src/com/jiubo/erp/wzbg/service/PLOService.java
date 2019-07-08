@@ -1,14 +1,20 @@
 package com.jiubo.erp.wzbg.service;
 
-import java.util.List;
 
-import com.jiubo.erp.wzbg.bean.AskForLeaveBean;
-import com.jiubo.erp.wzbg.bean.EmployeeOfDepartBean;
-import com.jiubo.erp.wzbg.vo.PLOParam;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
 
 public interface PLOService {
 	
-	public List<AskForLeaveBean> askOfLeaveList(PLOParam ploParam);
+	public JSONObject askOfLeaveList(HttpServletResponse response, HttpServletRequest request);
 	
-	public List<EmployeeOfDepartBean> selectDepartOfEmpList(PLOParam ploParam);
+	public JSONObject selectDepartOfEmpList(HttpServletResponse response, HttpServletRequest request);
+	
+	public JSONObject insertLeaveApplication(HttpServletResponse response, HttpServletRequest request);
+	
+	public JSONObject checkOfEmpList(HttpServletResponse response, HttpServletRequest request);
+	
+	public JSONObject restDownList(HttpServletResponse response, HttpServletRequest request);
 }
