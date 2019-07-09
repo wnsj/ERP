@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jiubo.erp.wzbg.dao.WzbgDao">
+<mapper namespace="com.jiubo.erp.wzbg.dao.LeavePrepareDao">
 
 	<!-- 查询某个部门下的员工姓名和员工ERP账户-->
 	<select id="queryEmpInfoByDept" resultType="DeptWithEmp">
@@ -38,9 +38,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT
 			A.ID,
 			A.TYPE,
+			A.LEAVE_ACCOUNT,
+			A.FILL_ACCOUNT,
 			B.LEAVE_EMP_NAME leaveEmpName,
 			B.LEAVE_DEPT_ID leaveDeptId,
 			B.LEAVE_DEPT_NAME leaveDepartmentName,
+			B.POSITION_NAME leavePositionName,
 			A.STARTTIME,
 			A.ENDTIME,
 			A.LEAVE_REMARK,
@@ -97,17 +100,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				LB.LEAVE_ACCOUNT,
 				ACC.ACCOUNT_NAME AS LEAVE_EMP_NAME,
 				DEPT.ID AS LEAVE_DEPT_ID,
-				DEPT.NAME AS LEAVE_DEPT_NAME 
+				DEPT.NAME AS LEAVE_DEPT_NAME,
+				PD.POSITION_NAME
 			FROM
 				Leave_Baobei AS LB
 				LEFT JOIN Account_Data AS ACC ON LB.LEAVE_ACCOUNT = ACC.ACCOUNT_ID
 				LEFT JOIN T_EMPLOYEE_BASIC AS EMP ON ACC.ACCOUNT_ID = EMP.ACCOUNT
+				LEFT JOIN Position_Data AS PD  ON ACC.POSITION_ID = PD.POSITION_ID
 				LEFT JOIN T_Department AS DEPT ON EMP.DEPARTMENT_ID = DEPT.ID  
 			GROUP BY
 				LB.LEAVE_ACCOUNT,
 				ACC.ACCOUNT_NAME,
 				DEPT.ID,
-				DEPT.NAME 
+				DEPT.NAME,
+				PD.POSITION_NAME
 			) AS B,
 			(
 			SELECT
@@ -123,7 +129,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			) AS C 
 		WHERE
 			A.LEAVE_ACCOUNT = B.LEAVE_ACCOUNT  
-			AND A.CHECK_ACCOUNT = C.CHECK_ACCOUNT  
+			AND A.CHECK_ACCOUNT = C.CHECK_ACCOUNT
+			<if test="accountId !=null and accountId !='' ">
+				AND (A.LEAVE_ACCOUNT = #{accountId} OR A.FILL_ACCOUNT = #{accountId})
+			</if>
 			<if test="startTime !=null and startTime !='' ">
 				AND A.FILL_TIME <![CDATA[ >= ]]> #{startTime}
 			</if>
@@ -158,7 +167,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					</when>
 				</choose>
 			</if>
-		ORDER BY A.ID
+			ORDER BY A.FILL_TIME
 	</select>
 	
 	<!--  报备审批权限映射表 -->	
@@ -185,5 +194,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			ACC.POSITION_ID = #{id}
 		AND 
 			ACC.ACCOUNT_STATE = '在用'
+	</select>
+	
+	<!-- 查询请假代理人列表-->
+	<select id="queryAgentList" resultType="DeptWithEmp">
+		SELECT
+			EMP.Department_ID depatrmentId,
+			ACC.ACCOUNT_NAME name,
+			ACC.ACCOUNT_ID account
+		FROM
+			T_Employee_Basic AS EMP
+			LEFT JOIN Account_Data AS ACC ON EMP.ACCOUNT = ACC.ACCOUNT_ID 
+		WHERE
+			EMP.Department_ID = #{departmentId}
+			AND state = '1' 
+			AND IsDelete = '0' 
+			AND ACC.ACCOUNT_ID != #{account}
+		ORDER BY
+			ACC.ACCOUNT_NAME,
+			ACC.ACCOUNT_ID
 	</select>
 </mapper>

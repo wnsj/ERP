@@ -10,11 +10,11 @@ import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 /**
  * @version: V1.0
  * @author: DingDong
- * @className: WzbgDao
- * @description: 无纸化办公数据访问层
+ * @className: LeavePrepareDao
+ * @description: 请假报备数据访问层
  * @data: 2019-06-29
  **/
-public interface WzbgDao {
+public interface LeavePrepareDao {
 	
 	// 查询某个部门下的员工姓名和员工ERP账户
     public List<DeptWithEmp> queryEmpInfoByDept(String id);
@@ -30,5 +30,8 @@ public interface WzbgDao {
 	
 	// 通过职位id查询报备审批权限账户信息
 	public List<AccWithApprovalLeaveAuth> queryAuthAccount(String id);
+	
+	// 查询请假代理人列表
+    public List<DeptWithEmp> queryAgentList(DeptWithEmp deptWithEmp);
 	 
 }

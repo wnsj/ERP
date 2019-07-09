@@ -10,11 +10,11 @@ import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 /**
  * @version: V1.0
  * @author: DingDong
- * @className: WzbgService
- * @description: 无纸化办公业务层
+ * @className: LeavePrepareService
+ * @description: 请假报备管理业务层
  * @data: 2019-06-29
  **/
-public interface WzbgService {
+public interface LeavePrepareService {
 	
 	/**
 	 * @Description: 查询部门下的员工姓名以及ERP账户信息
@@ -55,5 +55,14 @@ public interface WzbgService {
 	 * @version: V1.0
 	 */
 	public List<LeavePrepareBean> queryLeavePrepareBean(LeavePrepareBean leavePrepareBean) throws MessageException;
-
+	
+	/**
+	 * @Description: 查询请假代理人列表
+	 * @param  deptWithEmp
+	 * @return List<DeptWithEmp>
+	 * @author: DingDong
+	 * @date: 2019年7月9日
+	 * @version: V1.0
+	 */
+	 public List<DeptWithEmp> queryAgentList(DeptWithEmp deptWithEmp) throws MessageException;
 }
