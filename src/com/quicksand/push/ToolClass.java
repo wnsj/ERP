@@ -19,6 +19,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.StreamUtils;
 
+import com.jiubo.erp.common.TimeUtil;
 import com.jiubo.erp.rygl.vo.UserFamily;
 
 import net.sf.json.JSONObject;
@@ -53,18 +54,14 @@ public class ToolClass {
 
     //比较两个时间字符串的大小
     public static int compare_date(String DATE1, String DATE2) {
-
-//		DATE1 = DATE1+"00";
-//		DATE2 = DATE2+"00";
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0"); //加上时间
         try {
-            Date dt1 = df.parse(DATE1);
-            Date dt2 = df.parse(DATE2);
+            Date dt1 = TimeUtil.parseAnyDate(DATE1);
+            Date dt2 = TimeUtil.parseAnyDate(DATE2);
             if (dt1.getTime() > dt2.getTime()) {
-//	                System.out.println("1"+dt1+"--"+dt2);
+	                System.out.println("1"+dt1+"--"+dt2);
                 return 1;
             } else if (dt1.getTime() < dt2.getTime()) {
-//	                System.out.println("2"+dt1+"--"+dt2);
+	                System.out.println("2"+dt1+"--"+dt2);
                 return -1;
             } else {
                 System.out.println("3" + dt1 + "--" + dt2);
@@ -75,7 +72,7 @@ public class ToolClass {
         }
         return 0;
     }
-
+   
     public static String judgeStr(String string) {
         if (StringUtils.isBlank(string) || "0".equals(string)) {
             return "";

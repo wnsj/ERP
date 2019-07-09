@@ -487,15 +487,5 @@
 		where
 		Account_ID=#{accountId}
 	</select>
-	
-	<!-- 根据部门id查询该部门下的在职员工基本信息-->
-	<select id="selectEmpBasicByDept" resultType="com.jiubo.erp.rygl.bean.EmployeeBasicBean" parameterType="com.jiubo.erp.rygl.bean.EmployeeBasicBean">
-		SELECT 
-			EMP.ID, EMP.NAME, EMP.ACCOUNT
-		FROM
-			T_Employee_Basic AS EMP
-		WHERE
-			EMP.DEPARTMENT_ID = #{Department_ID} AND EMP.STATE = '1'
-	</select>
 
 </mapper>
