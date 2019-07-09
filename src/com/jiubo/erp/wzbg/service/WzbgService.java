@@ -1,9 +1,11 @@
 package com.jiubo.erp.wzbg.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
+import com.jiubo.erp.wzbg.bean.OfficeSuppliesDataBean;
 import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
 import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 
@@ -56,4 +58,14 @@ public interface WzbgService {
 	 */
 	public List<LeavePrepareBean> queryLeavePrepareBean(LeavePrepareBean leavePrepareBean) throws MessageException;
 
+	/* *
+     * @desc:
+     * @author: dx
+     * @date: 2019-07-09 09:27:09
+     * @param requestMap :
+     * @return: java.util.List<com.jiubo.erp.wzbg.bean.OfficeSuppliesDataBean>
+     * @throws:
+     * @version: 1.0
+     **/
+	public List<OfficeSuppliesDataBean> queryOfficeSuppliesData(Map<String,Object> requestMap)throws MessageException;
 }

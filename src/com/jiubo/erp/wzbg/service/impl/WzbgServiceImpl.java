@@ -2,7 +2,9 @@ package com.jiubo.erp.wzbg.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.jiubo.erp.wzbg.bean.OfficeSuppliesDataBean;
 import org.apache.commons.lang.StringUtils;
 
 import org.slf4j.Logger;
@@ -145,4 +147,10 @@ public class WzbgServiceImpl implements WzbgService {
 		return list;
 	}
 
+	@Override
+	public List<OfficeSuppliesDataBean> queryOfficeSuppliesData(Map<String, Object> requestMap) throws MessageException {
+
+
+		return null;
+	}
 }
