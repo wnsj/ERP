@@ -13,9 +13,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			T_Employee_Basic AS EMP
 			LEFT JOIN Account_Data AS ACC ON EMP.ACCOUNT = ACC.ACCOUNT_ID 
 		WHERE
-			EMP.Department_ID = #{id}
-			AND state = '1' 
-			AND IsDelete = '0' 
+			EMP.DEPARTMENT_ID = #{id}
+			AND EMP.STATE = '1' 
+			AND EMP.ISDELETE = '0' 
 		ORDER BY
 			ACC.ACCOUNT_NAME,
 			ACC.ACCOUNT_ID
@@ -206,12 +206,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			T_Employee_Basic AS EMP
 			LEFT JOIN Account_Data AS ACC ON EMP.ACCOUNT = ACC.ACCOUNT_ID 
 		WHERE
-			EMP.Department_ID = #{departmentId}
-			AND state = '1' 
-			AND IsDelete = '0' 
+			EMP.DEPARTMENT_ID = #{departmentId}
+			AND EMP.STATE = '1' 
+			AND EMP.ISDELETE = '0' 
 			AND ACC.ACCOUNT_ID != #{account}
 		ORDER BY
 			ACC.ACCOUNT_NAME,
 			ACC.ACCOUNT_ID
 	</select>
+	
+	<!-- 查询所在部门以及子部门的员工信息-->
+	<select id="queryEmpByDeptOrParentDept" resultType="DeptWithEmp">
+		SELECT
+			EMP.DEPARTMENT_ID,
+			ACC.ACCOUNT_NAME name,
+			DEPT.NAME deptName,
+			PD.POSITION_NAME positionName
+		FROM
+			T_Employee_Basic AS EMP
+			LEFT JOIN Account_Data AS ACC ON EMP.ACCOUNT = ACC.ACCOUNT_ID 
+			LEFT JOIN Position_Data AS PD ON ACC.POSITION_ID = PD.POSITION_ID 
+			LEFT JOIN T_Department AS DEPT ON DEPT.ID = EMP.DEPARTMENT_ID
+		WHERE
+			 EMP.ISDELETE = '0' 
+			 AND EMP.STATE = '1' 
+			 <if test="name !=null and name !='' ">
+				AND ACC.ACCOUNT_NAME LIKE '%' + #{name} + '%'
+			</if>
+			 <choose>
+			 	<when test="departmentId != null or departmentId != ''">
+			 		 <if test="departmentId != 0">
+			 		 	AND EMP.DEPARTMENT_ID IN (
+						SELECT
+							DEPT.ID 
+						FROM
+							T_Department DEPT 
+						WHERE
+						DEPT.ID = #{ departmentId } 
+						OR DEPT.PARENTID = #{ departmentId } )
+			 		 </if>
+			 	</when>
+			 </choose>
+			ORDER BY
+				ACC.ACCOUNT_NAME
+	</select>
+	
+	
 </mapper>

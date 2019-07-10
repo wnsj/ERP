@@ -267,4 +267,50 @@ public class LeavePrepareController {
 		}
 	}
 	
+	/**
+	 * @Description: 查询所在部门以及子部门的员工信息
+	 * @param  
+	 * @return  JSONObject
+	 * @author: DingDong
+	 * @date: 2019年07月10日
+	 * @version: V1.0
+	 */
+	//http://127.0.0.1:8080/Erp/leavePrepareController/queryEmpByDeptOrParentDept
+	@ResponseBody
+	@RequestMapping(value="/queryEmpByDeptOrParentDept", method=RequestMethod.POST)
+	public JSONObject queryEmpByDeptOrParentDept(HttpServletRequest request,HttpServletResponse response) {
+		JSONObject result = new JSONObject();
+		String retCode = null;
+		String retMsg = null;
+	    String retData = null;
+		try {
+			String str = ToolClass.getStrFromInputStream(request);
+			if(StringUtils.isBlank(str)) {
+				throw new MessageException("参数接收失败！");
+			}
+			DeptWithEmp deptWithEmp = MapUtil.transJsonStrToObjectIgnoreCase(str,DeptWithEmp.class);
+			List<DeptWithEmp> list = leavePrepareService.queryEmpByDeptOrParentDept(deptWithEmp);
+			
+			retCode = Constant.Result.SUCCESS;
+			retMsg = Constant.Result.SUCCESS_MSG;
+			retData = Constant.Result.RETDATA;
+			
+			result.put(retData, list);
+			logger.info("--------------查询所在部门以及子部门的员工信息成功 返回json数据-------------------");
+			return result;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+			logger.error("--------------MessageException-------------------");
+			return result;
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error("-------------查询所在部门以及子部门的员工信息失败-------------------");
+            return result;
+		}finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+		}
+	}
 }

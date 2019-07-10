@@ -65,4 +65,14 @@ public interface LeavePrepareService {
 	 * @version: V1.0
 	 */
 	 public List<DeptWithEmp> queryAgentList(DeptWithEmp deptWithEmp) throws MessageException;
+	 
+	/**
+	 * @Description: 查询所在部门以及子部门的员工信息
+	 * @param  deptWithEmp
+	 * @return List<DeptWithEmp>
+	 * @author: DingDong
+	 * @date: 2019年7月10日
+	 * @version: V1.0
+	 */
+	 public List<DeptWithEmp> queryEmpByDeptOrParentDept(DeptWithEmp deptWithEmp) throws MessageException;
 }

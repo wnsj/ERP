@@ -128,5 +128,19 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 		List<DeptWithEmp> list = leavePrepareDao.queryAgentList(deptWithEmp);
 		return list;
 	}
+	
+	/**
+	 * @Description: 查询所在部门以及子部门的员工信息
+	 * @param  deptWithEmp
+	 * @return List<DeptWithEmp>
+	 * @author: DingDong
+	 * @date: 2019年7月10日
+	 * @version: V1.0
+	 */
+	@Override
+	public List<DeptWithEmp> queryEmpByDeptOrParentDept(DeptWithEmp deptWithEmp) throws MessageException {
+		List<DeptWithEmp> list = leavePrepareDao.queryEmpByDeptOrParentDept(deptWithEmp);
+		return list;
+	}
 
 }

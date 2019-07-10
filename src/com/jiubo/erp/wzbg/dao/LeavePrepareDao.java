@@ -33,5 +33,8 @@ public interface LeavePrepareDao {
 	
 	// 查询请假代理人列表
     public List<DeptWithEmp> queryAgentList(DeptWithEmp deptWithEmp);
+    
+    // 查询所在部门以及子部门的员工信息
+    public List<DeptWithEmp> queryEmpByDeptOrParentDept(DeptWithEmp deptWithEmp);
 	 
 }
