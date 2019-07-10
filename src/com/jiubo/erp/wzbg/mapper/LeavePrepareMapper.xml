@@ -40,6 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			A.TYPE,
 			A.LEAVE_ACCOUNT,
 			A.FILL_ACCOUNT,
+			A.CHECK_ACCOUNT,
 			B.LEAVE_EMP_NAME leaveEmpName,
 			B.LEAVE_DEPT_ID leaveDeptId,
 			B.LEAVE_DEPT_NAME leaveDepartmentName,
@@ -139,9 +140,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="endTime !=null and endTime !='' ">
 				AND A.FILL_TIME <![CDATA[ <= ]]> #{endTime}
 			</if>
-			<if test="leaveDeptId !=null and leaveDeptId !='' ">
-				AND B.LEAVE_DEPT_ID = #{leaveDeptId}
-			</if>
+			<!-- <if test="leaveDeptId !=null and leaveDeptId !='' ">
+				<choose>
+					<when test="leaveDeptId !=0">
+						AND B.LEAVE_DEPT_ID = #{leaveDeptId}
+					</when>				
+				</choose>
+			</if> -->
+			<choose>
+			 	<when test="leaveDeptId != null or leaveDeptId != ''">
+			 		 <if test="leaveDeptId != 0">
+			 		 	AND B.LEAVE_DEPT_ID IN (
+						SELECT
+							DEPT.ID 
+						FROM
+							T_Department DEPT 
+						WHERE
+						DEPT.ID = #{ leaveDeptId } 
+						OR DEPT.PARENTID = #{ leaveDeptId } )
+			 		 </if>
+			 	</when>
+			</choose>
 			<if test="leaveEmpName !=null and leaveEmpName !='' ">
 				AND B.LEAVE_EMP_NAME LIKE '%' + #{leaveEmpName} + '%'
 			</if>
@@ -233,7 +252,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 AND EMP.STATE = '1' 
 			 <if test="name !=null and name !='' ">
 				AND ACC.ACCOUNT_NAME LIKE '%' + #{name} + '%'
-			</if>
+			 </if>
 			 <choose>
 			 	<when test="departmentId != null or departmentId != ''">
 			 		 <if test="departmentId != 0">
