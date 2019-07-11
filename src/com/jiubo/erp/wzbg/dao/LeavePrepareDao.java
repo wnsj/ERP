@@ -36,5 +36,8 @@ public interface LeavePrepareDao {
     
     // 查询所在部门以及子部门的员工信息
     public List<DeptWithEmp> queryEmpByDeptOrParentDept(DeptWithEmp deptWithEmp);
+    
+    //更新请假报备信息
+    public void updateLeavePrepare(LeavePrepareBean leavePrepareBean);
 	 
 }

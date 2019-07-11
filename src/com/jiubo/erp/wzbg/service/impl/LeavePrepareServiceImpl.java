@@ -142,5 +142,28 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 		List<DeptWithEmp> list = leavePrepareDao.queryEmpByDeptOrParentDept(deptWithEmp);
 		return list;
 	}
+	
+	/**
+	 * @Description: 更新请假报备信息
+	 * @param  leavePrepareBean
+	 * @return 
+	 * @author: DingDong
+	 * @date: 2019年7月11日
+	 * @version: V1.0
+	 */
+	@Override
+	public void updateLeavePrepare(LeavePrepareBean leavePrepareBean) throws MessageException {
+		if(!StringUtils.isBlank(leavePrepareBean.getStartTime())) {
+			logger.info("---------------开始转换startTme格式-------------------");
+			String startTime = TimeUtil.convertDateT(leavePrepareBean.getStartTime());
+			leavePrepareBean.setStartTime(startTime);
+		}
+		if(!StringUtils.isBlank(leavePrepareBean.getEndTime())) {
+			logger.info("---------------开始转换endTime格式-------------------");
+			String endTime = TimeUtil.convertDateT(leavePrepareBean.getEndTime());
+			leavePrepareBean.setEndTime(endTime);
+		}
+		leavePrepareDao.updateLeavePrepare(leavePrepareBean);
+	}
 
 }

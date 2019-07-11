@@ -271,5 +271,59 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				ACC.ACCOUNT_NAME
 	</select>
 	
-	
+	<update id="updateLeavePrepare" parameterType="LeavePrepareBean">
+		UPDATE 
+			LEAVE_BAOBEI
+		 <trim prefix="set" suffixOverrides=",">
+		 	<if test="type != null and type != '' ">
+		 		TYPE = #{type},
+		 	</if>
+		 	<if test="fillAccount != null and fillAccount !='' ">
+		 		Fill_Account = #{fillAccount},
+		 	</if>
+		 	<if test="fillTime != null and fillTime != '' ">
+		 		Fill_Time = #{fillTime},
+		 	</if>
+		 	<if test="leaveAccount != null and leaveAccount != '' ">
+		 		Leave_Account = #{leaveAccount},
+		 	</if>
+		 	<if test="startTime != null and startTime != '' ">
+		 		StartTime = #{startTime},
+		 	</if>
+		 	<if test="endTime != null and endTime != '' ">
+		 		EndTime = #{endTime},
+		 	</if>
+		 	<if test="leaveRemark != null and leaveRemark != '' ">
+		 		Leave_Remark = #{leaveRemark},
+		 	</if>
+		 	<if test="checkAccount != null and checkAccount != '' ">
+		 		Check_Account = #{checkAccount},
+		 	</if>
+		 	<if test="checkTime != null and checkTime != '' ">
+		 		Check_Time = #{checkTime},
+		 	</if>
+		 	<if test="checkResult != null and checkResult != '' ">
+		 		Check_Result = #{checkResult},
+		 	</if>
+		 	<if test="checkRemark != null and checkRemark != '' ">
+		 		Check_Remark = #{checkRemark},
+		 	</if>
+		 	<if test="updateTime != null and updateTime != '' ">
+		 		update_Time = #{updateTime},
+		 	</if>
+		 	<if test="isSee != null and isSee !='' ">
+		 		isSee = #{isSee},
+		 	</if>
+		 	<choose>
+		 		<when test="state == null or state =='' ">
+		 			state = null,
+		 		</when>
+		 		<when test="state != null or state !='' ">
+		 			state = #{state},
+		 		</when>
+		 	</choose>
+		 </trim>
+		WHERE 
+			ID = #{id}		 
+	</update>
 </mapper>

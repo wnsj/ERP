@@ -75,4 +75,14 @@ public interface LeavePrepareService {
 	 * @version: V1.0
 	 */
 	 public List<DeptWithEmp> queryEmpByDeptOrParentDept(DeptWithEmp deptWithEmp) throws MessageException;
+	 
+	/**
+	 * @Description: 更新请假报备信息
+	 * @param  leavePrepareBean
+	 * @return 
+	 * @author: DingDong
+	 * @date: 2019年7月11日
+	 * @version: V1.0
+	 */
+	 public void updateLeavePrepare(LeavePrepareBean leavePrepareBean) throws MessageException;
 }
