@@ -22,13 +22,13 @@ import java.util.Map;
 
 /**
  * @desc:
- * @date: 2019-07-12 15:18
+ * @date: 2019-07-12 16:25
  * @author: dx
  * @version: 1.0
  */
 @Controller
 @Scope("prototype")
-@RequestMapping("/officeController")
+@RequestMapping("/officeAction")
 public class OfficeAction {
 
     private final static Logger logger  = LoggerFactory.getLogger(OfficeAction.class);
