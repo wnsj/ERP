@@ -1,6 +1,9 @@
 package com.jiubo.erp.wzbg.service.imply;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,6 +32,15 @@ public class PLOServiceImply implements PLOService {
 	@Autowired
     private PLODao dao;
 	
+	/**
+	    * 请假-列表
+	    * @param response
+	    * @param request
+	    * @return
+	    * JSONObject
+	    * @author 作者 : mwl
+	    * @version 创建时间：2019年7月3日 下午2:35:25
+	    */
 	@SuppressWarnings("finally")
 	@Override
 	public JSONObject askOfLeaveList(HttpServletResponse response, HttpServletRequest request) {
@@ -57,7 +69,15 @@ public class PLOServiceImply implements PLOService {
         }
 		
 	}
-
+	/**
+	 * 请假 -- 代理人员列表
+	 * @param response
+	 * @param request
+	 * @return
+	 * JSONObject
+	 * @author 作者 : mwl
+	 * @version 创建时间：2019年7月3日 下午2:37:15
+	 */
 	@SuppressWarnings("finally")
 	@Override
 	public JSONObject selectDepartOfEmpList(HttpServletResponse response, HttpServletRequest request) {
@@ -71,6 +91,7 @@ public class PLOServiceImply implements PLOService {
                 throw new MessageException("参数接收失败！");
             plop = MapUtil.transJsonStrToObjectIgnoreCase(str, PLOParam.class);
             System.out.println("getSearchContent：" + plop.getDepartId()+plop.toString());
+            System.out.println(this.dao.selectDepartOfEmpList(plop).get(0).getPositionName());
             result.put("resData", this.dao.selectDepartOfEmpList(plop));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
@@ -85,24 +106,55 @@ public class PLOServiceImply implements PLOService {
             return result;
         }
 	}
-
+	
+	/**
+	 * 请假审查 -- 审查人列表 根据请假人的级别查看审查列表
+	 * @param response
+	 * @param request
+	 * @return
+	 * JSONObject
+	 * @author 作者 : mwl
+	 * @version 创建时间：2019年7月8日 上午10:20:08
+	 */
+	@SuppressWarnings("finally")
+	public JSONObject checkOfEmpList(HttpServletResponse response, HttpServletRequest request) {
+		Map<String, String> levelMap = new HashMap<>();
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            levelMap = ToolClass.mapShiftStr(request);
+            result.put("resData", this.dao.checkOfEmpList(levelMap));
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            log.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+	}
+	
+	/**
+	 * 请假申请
+	 * @param response
+	 * @param request
+	 * @return
+	 * JSONObject
+	 * @author 作者 : mwl
+	 * @version 创建时间：2019年7月8日 上午9:43:42
+	 */
 	@SuppressWarnings("finally")
 	public JSONObject insertLeaveApplication(HttpServletResponse response, HttpServletRequest request) {
 		
-		AskForLeaveBean aflb = new AskForLeaveBean();
+		Map<String, String> departMap = new HashMap<>();
         JSONObject result = new JSONObject();
         String retCode = Constant.Result.SUCCESS;
         String retMsg = Constant.Result.SUCCESS_MSG;
         try {
-            String str = ToolClass.getStrFromInputStream(request);
-            if (StringUtils.isBlank(str))
-                throw new MessageException("参数接收失败！");
-            aflb = MapUtil.transJsonStrToObjectIgnoreCase(str, AskForLeaveBean.class);
-            System.out.println("insertLeaveApplication:"+aflb.toString());
-            result.put("resData", this.dao.insertLeaveApplication(aflb));
-        } catch (MessageException e) {
-            retCode = Constant.Result.ERROR;
-            retMsg = e.getMessage();
+        	departMap = ToolClass.mapShiftStr(request);
+//            result.put("resData", this.dao.checkOfEmpList(departMap.get("departId")));
         } catch (Exception e) {
             retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
@@ -114,35 +166,6 @@ public class PLOServiceImply implements PLOService {
         }
 	}
 	
-	
-	@SuppressWarnings("finally")
-	public JSONObject checkOfEmpList(HttpServletResponse response, HttpServletRequest request) {
-		String level = new String();
-        JSONObject result = new JSONObject();
-        String retCode = Constant.Result.SUCCESS;
-        String retMsg = Constant.Result.SUCCESS_MSG;
-        try {
-            String str = ToolClass.getStrFromInputStream(request);
-            if (StringUtils.isBlank(str))
-                throw new MessageException("参数接收失败！");
-            level = MapUtil.transJsonStrToObjectIgnoreCase(str, String.class);
-            System.out.println("insertLeaveApplication:"+level.toString());
-            result.put("resData", this.dao.checkOfEmpList(level));
-        } catch (MessageException e) {
-            retCode = Constant.Result.ERROR;
-            retMsg = e.getMessage();
-        } catch (Exception e) {
-            retCode = Constant.Result.ERROR;
-            retMsg = Constant.Result.ERROR_MSG;
-            log.error(Constant.Result.RETMSG, e);
-        } finally {
-            result.put(Constant.Result.RETCODE, retCode);
-            result.put(Constant.Result.RETMSG, retMsg);
-            return result;
-        }
-	}
-	
-
 	@SuppressWarnings("finally")
 	public JSONObject restDownList(HttpServletResponse response, HttpServletRequest request) {
         PLOParam plop = new PLOParam();

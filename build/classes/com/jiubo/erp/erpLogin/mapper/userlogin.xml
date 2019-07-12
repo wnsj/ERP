@@ -12,18 +12,27 @@
         <result property="Account_Pwd" column="ACCOUNT_PWD"/>
         <result property="Account_State" column="ACCOUNT_STATE"/>
         <result property="Position_ID" column="POSITION_ID"/>
+        <result property="positionName" column="POSITION_NAME"/>
+        <result property="departId" column="ID"/>
+        <result property="departName" column="NAME"/>
     </resultMap>
 
     <!--根据用户名查询账号信息-->
     <select id="userLogin" parameterType="com.jiubo.erp.erpLogin.bean.AccountDataBean" resultMap="resultAccountDataMap">
         SELECT
-          ACCOUNT_ID ,
-          ACCOUNT_NAME ,
-          ACCOUNT_PWD ,
-          ACCOUNT_STATE ,
-          POSITION_ID
+          AD.ACCOUNT_ID,
+          AD.ACCOUNT_NAME,
+          AD.ACCOUNT_PWD,
+          AD.ACCOUNT_STATE,
+          AD.POSITION_ID,
+          PD.POSITION_NAME,
+          TD.ID,
+          TD.NAME
         FROM
-            ACCOUNT_DATA
+            ACCOUNT_DATA AD
+            LEFT JOIN Position_Data PD ON AD.POSITION_ID=PD.POSITION_ID
+            LEFT JOIN T_Employee_Basic TEB ON TEB.ACCOUNT=AD.ACCOUNT_ID
+            LEFT JOIN T_Department TD ON TD.ID=TEB.DEPARTMENT_ID
         WHERE
               ACCOUNT_NAME = #{Account_Name} AND Account_Pwd = #{Account_Pwd}
               <if test="Account_State != null and Account_State != ''">

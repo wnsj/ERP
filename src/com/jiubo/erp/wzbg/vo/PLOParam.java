@@ -16,6 +16,7 @@ public class PLOParam {
 	private String conferenceRoom;// 会议室
 	
 	
+	
 
 	public PLOParam() {
 		// TODO Auto-generated constructor stub

@@ -9,8 +9,38 @@ public class AccountDataBean {
     private String Account_State;//账号状态
     private String Position_ID;//职位
     private String Account_Mac;//绑定机器mac
+    
+    //添加部门和岗位
+    private String departId;
+    private String departName;
+    private String positionName;
+    
 
-    public String getAccount_ID() {
+    public String getDepartId() {
+		return departId;
+	}
+
+	public void setDepartId(String departId) {
+		this.departId = departId;
+	}
+
+	public String getDepartName() {
+		return departName;
+	}
+
+	public void setDepartName(String departName) {
+		this.departName = departName;
+	}
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
+
+	public String getAccount_ID() {
         return Account_ID;
     }
 
