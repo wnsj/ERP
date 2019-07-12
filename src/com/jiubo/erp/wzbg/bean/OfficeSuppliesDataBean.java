@@ -1,6 +1,7 @@
 package com.jiubo.erp.wzbg.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @desc:办公用品管理bean
@@ -40,8 +41,53 @@ public class OfficeSuppliesDataBean implements Serializable{
     private String renOtherSee;
 
     private String departmentName;//部门名
+    private String account1Name;
+    private String account2Name;
+    private String officeId;//办公用品名id
+    private String specId;//办公用品规格id
+    private List<SpecificationBean> specificationList;//办公用品所有的规格
 
     public OfficeSuppliesDataBean() {
+    }
+
+    public List<SpecificationBean> getSpecificationList() {
+        return specificationList;
+    }
+
+    public void setSpecificationList(List<SpecificationBean> specificationList) {
+        this.specificationList = specificationList;
+    }
+
+    public String getOfficeId() {
+        return officeId;
+    }
+
+    public void setOfficeId(String officeId) {
+        this.officeId = officeId;
+    }
+
+    public String getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(String specId) {
+        this.specId = specId;
+    }
+
+    public String getAccount2Name() {
+        return account2Name;
+    }
+
+    public void setAccount2Name(String account2Name) {
+        this.account2Name = account2Name;
+    }
+
+    public String getAccount1Name() {
+        return account1Name;
+    }
+
+    public void setAccount1Name(String account1Name) {
+        this.account1Name = account1Name;
     }
 
     public String getId() {
@@ -308,6 +354,11 @@ public class OfficeSuppliesDataBean implements Serializable{
                 ", isWanCheng='" + isWanCheng + '\'' +
                 ", renOtherSee='" + renOtherSee + '\'' +
                 ", departmentName='" + departmentName + '\'' +
+                ", account1Name='" + account1Name + '\'' +
+                ", account2Name='" + account2Name + '\'' +
+                ", officeId='" + officeId + '\'' +
+                ", specId='" + specId + '\'' +
+                ", specificationList=" + specificationList +
                 '}';
     }
 }
