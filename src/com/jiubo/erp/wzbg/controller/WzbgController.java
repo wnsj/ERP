@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jiubo.erp.wzbg.bean.OfficeSuppliesDataBean;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -235,6 +236,7 @@ public class WzbgController {
      * @throws:
      * @version: 1.0
      **/
+    //http://127.0.0.1:8080/Erp/wzbgController/queryOfficeSuppliesData?month=2019-08&
     @ResponseBody
     @RequestMapping(value = "/queryOfficeSuppliesData", method = RequestMethod.POST)
     public JSONObject queryOfficeSuppliesData(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {
@@ -243,7 +245,77 @@ public class WzbgController {
         String retMsg = Constant.Result.SUCCESS_MSG;
         try {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败！");
-            Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
+            OfficeSuppliesDataBean officeSuppliesDataBean = JSONObject.parseObject(params, OfficeSuppliesDataBean.class);
+            result.put(Constant.Result.RETDATA,wzbgService.queryOfficeSuppliesData(officeSuppliesDataBean));
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
+
+    /* *
+     * @desc:查询办公用品名及规格
+     * @author: dx
+     * @date: 2019-07-10 13:40:15
+     * @param request :
+     * @param response :
+     * @return: com.alibaba.fastjson.JSONObject
+     * @throws:
+     * @version: 1.0
+     **/
+    //http://127.0.0.1:8080/Erp/wzbgController/queryOfficeNames
+    @ResponseBody
+    @RequestMapping(value = "/queryOfficeNames", method = RequestMethod.POST)
+    public JSONObject queryOfficeNames(HttpServletRequest request, HttpServletResponse response) {
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            result.put(Constant.Result.RETDATA,wzbgService.queryOfficeNames());
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
+
+    /* *
+     * @desc:修改或添加办公用品申请信息
+     * @author: dx
+     * @date: 2019-07-12 11:13:23
+     * @param request :
+     * @param response :
+     * @param params :
+     * @return: com.alibaba.fastjson.JSONObject
+     * @throws:
+     * @version: 1.0
+     **/
+    //http://127.0.0.1:8080/Erp/wzbgController/addUpdateOfficeSupplies
+    @ResponseBody
+    @RequestMapping(value = "/addUpdateOfficeSupplies", method = RequestMethod.POST)
+    public JSONObject addUpdateOfficeSupplies(HttpServletRequest request, HttpServletResponse response,@RequestBody String params) {
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            if(StringUtils.isBlank(params))throw new MessageException("参数接收失败!");
+            Map<String,Object> requestMap = JSONObject.parseObject(params,Map.class);
+            wzbgService.addUpdateOfficeSupplies(requestMap);
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
