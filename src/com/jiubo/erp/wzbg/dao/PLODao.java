@@ -3,7 +3,6 @@ package com.jiubo.erp.wzbg.dao;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 
 import com.jiubo.erp.wzbg.bean.AskForLeaveBean;
 import com.jiubo.erp.wzbg.bean.EmployeeOfCheck;

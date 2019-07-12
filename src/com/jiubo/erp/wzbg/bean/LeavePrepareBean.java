@@ -31,12 +31,19 @@ public class LeavePrepareBean implements Serializable {
 	private String state; // 状态
 	
 	// 非数据库字段
+	private String accountId; // 登陆人账户
 	private String leaveEmpName;
 	private String leaveDeptId;
 	private String leaveDepartmentName; // 请假人部门名
+	private String leavePositionId;
+	private String leavePositionName;// 请假人职位名
+	
 	private String fillEmpName;
 	private String fillDepartmentName;  // 填表人部门名
+	private String fillPositionId;
+	private String fillPositionName;// 填表人职位名
 	private String checkEmpName;
+	private String checkPositionName;// 审批人职位名
 	
 	public LeavePrepareBean() {
 		super();
@@ -162,6 +169,14 @@ public class LeavePrepareBean implements Serializable {
 		this.state = state;
 	}
 
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
 	public String getLeaveEmpName() {
 		return leaveEmpName;
 	}
@@ -186,6 +201,22 @@ public class LeavePrepareBean implements Serializable {
 		this.leaveDepartmentName = leaveDepartmentName;
 	}
 
+	public String getLeavePositionId() {
+		return leavePositionId;
+	}
+
+	public void setLeavePositionId(String leavePositionId) {
+		this.leavePositionId = leavePositionId;
+	}
+
+	public String getLeavePositionName() {
+		return leavePositionName;
+	}
+
+	public void setLeavePositionName(String leavePositionName) {
+		this.leavePositionName = leavePositionName;
+	}
+
 	public String getFillEmpName() {
 		return fillEmpName;
 	}
@@ -202,12 +233,36 @@ public class LeavePrepareBean implements Serializable {
 		this.fillDepartmentName = fillDepartmentName;
 	}
 
+	public String getFillPositionId() {
+		return fillPositionId;
+	}
+
+	public void setFillPositionId(String fillPositionId) {
+		this.fillPositionId = fillPositionId;
+	}
+
+	public String getFillPositionName() {
+		return fillPositionName;
+	}
+
+	public void setFillPositionName(String fillPositionName) {
+		this.fillPositionName = fillPositionName;
+	}
+
 	public String getCheckEmpName() {
 		return checkEmpName;
 	}
 
 	public void setCheckEmpName(String checkEmpName) {
 		this.checkEmpName = checkEmpName;
+	}
+
+	public String getCheckPositionName() {
+		return checkPositionName;
+	}
+
+	public void setCheckPositionName(String checkPositionName) {
+		this.checkPositionName = checkPositionName;
 	}
 	
 }
