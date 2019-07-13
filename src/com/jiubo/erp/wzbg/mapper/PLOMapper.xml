@@ -196,7 +196,6 @@
 	<!-- 审查人员列表 -->
 	<select
 		id="checkOfEmpList"
-		parameterType="java.util.Map"
 		resultType="com.jiubo.erp.wzbg.bean.EmployeeOfCheck">
 		SELECT
 		AD.Account_ID AS accountId,
@@ -209,28 +208,40 @@
 		<trim
 			prefix="WHERE"
 			prefixOverrides="AND | OR">
-			<if test=" level=='4'">
+			<!-- <choose>
+				<when test=" level== 4">
+					AND PD.PositionType_ID =4
+				</when>
+			</choose> -->
+			<if test=" level== 4">
 				AND PD.PositionType_ID =4
 			</if>
-			<if test=" level=='5'">
+			<if test=" level== 5">
 				AND PD.PositionType_ID =5
 			</if>
-			<if test=" level=='6'">
+			<if test=" level==6">
 				AND PD.PositionType_ID =6
 			</if>
-			<if test=" level=='45'">
+			<!-- <if test=" '45'.equals(level)">
+				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5)
+			</if> -->
+			<if test=" level=45">
 				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5)
 			</if>
-			<if test=" level=='56'">
+			<if test=" level==56">
 				AND (PD.PositionType_ID= 5 OR PD.PositionType_ID= 6)
 			</if>
-			<if test=" level=='456'">
+			<if test=" level==456">
 				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5 OR
 				PD.PositionType_ID= 6)
 			</if>
-			<if test=" departId !=null and departId !='' and departId !='0'">
+			<if test=" null != departId  and '' !=departId">
 				AND TD.ID=#{departId}
 			</if>
+			<if test=" null != positionId and '' != positionId">
+				AND PD.Position_ID=#{positionId}
+			</if>
+	
 			AND AD.Account_State='在用'
 		</trim>
 

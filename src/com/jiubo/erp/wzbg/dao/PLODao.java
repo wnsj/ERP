@@ -3,6 +3,7 @@ package com.jiubo.erp.wzbg.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 
 import com.jiubo.erp.wzbg.bean.AskForLeaveBean;
 import com.jiubo.erp.wzbg.bean.EmployeeOfCheck;
@@ -21,7 +22,7 @@ public interface PLODao {
 	public int insertLeaveApplication(AskForLeaveBean afl);
 	
 	//请假 --- 人员级别查看审查列表
-	public List<EmployeeOfCheck>checkOfEmpList(Map<String, String> paramMap);
+	public List<EmployeeOfCheck>checkOfEmpList(@Param(value="level") String level,@Param(value="positionId") String positionId,@Param(value="departId") String departId);
 	
 	//倒休列表
 	

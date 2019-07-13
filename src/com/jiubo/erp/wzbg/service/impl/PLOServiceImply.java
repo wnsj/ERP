@@ -124,7 +124,8 @@ public class PLOServiceImply implements PLOService {
         String retMsg = Constant.Result.SUCCESS_MSG;
         try {
             levelMap = ToolClass.mapShiftStr(request);
-            result.put("resData", this.dao.checkOfEmpList(levelMap));
+            result.put("resData", this.dao.checkOfEmpList(levelMap.get("level"),levelMap.get("positionId"),""));
+//            result.put("resData", this.dao.checkOfEmpList(levelMap));
         } catch (Exception e) {
             retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
