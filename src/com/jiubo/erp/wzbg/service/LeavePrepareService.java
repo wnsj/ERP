@@ -15,7 +15,7 @@ import com.jiubo.erp.wzbg.vo.DeptWithEmp;
  * @data: 2019-06-29
  **/
 public interface LeavePrepareService {
-	
+
 	/**
 	 * @Description: 查询部门下的员工姓名以及ERP账户信息
 	 * @param  String id(部门id)
@@ -25,37 +25,37 @@ public interface LeavePrepareService {
 	 * @version: V1.0
 	 */
 	public List<DeptWithEmp> queryEmpInfoByDept(String id) throws MessageException;
-	
+
 	/**
 	 * @Description: 添加请假报备
 	 * @param  leavePrepareBean(请假报备实体)
-	 * @return 
+	 * @return
 	 * @author: DingDong
 	 * @date: 2019年06月29日
 	 * @version: V1.0
 	 */
 	public void addLeavePrepareBean(LeavePrepareBean leavePrepareBean) throws MessageException;
-	
+
 	/**
 	 * @Description: 查询报备审批权限账户信息
-	 * @param  
-	 * @return 
+	 * @param
+	 * @return
 	 * @author: DingDong
 	 * @date: 2019年07月2日
 	 * @version: V1.0
 	 */
 	public List<AccWithApprovalLeaveAuth> queryApprovalAuthAccount() throws MessageException;
-	
+
 	/**
 	 * @Description: 查询请假报备
 	 * @param  leavePrepareBean(请假报备实体)
-	 * @return 
+	 * @return
 	 * @author: DingDong
 	 * @date: 2019年06月29日
 	 * @version: V1.0
 	 */
 	public List<LeavePrepareBean> queryLeavePrepareBean(LeavePrepareBean leavePrepareBean) throws MessageException;
-	
+
 	/**
 	 * @Description: 查询请假代理人列表
 	 * @param  deptWithEmp
@@ -64,8 +64,8 @@ public interface LeavePrepareService {
 	 * @date: 2019年7月9日
 	 * @version: V1.0
 	 */
-	 public List<DeptWithEmp> queryAgentList(DeptWithEmp deptWithEmp) throws MessageException;
-	 
+	public List<DeptWithEmp> queryAgentList(DeptWithEmp deptWithEmp) throws MessageException;
+
 	/**
 	 * @Description: 查询所在部门以及子部门的员工信息
 	 * @param  deptWithEmp
@@ -74,15 +74,15 @@ public interface LeavePrepareService {
 	 * @date: 2019年7月10日
 	 * @version: V1.0
 	 */
-	 public List<DeptWithEmp> queryEmpByDeptOrParentDept(DeptWithEmp deptWithEmp) throws MessageException;
-	 
+	public List<DeptWithEmp> queryEmpByDeptOrParentDept(DeptWithEmp deptWithEmp) throws MessageException;
+
 	/**
 	 * @Description: 更新请假报备信息
 	 * @param  leavePrepareBean
-	 * @return 
+	 * @return
 	 * @author: DingDong
 	 * @date: 2019年7月11日
 	 * @version: V1.0
 	 */
-	 public void updateLeavePrepare(LeavePrepareBean leavePrepareBean) throws MessageException;
+	public void updateLeavePrepare(LeavePrepareBean leavePrepareBean) throws MessageException;
 }

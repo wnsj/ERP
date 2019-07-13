@@ -6,6 +6,8 @@ public class EmployeeOfDepartBean {
 	private String departName;
 	private String employeeId;
 	private String employeeName;
+	private String positionId;
+	private String positionName;
 	
 	public EmployeeOfDepartBean() {
 		// TODO Auto-generated constructor stub
@@ -13,6 +15,22 @@ public class EmployeeOfDepartBean {
 
 	public String getDepartId() {
 		return departId;
+	}
+
+	public String getPositionId() {
+		return positionId;
+	}
+
+	public void setPositionId(String positionId) {
+		this.positionId = positionId;
+	}
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
 	}
 
 	public void setDepartId(String departId) {

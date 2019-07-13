@@ -25,19 +25,19 @@ import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 /**
  * @version: V1.0
  * @author: DingDong
- * @className: 
+ * @className:
  * @description: 无纸化办公业务实现层
  * @data: 2019-06-29
  **/
 @Service
 @Transactional
 public class LeavePrepareServiceImpl implements LeavePrepareService {
-	
+
 	private final static Logger logger  = LoggerFactory.getLogger(LeavePrepareServiceImpl.class);
-	
+
 	@Autowired
 	private LeavePrepareDao leavePrepareDao;
-	
+
 	/**
 	 * @Description: 查询部门下的员工姓名以及ERP账户信息
 	 * @param  String id(部门id)
@@ -51,11 +51,11 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 		List<DeptWithEmp> list = leavePrepareDao.queryEmpInfoByDept(id);
 		return list;
 	}
-	
+
 	/**
 	 * @Description: 添加请假报备
 	 * @param  leavePrepareBean(请假报备实体)
-	 * @return 
+	 * @return
 	 * @author: DingDong
 	 * @date: 2019年06月29日
 	 * @version: V1.0
@@ -74,11 +74,11 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 		}
 		leavePrepareDao.addLeavePrepare(leavePrepareBean);
 	}
-	
+
 	/**
 	 * @Description: 查询请假报备审批权限账户信息
-	 * @param  
-	 * @return 
+	 * @param
+	 * @return
 	 * @author: DingDong
 	 * @date: 2019年07月2日
 	 * @version: V1.0
@@ -100,11 +100,11 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 		}
 		return accList;
 	}
-	
+
 	/**
 	 * @Description: 查询请假报备
 	 * @param  leavePrepareBean(请假报备实体)
-	 * @return 
+	 * @return
 	 * @author: DingDong
 	 * @date: 2019年07月04日
 	 * @version: V1.0
@@ -114,7 +114,7 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 		List<LeavePrepareBean> list = leavePrepareDao.queryLeavePrepare(leavePrepareBean);
 		return list;
 	}
-	
+
 	/**
 	 * @Description: 查询请假代理人列表
 	 * @param  deptWithEmp
@@ -128,7 +128,7 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 		List<DeptWithEmp> list = leavePrepareDao.queryAgentList(deptWithEmp);
 		return list;
 	}
-	
+
 	/**
 	 * @Description: 查询所在部门以及子部门的员工信息
 	 * @param  deptWithEmp
@@ -142,11 +142,11 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 		List<DeptWithEmp> list = leavePrepareDao.queryEmpByDeptOrParentDept(deptWithEmp);
 		return list;
 	}
-	
+
 	/**
 	 * @Description: 更新请假报备信息
 	 * @param  leavePrepareBean
-	 * @return 
+	 * @return
 	 * @author: DingDong
 	 * @date: 2019年7月11日
 	 * @version: V1.0

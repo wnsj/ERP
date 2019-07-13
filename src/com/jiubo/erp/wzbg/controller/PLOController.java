@@ -84,7 +84,7 @@ public class PLOController {
     @RequestMapping(value = "/checkOfEmpList")
     public JSONObject checkOfEmpList(HttpServletResponse response, HttpServletRequest request) {
         
-		return this.service.selectDepartOfEmpList(response, request);
+		return this.service.checkOfEmpList(response, request);
     }
 	
 	/**

@@ -104,7 +104,7 @@
 				AND LQ.AddTime &lt;=#{endDate}
 			</if>
 			<if test="accountId!=null and accountId!=''">
-				AND (LQ.AgentAccount =#{accountId} OR LQ.Account1
+				AND (LQ.LeaveAccount=#{accountId} OR LQ.AgentAccount =#{accountId} OR LQ.Account1
 				=#{accountId}
 				OR LQ.Account2 =#{accountId} OR LQ.Account3
 				=#{accountId} OR
@@ -147,19 +147,23 @@
 		SELECT
 		TD.ID AS departId
 		,TD.Name AS departName
-		,TEB.ID AS employeeId
-		,TEB.Name AS employeeName
+		,AD.Account_ID AS employeeId
+		,AD.Account_Name AS employeeName
+		,PD.Position_Name AS positionName
+		,PD.Position_ID AS positionId
 		from
 		T_Department TD
-		LEFT JOIN T_Employee_Basic
-		TEB ON TD.ID = TEB.Department_ID
-		LEFT JOIN Account_Data AD ON
-		AD.Account_ID= TEB.Account
+		LEFT JOIN T_Employee_Basic TEB ON TD.ID = TEB.Department_ID
+		LEFT JOIN Account_Data AD ON AD.Account_ID= TEB.Account
+		LEFT JOIN Position_Data PD ON PD.Position_ID=AD.Position_ID
 		<trim
 			prefix="WHERE"
 			prefixOverrides="AND | OR">
 			<if test=" departId !=null and departId !=''">
 				AND TD.ID =#{departId}
+			</if>
+			<if test=" name !=null and name !=''">
+				AND AD.Account_Name =#{name}
 			</if>
 			AND TEB.IsDelete = '0' AND TEB.State='1' AND AD.Account_ID !=
 			#{accountId}
@@ -192,24 +196,27 @@
 	<!-- 审查人员列表 -->
 	<select
 		id="checkOfEmpList"
+		parameterType="java.util.Map"
 		resultType="com.jiubo.erp.wzbg.bean.EmployeeOfCheck">
 		SELECT
-		AD.Account_ID AS accountId
+		AD.Account_ID AS accountId,
 		AD.Account_Name AS accountName
 		FROM
 		Account_Data AD
+		LEFT JOIN T_Employee_Basic TEB ON TEB.Account=AD.Account_ID
+		LEFT JOIN T_Department TD ON TD.ID = TEB.Department_ID
 		LEFT JOIN Position_Data PD ON PD.Position_ID=AD.Position_ID
 		<trim
 			prefix="WHERE"
 			prefixOverrides="AND | OR">
 			<if test=" level=='4'">
-				AND PD.PositionType_ID =#{level}
+				AND PD.PositionType_ID =4
 			</if>
 			<if test=" level=='5'">
-				AND PD.PositionType_ID =#{level}
+				AND PD.PositionType_ID =5
 			</if>
 			<if test=" level=='6'">
-				AND PD.PositionType_ID =#{level}
+				AND PD.PositionType_ID =6
 			</if>
 			<if test=" level=='45'">
 				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5)
@@ -221,6 +228,10 @@
 				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5 OR
 				PD.PositionType_ID= 6)
 			</if>
+			<if test=" departId !=null and departId !='' and departId !='0'">
+				AND TD.ID=#{departId}
+			</if>
+			AND AD.Account_State='在用'
 		</trim>
 
 	</select>
