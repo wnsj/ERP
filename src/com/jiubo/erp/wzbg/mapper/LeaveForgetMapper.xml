@@ -95,6 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND B.leaveAccountName like '%' + #{leaveAccountName} + '%'
 			</if>
 		</where>
+		ORDER BY B.AddTime
 	</select>
 	
 	<insert id="addLeaveForget" parameterType="LeaveForgetBean">
