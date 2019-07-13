@@ -140,13 +140,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="endTime !=null and endTime !='' ">
 				AND A.FILL_TIME <![CDATA[ <= ]]> #{endTime}
 			</if>
-			<!-- <if test="leaveDeptId !=null and leaveDeptId !='' ">
-				<choose>
-					<when test="leaveDeptId !=0">
-						AND B.LEAVE_DEPT_ID = #{leaveDeptId}
-					</when>				
-				</choose>
-			</if> -->
 			<choose>
 			 	<when test="leaveDeptId != null or leaveDeptId != ''">
 			 		 <if test="leaveDeptId != 0">

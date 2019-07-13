@@ -1,5 +1,6 @@
 package com.jiubo.erp.wzbg.vo;
 
+import lombok.Data;
 
 /**
  * @version: V1.0
@@ -8,25 +9,8 @@ package com.jiubo.erp.wzbg.vo;
  * @description: 请假报备审批权限账户信息
  * @data: 2019-07-02
  **/
+@Data
 public class AccWithApprovalLeaveAuth {
 	private String accountID; // 账户ID
 	private String accountName;// 账户名
-	
-	public String getAccountID() {
-		return accountID;
-	}
-	public void setAccountID(String accountID) {
-		this.accountID = accountID;
-	}
-	public String getAccountName() {
-		return accountName;
-	}
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
-	}
-	@Override
-	public String toString() {
-		return "AccWithApprovalLeaveAuth [accountID=" + accountID + ", accountName=" + accountName + "]";
-	}
-	
 }
