@@ -2,6 +2,7 @@ package com.jiubo.erp.wzbg.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,13 @@ public class LeaveForgetServiceImpl implements LeaveForgetService {
 	 */
 	@Override
 	public List<LeaveForgetBean> queryLeaveForgetBean(LeaveForgetBean leaveForgetBean) throws MessageException {
-		logger.info("---------------开始查询忘记打卡证明-------------------");
-		List<LeaveForgetBean> list = leaveForgetDao.queryLeaveForget(leaveForgetBean);
+		List<LeaveForgetBean> list;
+		try {
+			logger.debug("---------------开始查询忘记打卡证明-------------------");
+			list = leaveForgetDao.queryLeaveForget(leaveForgetBean);
+		} catch (Exception e) {
+			throw new MessageException(e.getMessage());
+		}
 		return list;
 	}
 	

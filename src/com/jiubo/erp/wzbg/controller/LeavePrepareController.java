@@ -46,7 +46,7 @@ public class LeavePrepareController {
 	private LeavePrepareService leavePrepareService;
 
 	/**
-	 * @Description: 查询部门下的员工姓名以及ERP账户信息
+	 * @Description: 查询某个部门的员工账户信息
 	 * @param
 	 * @return  JSONObject
 	 * @author: DingDong
@@ -89,7 +89,7 @@ public class LeavePrepareController {
 	}
 
 	/**
-	 * @Description: 请假报备审批人列表
+	 * @Description: 查询审批人账户信息
 	 * @param
 	 * @return
 	 * @author: DingDong
@@ -173,7 +173,7 @@ public class LeavePrepareController {
 	}
 
 	/**
-	 * @Description: 添加请假报备
+	 * @Description: 申请请假报备
 	 * @param
 	 * @return
 	 * @author: DingDong
@@ -221,7 +221,7 @@ public class LeavePrepareController {
 	}
 
 	/**
-	 * @Description: 查询请假代理人列表
+	 * @Description: 查询代理人账户信息
 	 * @param
 	 * @return  JSONObject
 	 * @author: DingDong
@@ -268,7 +268,7 @@ public class LeavePrepareController {
 	}
 
 	/**
-	 * @Description: 查询所在部门以及子部门的员工信息
+	 * @Description: 查询部门及子部门的员工信息
 	 * @param
 	 * @return  JSONObject
 	 * @author: DingDong
@@ -315,7 +315,7 @@ public class LeavePrepareController {
 	}
 
 	/**
-	 * @Description: 更新请假报备信息
+	 * @Description: 更新请假报备
 	 * @param
 	 * @return  JSONObject
 	 * @author: DingDong

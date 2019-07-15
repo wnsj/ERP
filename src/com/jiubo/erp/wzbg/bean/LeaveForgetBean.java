@@ -84,6 +84,10 @@ public class LeaveForgetBean implements Serializable {
 	private String reportDeptName; // 报备人部门名
 	private String reportPositionId; // 报备人职位ID
 	private String reportPositionName;// 报备人职位名
+	// 查询时间
+	private String beginDate;
+	private String endDate;
+	private String state;	// 状态
 	
 	
 }

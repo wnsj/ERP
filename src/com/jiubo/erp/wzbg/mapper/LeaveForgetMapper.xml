@@ -2,7 +2,8 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jiubo.erp.wzbg.dao.LeavePrepareDao">
+<mapper namespace="com.jiubo.erp.wzbg.dao.LeaveForgetDao">
+
 	<!-- 查询忘记打卡证明 -->
 	<select id="queryLeaveForget" resultType="LeaveForgetBean">
 	WITH A AS (
@@ -70,11 +71,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		) G
 		ON F.ID = G.ID
 		<where>
-			<if test="beginTime !=null and beginTime !='' ">
-				AND A.addTime <![CDATA[ >= ]]> #{beginTime}
+			<if test="accountId !=null and accountId !='' ">
+				AND (B.leaveAccount = #{accountId} 
+					OR C.accountR = #{accountId}
+					OR D.account1 = #{accountId}
+					OR E.account2 = #{accountId}
+					OR F.account3 = #{accountId}
+					OR G.account4 = #{accountId}
+				)
 			</if>
-			<if test="endTime !=null and endTime !='' ">
-				AND A.addTime <![CDATA[ <= ]]> #{endTime}
+			<if test="beginDate !=null and beginDate !='' ">
+				AND B.addTime <![CDATA[ >= ]]> #{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !='' ">
+				AND B.addTime <![CDATA[ <= ]]> #{endDate}
 			</if>
 			<if test="leaveDeptId != 0">
 			 	<choose>
@@ -86,13 +96,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 								T_Department DEPT 
 							WHERE
 								B.leaveDeptId = DEPT.ID 
-							AND ( DEPT.ID = 'leaveDeptId' OR DEPT.ParentID = 'leaveDeptId' )
+							AND ( DEPT.ID = #{leaveDeptId} OR DEPT.ParentID = #{leaveDeptId} )
 						) 
 			 		</when>
 			 	</choose>
 			</if>
 			<if test="leaveAccountName != null and leaveAccountName">
 				AND B.leaveAccountName like '%' + #{leaveAccountName} + '%'
+			</if>
+			<if test="state !=null and state !='' ">
+				<choose>
+					<when test="state==1">
+						AND C.resultR IS NULL
+					</when>
+					<when test="state==2">
+						AND C.resultR IS NOT NULL 
+						AND C.resultR != 0
+					</when>
+					<when test="state==3">
+						AND G.result4 = 1
+					</when>
+					<when test="state==4">
+						AND (C.resultR = 0
+							OR D.result1 = 0
+							OR E.result2 = 0
+							OR F.result3 = 0
+							OR G.result4 = 0
+						)
+					</when>
+				</choose>
 			</if>
 		</where>
 		ORDER BY B.AddTime

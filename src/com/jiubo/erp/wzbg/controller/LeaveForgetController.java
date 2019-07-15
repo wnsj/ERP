@@ -34,7 +34,7 @@ import com.quicksand.push.ToolClass;
  **/
 @RestController
 @Scope("prototype")
-@RequestMapping("leaveForgetController")
+@RequestMapping("/leaveForgetController")
 public class LeaveForgetController {
 	
 	private final static Logger logger  = LoggerFactory.getLogger(LeaveForgetController.class);
@@ -62,28 +62,27 @@ public class LeaveForgetController {
 			}
 			LeaveForgetBean leaveForgetBean = MapUtil.transJsonStrToObjectIgnoreCase(str,LeaveForgetBean.class);
 			List<LeaveForgetBean> list = leaveForgetService.queryLeaveForgetBean(leaveForgetBean);
-			
 			retCode = Constant.Result.SUCCESS;
 			retMsg = Constant.Result.SUCCESS_MSG;
 			retData = Constant.Result.RETDATA;
 			
 			result.put(retData, list);
-			logger.info("--------------查询忘记打卡证明成功 返回json数据-------------------");
+			logger.info(retMsg);
 			return result;
 		} catch (IOException e) {
 			retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
-            logger.error("--------------IOException异常-------------------");
+            logger.error(retMsg);
             return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error("--------------MessageException-------------------");
+			logger.error(retMsg);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
-            logger.error("--------------忘记打卡证明查询失败-------------------");
+            logger.error(retMsg);
             return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);
@@ -113,22 +112,22 @@ public class LeaveForgetController {
 			
 			retCode = Constant.Result.SUCCESS;
 			retMsg = Constant.Result.SUCCESS_MSG;
-			logger.info("--------------新增忘记打卡证明成功-------------------");
+			logger.info(retMsg);
 			return result;
 		} catch (IOException e) {
 			retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
-            logger.error("--------------IOException异常-------------------");
+            logger.error(retMsg);
             return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error("--------------参数接收失败-------------------");
+			logger.error(retMsg);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
-            logger.error("--------------新增忘记打卡证明失败-------------------");
+            logger.error(retMsg);
             return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);
