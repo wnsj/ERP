@@ -23,6 +23,7 @@ import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.LeaveForgetBean;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
 import com.jiubo.erp.wzbg.service.LeaveForgetService;
+import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 import com.quicksand.push.ToolClass;
 
 /**
@@ -55,6 +56,7 @@ public class LeaveForgetController {
 		String retCode = null;
 		String retMsg = null;
 	    String retData = null;
+	    logger.info("----------请求接口:leaveForgetController/queryLeaveForget----------");
 		try {
 			String str = ToolClass.getStrFromInputStream(request);
 			if(StringUtils.isBlank(str)) {
@@ -67,22 +69,22 @@ public class LeaveForgetController {
 			retData = Constant.Result.RETDATA;
 			
 			result.put(retData, list);
-			logger.info(retMsg);
+			logger.info("----------查询忘记打卡证明成功----------");
 			return result;
 		} catch (IOException e) {
 			retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
-            logger.error(retMsg);
+            logger.error(e.getMessage(), e);
             return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error(retMsg);
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
-            logger.error(retMsg);
+            logger.error(e.getMessage(), e);
             return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);
@@ -102,6 +104,7 @@ public class LeaveForgetController {
 		JSONObject result = new JSONObject();
 		String retCode = null;
 		String retMsg = null;
+		logger.info("----------请求接口:leaveForgetController/addLeaveForget----------");
 		try {
 			String str = ToolClass.getStrFromInputStream(request);
 			if(StringUtils.isBlank(str)) {
@@ -112,22 +115,71 @@ public class LeaveForgetController {
 			
 			retCode = Constant.Result.SUCCESS;
 			retMsg = Constant.Result.SUCCESS_MSG;
-			logger.info(retMsg);
+			logger.info("----------新增忘记打卡证明成功----------");
 			return result;
 		} catch (IOException e) {
 			retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
-            logger.error(retMsg);
+            logger.error(e.getMessage(), e);
             return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error(retMsg);
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
-            logger.error(retMsg);
+            logger.error(e.getMessage(), e);
+            return result;
+		}finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+		}
+	}
+	
+	/**
+	 * @Description: 通过账户ID查询某员工部门和职位
+	 * @author: DingDong
+	 * @date: 2019年07月16日
+	 * @version: V1.0
+	 */
+	//http://127.0.0.1:8080/Erp/leaveForgetController/queryEmpInfoByAccount
+	@RequestMapping(value="/queryEmpInfoByAccount", method=RequestMethod.POST)
+	public JSONObject queryEmpInfoByAccount(HttpServletRequest request,HttpServletResponse response) {
+		JSONObject result = new JSONObject();
+		String retCode = null;
+		String retMsg = null;
+	    String retData = null;
+	    logger.info("----------请求接口:leaveForgetController/queryEmpInfoByAccount----------");
+		try {
+			String str = ToolClass.getStrFromInputStream(request);
+			if(StringUtils.isBlank(str)) {
+				throw new MessageException("参数接收失败！");
+			}
+			DeptWithEmp deptWithEmp = MapUtil.transJsonStrToObjectIgnoreCase(str,DeptWithEmp.class);
+			DeptWithEmp empInfo = leaveForgetService.queryEmpInfoByAccount(deptWithEmp);
+			retCode = Constant.Result.SUCCESS;
+			retMsg = Constant.Result.SUCCESS_MSG;
+			retData = Constant.Result.RETDATA;
+			
+			result.put(retData, empInfo);
+			logger.info("----------通过账户ID查询某员工部门和职位成功----------");
+			return result;
+		} catch (IOException e) {
+			retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error(e.getMessage(), e);
+            return result;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+			logger.error(e.getMessage(), e);
+			return result;
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error(e.getMessage(), e);
             return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);

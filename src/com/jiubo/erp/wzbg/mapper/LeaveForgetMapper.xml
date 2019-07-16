@@ -89,7 +89,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="leaveDeptId != 0">
 			 	<choose>
 			 		<when test="leaveDeptId != null or leaveDeptId != '' ">
-						EXISTS (
+						AND EXISTS (
 							SELECT
 								DEPT.ID 
 							FROM
@@ -101,7 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 		</when>
 			 	</choose>
 			</if>
-			<if test="leaveAccountName != null and leaveAccountName">
+			<if test="leaveAccountName != null and leaveAccountName != '' ">
 				AND B.leaveAccountName like '%' + #{leaveAccountName} + '%'
 			</if>
 			<if test="state !=null and state !='' ">
@@ -130,6 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY B.AddTime
 	</select>
 	
+	<!-- 新增忘记打卡证明 -->
 	<insert id="addLeaveForget" parameterType="LeaveForgetBean">
 		INSERT INTO Leave_Forget (ID, Reason, LeaveAccount, AddTime, StartTime
 			, Leave_Remark, AccountR, TimeR, ResultR, RemarkR
@@ -144,4 +145,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			, #{result3}, #{remark3}, #{account4}, #{time4}, #{result4}
 			, #{remark4}, #{updateTime}, #{isSee}, #{step});
 	</insert>
+	
+	<!-- 通过账户ID查询某员工部门和职位 -->
+	<select id="queryEmpInfoByAccount" resultType="DeptWithEmp">
+		SELECT 
+			ACC.Account_ID account, 
+			ACC.Account_Name name, 
+			DEPT.ID AS departmentId, 
+			DEPT.Name deptName, 
+			POS.Position_ID positionId, 
+			POS.Position_Name positionName
+		FROM 
+			Account_Data ACC
+			LEFT JOIN T_Employee_Basic EMP ON ACC.Account_ID = EMP.Account
+			LEFT JOIN T_Department DEPT ON EMP.Department_ID = DEPT.ID
+			LEFT JOIN Position_Data POS ON ACC.Position_ID = POS.Position_ID
+		WHERE 
+			EMP.IsDelete = '0'
+			AND EMP.State = '1'
+			AND Account_ID = #{account}
+	</select>
+	
 </mapper>

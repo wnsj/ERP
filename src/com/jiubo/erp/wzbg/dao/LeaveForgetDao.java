@@ -3,6 +3,7 @@ package com.jiubo.erp.wzbg.dao;
 import java.util.List;
 
 import com.jiubo.erp.wzbg.bean.LeaveForgetBean;
+import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 
 /**
  * @version: V1.0
@@ -18,5 +19,8 @@ public interface LeaveForgetDao {
 	
 	// 添加忘记打卡证明
 	public void addLeaveForget(LeaveForgetBean leaveForgetBean);
+	
+	// 通过账户ID查询某员工部门和职位
+	public DeptWithEmp queryEmpInfoByAccount(DeptWithEmp deptWithEmp);
 	
 }
