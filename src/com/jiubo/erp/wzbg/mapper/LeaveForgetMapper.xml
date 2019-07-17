@@ -112,6 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					<when test="state==2">
 						AND C.resultR IS NOT NULL 
 						AND C.resultR != 0
+						AND G.result4 IS NULL
 					</when>
 					<when test="state==3">
 						AND G.result4 = 1
@@ -129,21 +130,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 		ORDER BY B.AddTime
 	</select>
-	
+
 	<!-- 新增忘记打卡证明 -->
 	<insert id="addLeaveForget" parameterType="LeaveForgetBean">
-		INSERT INTO Leave_Forget (ID, Reason, LeaveAccount, AddTime, StartTime
-			, Leave_Remark, AccountR, TimeR, ResultR, RemarkR
-			, Account1, Time1, Result1, Remark1, Account2
-			, Time2, Result2, Remark2, Account3, Time3
-			, Result3, Remark3, Account4, Time4, Result4
-			, Remark4, update_Time, isSee, step)
-		VALUES (#{id}, #{reason}, #{leaveAccount}, #{addTime}, #{startTime}
-			, #{leaveRemark}, #{accountR}, #{timeR}, #{resultR}, #{remarkR}
-			, #{account1}, #{time1}, #{result1}, #{remark1}, #{account2}
-			, #{time2}, #{result2}, #{remark2}, #{account3}, #{time3}
-			, #{result3}, #{remark3}, #{account4}, #{time4}, #{result4}
-			, #{remark4}, #{updateTime}, #{isSee}, #{step});
+		INSERT INTO Leave_Forget (Reason, LeaveAccount, AddTime, StartTime, Leave_Remark
+			, AccountR, Account1, Account2, Account3, Account4
+			, update_Time, step)
+		VALUES (#{reason}, #{leaveAccount}, #{addTime}, #{startTime}, #{leaveRemark}
+			, #{accountR}, #{account1}, #{account2}, #{account3}, #{account4}
+			, #{updateTime}, #{step});
 	</insert>
 	
 	<!-- 通过账户ID查询某员工部门和职位 -->

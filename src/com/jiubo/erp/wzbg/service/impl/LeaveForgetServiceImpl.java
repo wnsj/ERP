@@ -2,6 +2,7 @@ package com.jiubo.erp.wzbg.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jiubo.erp.common.MessageException;
+import com.jiubo.erp.common.TimeUtil;
 import com.jiubo.erp.wzbg.bean.LeaveForgetBean;
 import com.jiubo.erp.wzbg.dao.LeaveForgetDao;
 import com.jiubo.erp.wzbg.service.LeaveForgetService;
@@ -62,6 +64,12 @@ public class LeaveForgetServiceImpl implements LeaveForgetService {
 	public void addLeaveForgetBean(LeaveForgetBean leaveForgetBean) throws MessageException {
 		logger.info("----------开始新增忘记打卡证明,方法:addLeaveForgetBean----------");
 		try {
+			if(!StringUtils.isBlank(leaveForgetBean.getStartTime())) {
+				logger.info("---------------日期格式格式-------------------");
+				String startTime = TimeUtil.convertDateT(leaveForgetBean.getStartTime());
+				leaveForgetBean.setStartTime(startTime);
+			}
+			leaveForgetBean.setStep("1");
 			leaveForgetDao.addLeaveForget(leaveForgetBean);
 		} catch (Exception e) {
 			throw new MessageException(e.getMessage());
