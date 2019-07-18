@@ -2,7 +2,8 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jiubo.erp.wzbg.dao.LeavePrepareDao">
+<mapper namespace="com.jiubo.erp.wzbg.dao.LeaveForgetDao">
+
 	<!-- 查询忘记打卡证明 -->
 	<select id="queryLeaveForget" resultType="LeaveForgetBean">
 	WITH A AS (
@@ -70,46 +71,94 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		) G
 		ON F.ID = G.ID
 		<where>
-			<if test="beginTime !=null and beginTime !='' ">
-				AND A.addTime <![CDATA[ >= ]]> #{beginTime}
+			<if test="accountId !=null and accountId !='' ">
+				AND (B.leaveAccount = #{accountId} 
+					OR C.accountR = #{accountId}
+					OR D.account1 = #{accountId}
+					OR E.account2 = #{accountId}
+					OR F.account3 = #{accountId}
+					OR G.account4 = #{accountId}
+				)
 			</if>
-			<if test="endTime !=null and endTime !='' ">
-				AND A.addTime <![CDATA[ <= ]]> #{endTime}
+			<if test="beginDate !=null and beginDate !='' ">
+				AND B.addTime <![CDATA[ >= ]]> #{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !='' ">
+				AND B.addTime <![CDATA[ <= ]]> #{endDate}
 			</if>
 			<if test="leaveDeptId != 0">
 			 	<choose>
 			 		<when test="leaveDeptId != null or leaveDeptId != '' ">
-						EXISTS (
+						AND EXISTS (
 							SELECT
 								DEPT.ID 
 							FROM
 								T_Department DEPT 
 							WHERE
 								B.leaveDeptId = DEPT.ID 
-							AND ( DEPT.ID = 'leaveDeptId' OR DEPT.ParentID = 'leaveDeptId' )
+							AND ( DEPT.ID = #{leaveDeptId} OR DEPT.ParentID = #{leaveDeptId} )
 						) 
 			 		</when>
 			 	</choose>
 			</if>
-			<if test="leaveAccountName != null and leaveAccountName">
+			<if test="leaveAccountName != null and leaveAccountName != '' ">
 				AND B.leaveAccountName like '%' + #{leaveAccountName} + '%'
+			</if>
+			<if test="state !=null and state !='' ">
+				<choose>
+					<when test="state==1">
+						AND C.resultR IS NULL
+					</when>
+					<when test="state==2">
+						AND C.resultR IS NOT NULL 
+						AND C.resultR != 0
+						AND G.result4 IS NULL
+					</when>
+					<when test="state==3">
+						AND G.result4 = 1
+					</when>
+					<when test="state==4">
+						AND (C.resultR = 0
+							OR D.result1 = 0
+							OR E.result2 = 0
+							OR F.result3 = 0
+							OR G.result4 = 0
+						)
+					</when>
+				</choose>
 			</if>
 		</where>
 		ORDER BY B.AddTime
 	</select>
-	
+
+	<!-- 新增忘记打卡证明 -->
 	<insert id="addLeaveForget" parameterType="LeaveForgetBean">
-		INSERT INTO Leave_Forget (ID, Reason, LeaveAccount, AddTime, StartTime
-			, Leave_Remark, AccountR, TimeR, ResultR, RemarkR
-			, Account1, Time1, Result1, Remark1, Account2
-			, Time2, Result2, Remark2, Account3, Time3
-			, Result3, Remark3, Account4, Time4, Result4
-			, Remark4, update_Time, isSee, step)
-		VALUES (#{id}, #{reason}, #{leaveAccount}, #{addTime}, #{startTime}
-			, #{leaveRemark}, #{accountR}, #{timeR}, #{resultR}, #{remarkR}
-			, #{account1}, #{time1}, #{result1}, #{remark1}, #{account2}
-			, #{time2}, #{result2}, #{remark2}, #{account3}, #{time3}
-			, #{result3}, #{remark3}, #{account4}, #{time4}, #{result4}
-			, #{remark4}, #{updateTime}, #{isSee}, #{step});
+		INSERT INTO Leave_Forget (Reason, LeaveAccount, AddTime, StartTime, Leave_Remark
+			, AccountR, Account1, Account2, Account3, Account4
+			, update_Time, step)
+		VALUES (#{reason}, #{leaveAccount}, #{addTime}, #{startTime}, #{leaveRemark}
+			, #{accountR}, #{account1}, #{account2}, #{account3}, #{account4}
+			, #{updateTime}, #{step});
 	</insert>
+	
+	<!-- 通过账户ID查询某员工部门和职位 -->
+	<select id="queryEmpInfoByAccount" resultType="DeptWithEmp">
+		SELECT 
+			ACC.Account_ID account, 
+			ACC.Account_Name name, 
+			DEPT.ID AS departmentId, 
+			DEPT.Name deptName, 
+			POS.Position_ID positionId, 
+			POS.Position_Name positionName
+		FROM 
+			Account_Data ACC
+			LEFT JOIN T_Employee_Basic EMP ON ACC.Account_ID = EMP.Account
+			LEFT JOIN T_Department DEPT ON EMP.Department_ID = DEPT.ID
+			LEFT JOIN Position_Data POS ON ACC.Position_ID = POS.Position_ID
+		WHERE 
+			EMP.IsDelete = '0'
+			AND EMP.State = '1'
+			AND Account_ID = #{account}
+	</select>
+	
 </mapper>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.LeaveForgetBean;
+import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 
 /**
  * @version: V1.0
@@ -27,10 +28,20 @@ public interface LeaveForgetService {
 	/**
 	 * @Description: 新增忘记打卡证明
 	 * @param  leaveForgetBean
-	 * @return List<LeaveForgetBean>
+	 * @return 
 	 * @author: DingDong
 	 * @date: 2019年7月13日
 	 * @version: V1.0
 	 */
 	public void addLeaveForgetBean(LeaveForgetBean leaveForgetBean) throws MessageException;
+	
+	/**
+	 * @Description: 通过账户ID查询某员工部门和职位
+	 * @param  deptWithEmp
+	 * @return DeptWithEmp
+	 * @author: DingDong
+	 * @date: 2019年7月16日
+	 * @version: V1.0
+	 */
+	public DeptWithEmp queryEmpInfoByAccount(DeptWithEmp deptWithEmp) throws MessageException;
 }

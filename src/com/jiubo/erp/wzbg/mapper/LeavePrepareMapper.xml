@@ -264,6 +264,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				ACC.ACCOUNT_NAME
 	</select>
 	
+	<!-- 更新请假报备 -->
 	<update id="updateLeavePrepare" parameterType="LeavePrepareBean">
 		UPDATE 
 			LEAVE_BAOBEI
