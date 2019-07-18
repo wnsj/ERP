@@ -104,11 +104,14 @@
 				AND LQ.AddTime &lt;=#{endDate}
 			</if>
 			<if test="accountId!=null and accountId!=''">
-				AND (LQ.LeaveAccount=#{accountId} OR LQ.AgentAccount =#{accountId} OR LQ.Account1
+				AND (LQ.LeaveAccount=#{accountId} OR LQ.AgentAccount
+				=#{accountId} OR LQ.Account1
 				=#{accountId}
-				OR LQ.Account2 =#{accountId} OR LQ.Account3
+				OR LQ.Account2
+				=#{accountId} OR LQ.Account3
 				=#{accountId} OR
-				LQ.Account4 =#{accountId})
+				LQ.Account4
+				=#{accountId})
 			</if>
 			<if test=" departId !=null and departId !=''">
 				AND TEB.Department_ID =#{departId}
@@ -132,7 +135,8 @@
 				AND LQ.Time4 IS NOT NULL AND LQ.Result4 = 1
 			</if>
 			<if test=" handleState == '未通过'">
-				AND (LQ.Result1 = 0 OR LQ.Result2 = 0 OR LQ.Result3 = 0 OR
+				AND (LQ.Result1 = 0 OR LQ.Result2 = 0 OR LQ.Result3 = 0
+				OR
 				LQ.Result4 = 0)
 			</if>
 
@@ -147,15 +151,20 @@
 		SELECT
 		TD.ID AS departId
 		,TD.Name AS departName
-		,AD.Account_ID AS employeeId
+		,AD.Account_ID AS
+		employeeId
 		,AD.Account_Name AS employeeName
-		,PD.Position_Name AS positionName
+		,PD.Position_Name AS
+		positionName
 		,PD.Position_ID AS positionId
 		from
 		T_Department TD
-		LEFT JOIN T_Employee_Basic TEB ON TD.ID = TEB.Department_ID
-		LEFT JOIN Account_Data AD ON AD.Account_ID= TEB.Account
-		LEFT JOIN Position_Data PD ON PD.Position_ID=AD.Position_ID
+		LEFT JOIN
+		T_Employee_Basic TEB ON TD.ID = TEB.Department_ID
+		LEFT JOIN
+		Account_Data AD ON AD.Account_ID= TEB.Account
+		LEFT JOIN Position_Data
+		PD ON PD.Position_ID=AD.Position_ID
 		<trim
 			prefix="WHERE"
 			prefixOverrides="AND | OR">
@@ -192,60 +201,124 @@
 		,#{updateTime},#{isSee},#{step},#{baobeiID}
 	</insert>
 
-
-	<!-- 审查人员列表 -->
-	<select
-		id="checkOfEmpList"
-		resultType="com.jiubo.erp.wzbg.bean.EmployeeOfCheck">
-		SELECT
-		AD.Account_ID AS accountId,
-		AD.Account_Name AS accountName
+	
+	<!-- 审查人员列表 --><!-- level级别，0=组长，1=主管，2=部长总监  clickTimes点击次数-->
+	<!-- The content of elements must consist of well-formed character data or markup 报错由于小于号的问题-->
+	<select id="checkOfEmpList" resultType="com.jiubo.erp.wzbg.bean.EmployeeOfCheck">
+	    SELECT
+		ATTP.Account_Name AS accountName,
+		ATTP.Account_ID AS accountId
+	    FROM
+		(<choose>
+			<when test="clickTimes == 0">
+			SELECT
+			    TD.ID
+			FROM
+			    T_Department TD
+			WHERE
+			    TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=#{departId} AND TD.ID !=0)
+			    OR TD.ID=#{departId}
+			</when>
+			<when test="clickTimes == 1">
+			SELECT
+			    TD.ID
+			FROM
+			    T_Department TD
+			WHERE
+			    TD.ParentID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=#{departId} AND TD.ID !=0)
+			    OR TD.ID=#{departId}
+			</when>
+			<when test="clickTimes == 2">
+			SELECT
+			    TD.ID
+			FROM
+			    T_Department TD
+			</when>
+			<when test="clickTimes == 3">
+			SELECT
+			    TD.ID
+			FROM
+			    T_Department TD
+			WHERE
+			    TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE
+			    	TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=#{departId} AND TD.ID !=0))
+			</when>
+			<when test="clickTimes == 4">
+			SELECT
+			    TD.ID
+			FROM
+			    T_Department TD
+			WHERE
+			    TD.ParentID=(SELECT TD.ParentID FROM T_Department TD WHERE
+			    	TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=#{departId} AND TD.ID !=0))
+			    OR TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE
+			    	TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=#{departId} AND TD.ID !=0))
+			</when>
+			<when test="clickTimes == 5">
+			SELECT
+			    TD.ID
+			FROM
+			    T_Department TD
+			</when>
+			<when test="clickTimes == 6">
+			SELECT
+			    TD.ID
+			FROM
+			    T_Department TD
+			WHERE
+			    TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE
+			    	TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=#{departId} AND TD.ID !=0)))
+			</when>
+			<when test="clickTimes == 7">
+			SELECT
+			    TD.ID
+			FROM
+			    T_Department TD
+			WHERE
+			    TD.ParentID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE
+			    	TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=#{departId} AND TD.ID !=0)))
+			    OR TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE
+			    	TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=#{departId} AND TD.ID !=0)))
+			</when>
+			<when test="clickTimes == 8">
+			SELECT
+			    TD.ID
+			FROM
+			    T_Department TD
+			</when>
+		</choose>) TDS
+		
+	    LEFT JOIN
+	    (SELECT
+		AD.Account_Name,
+		TD.ID,
+		AD.Account_ID
 		FROM
 		Account_Data AD
 		LEFT JOIN T_Employee_Basic TEB ON TEB.Account=AD.Account_ID
 		LEFT JOIN T_Department TD ON TD.ID = TEB.Department_ID
 		LEFT JOIN Position_Data PD ON PD.Position_ID=AD.Position_ID
-		<trim
-			prefix="WHERE"
-			prefixOverrides="AND | OR">
-			<!-- <choose>
-				<when test=" level== 4">
-					AND PD.PositionType_ID =4
-				</when>
-			</choose> -->
-			<if test=" level== 4">
-				AND PD.PositionType_ID =4
-			</if>
-			<if test=" level== 5">
-				AND PD.PositionType_ID =5
-			</if>
-			<if test=" level==6">
-				AND PD.PositionType_ID =6
-			</if>
-			<!-- <if test=" '45'.equals(level)">
-				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5)
-			</if> -->
-			<if test=" level=45">
-				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5)
-			</if>
-			<if test=" level==56">
-				AND (PD.PositionType_ID= 5 OR PD.PositionType_ID= 6)
-			</if>
-			<if test=" level==456">
-				AND (PD.PositionType_ID = 4 OR PD.PositionType_ID= 5 OR
-				PD.PositionType_ID= 6)
-			</if>
-			<if test=" null != departId  and '' !=departId">
-				AND TD.ID=#{departId}
-			</if>
-			<if test=" null != positionId and '' != positionId">
-				AND PD.Position_ID=#{positionId}
-			</if>
-	
-			AND AD.Account_State='在用'
-		</trim>
-
+		WHERE 
+		AD.Account_State='在用'
+		AND
+		PD.PositionType_ID=(CASE
+			    WHEN
+			    (SELECT PD.PositionType_ID FROM Position_Data PD WHERE PD.Position_ID=#{positionId})&lt;4 THEN  4+#{level}
+			    WHEN 
+			    (SELECT PD.PositionType_ID FROM Position_Data PD WHERE PD.Position_ID=#{positionId})=4  THEN 5+#{level}
+			    WHEN 
+			    (SELECT PD.PositionType_ID FROM Position_Data PD WHERE PD.Position_ID=#{positionId})=5 THEN 6+#{level}
+			    WHEN 
+			    (SELECT PD.PositionType_ID FROM Position_Data PD WHERE PD.Position_ID=#{positionId})>=6 THEN ''
+			    END)
+		)ATTP ON ATTP.ID=TDS.ID
+		WHERE
+		ATTP.Account_Name IS NOT NULL
 	</select>
+
+
+
+
 
 	<!-- 倒休列表 -->
 
@@ -255,35 +328,35 @@
 		resultType="com.jiubo.erp.wzbg.bean.AskForLeaveBean">
 		SELECT
 		,Reason AS reason
-      ,LeaveAccount AS leaveAccount
-      ,AddTime AS addTime
-      ,StartTime AS startTime
-      ,EndTime AS endTime
-      ,LeaveTotal AS leaveTotal
-      ,WorkTime AS workTime
-      ,WorkTotal AS workTotal
-      ,Leave_Remark AS leave_Remark
-      ,Account1 AS account1
-      ,Time1 AS time1
-      ,Result1 AS result1
-      ,Remark1 AS remark1
-      ,Account2 AS account2
-      ,Time2 AS time2
-      ,Result2 AS result2
-      ,Remark2 AS remark2
-      ,Account3 AS account3
-      ,Time3 AS time3
-      ,Result3 AS result3
-      ,Remark3 AS remark3
-      ,Account4 AS account4
-      ,Time4 AS time4
-      ,Result4 AS result4
-      ,Remark4 AS remark4
-      ,update_Time AS update_Time 
-      ,isSee AS isSee
-      ,step AS step
-      FROM Leave_Daoxiu LD
-      LEFT
+		,LeaveAccount AS leaveAccount
+		,AddTime AS addTime
+		,StartTime AS startTime
+		,EndTime AS endTime
+		,LeaveTotal AS leaveTotal
+		,WorkTime AS workTime
+		,WorkTotal AS workTotal
+		,Leave_Remark AS leave_Remark
+		,Account1 AS account1
+		,Time1 AS time1
+		,Result1 AS result1
+		,Remark1 AS remark1
+		,Account2 AS account2
+		,Time2 AS time2
+		,Result2 AS result2
+		,Remark2 AS remark2
+		,Account3 AS account3
+		,Time3 AS time3
+		,Result3 AS result3
+		,Remark3 AS remark3
+		,Account4 AS account4
+		,Time4 AS time4
+		,Result4 AS result4
+		,Remark4 AS remark4
+		,update_Time AS update_Time
+		,isSee AS isSee
+		,step AS step
+		FROM Leave_Daoxiu LD
+		LEFT
 		JOIN Account_Data AD ON LD.LeaveAccount=AD.Account_ID
 		LEFT JOIN
 		Account_Data ADA ON LD.AgentAccount=ADA.Account_ID
@@ -301,7 +374,7 @@
 		LD.Account3=AD3.Account_ID
 		LEFT JOIN Account_Data AD4 ON
 		LD.Account4=AD4.Account_ID
-      <trim
+		<trim
 			prefix="WHERE"
 			prefixOverrides="AND | OR">
 			<if test="beginDate !=null and beginDate !=''">
@@ -342,12 +415,13 @@
 				AND LD.Time4 IS NOT NULL AND LD.Result4 = 1
 			</if>
 			<if test=" handleState == '未通过'">
-				AND (LD.Result1 = 0 OR LD.Result2 = 0 OR LD.Result3 = 0 OR
+				AND (LD.Result1 = 0 OR LD.Result2 = 0 OR LD.Result3 = 0
+				OR
 				LD.Result4 = 0)
 			</if>
 
 		</trim>
-		
+
 
 	</select>
 </mapper>

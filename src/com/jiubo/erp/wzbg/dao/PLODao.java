@@ -22,7 +22,8 @@ public interface PLODao {
 	public int insertLeaveApplication(AskForLeaveBean afl);
 	
 	//请假 --- 人员级别查看审查列表
-	public List<EmployeeOfCheck>checkOfEmpList(@Param(value="level") String level,@Param(value="positionId") String positionId,@Param(value="departId") String departId);
+	public List<EmployeeOfCheck>checkOfEmpList(@Param(value="level") String level,@Param(value="positionId") String positionId
+			,@Param(value="departId") String departId,@Param(value="clickTimes") String clickTimes);
 	
 	//倒休列表
 	
