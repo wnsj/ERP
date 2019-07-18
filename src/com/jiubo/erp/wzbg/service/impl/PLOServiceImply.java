@@ -91,7 +91,6 @@ public class PLOServiceImply implements PLOService {
                 throw new MessageException("参数接收失败！");
             plop = MapUtil.transJsonStrToObjectIgnoreCase(str, PLOParam.class);
             System.out.println("getSearchContent：" + plop.getDepartId()+plop.toString());
-            System.out.println(this.dao.selectDepartOfEmpList(plop).get(0).getPositionName());
             result.put("resData", this.dao.selectDepartOfEmpList(plop));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
@@ -124,7 +123,7 @@ public class PLOServiceImply implements PLOService {
         String retMsg = Constant.Result.SUCCESS_MSG;
         try {
             levelMap = ToolClass.mapShiftStr(request);
-            result.put("resData", this.dao.checkOfEmpList(levelMap));
+            result.put("resData", this.dao.checkOfEmpList(levelMap.get("level"),levelMap.get("positionId"),levelMap.get("departId"),levelMap.get("clickTimes")));
         } catch (Exception e) {
             retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
