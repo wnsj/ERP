@@ -132,7 +132,9 @@
 		a.Birth AS birth,
 		a.EntryDate AS entryDate,
 		a.PositiveDate AS PositiveDate,
-		a.ResignDate AS ResignDate,
+		CASE WHEN a.ResignDate&lt;a.EntryDate  THEN NULL
+		ELSE a.ResignDate 
+		END AS ResignDate,
 		a.State AS
 		State,
 		a.ResignType AS resignType,
@@ -372,13 +374,11 @@
 	<insert id="insertfamilyInfo" parameterType="com.jiubo.erp.rygl.vo.QueryFamilyResult">
 		insert into
 		Account_Family
-		(name,Birthday,appellation,workaddress,position,
+		(Account_ID,name,Birthday,appellation,workaddress,position,
 		phone,wechat,address)
 		values
-		(#{name},#{birth},#{appellation},#{workaddress},#{position},
+		(#{uAccountId},#{chname},#{birth},#{appellation},#{workAddress},#{position},
 		#{phone},#{wechat},#{famAddress})
-		where
-		Account_ID=#{accountId}
 	</insert>
 
 

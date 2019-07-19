@@ -80,7 +80,7 @@ public class EmpController {
             if (StringUtils.isBlank(str))
                 throw new MessageException("参数接收失败！");
             qp = MapUtil.transJsonStrToObjectIgnoreCase(str, QueryParam.class);
-            System.out.println("getSearchContent：" + qp.getSearchContent()+qp.toString());
+//            System.out.println("getSearchContent：" + qp.getSearchContent()+qp.toString()+this.service.initEmpList(qp, request).get(0).getResignDate());
             result.put("resData", this.service.initEmpList(qp, request));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
@@ -915,14 +915,18 @@ public class EmpController {
 				
 
 				if (jsonData.containsKey("userFamily")) {
+					System.out.println("userFamily-1:");
 					userFamily = jsonData.getJSONArray("userFamily");
 					resultMap.put("add", "1");
 					resultMap.put("modify", "1");
-					if (accountId.equals("0")) {
+					if (!accountId.equals("0")) {
+						System.out.println("userFamily-2:");
 						for (int i = 0; i < userFamily.size(); i++) {
 							JSONObject jsonObject = userFamily.getJSONObject(i);
 							qfr= MapUtil.transJsonToObjectIgnoreCase(jsonObject, QueryFamilyResult.class);
 							qfr.setuAccountId(accountId);
+							System.out.println("userFamily-3:");
+							System.out.println("userFamily:"+qfr.toString());
 							if (qfr.getType().equals("add")) {
 								Integer add = this.service.insertUserFmInfo(qfr);
 								if (add==0) {
