@@ -62,17 +62,12 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 	 */
 	@Override
 	public void addLeavePrepareBean(LeavePrepareBean leavePrepareBean) throws MessageException {
-		if(!StringUtils.isBlank(leavePrepareBean.getStartTime())) {
-			logger.info("---------------开始转换startTme格式-------------------");
-			String startTime = TimeUtil.convertDateT(leavePrepareBean.getStartTime());
-			leavePrepareBean.setStartTime(startTime);
+		logger.info("----------开始新增请假报备,方法:addLeavePrepareBean----------");
+		try {
+			leavePrepareDao.addLeavePrepare(leavePrepareBean);
+		} catch (Exception e) {
+			throw new MessageException(e.getMessage());
 		}
-		if(!StringUtils.isBlank(leavePrepareBean.getEndTime())) {
-			logger.info("---------------开始转换endTime格式-------------------");
-			String endTime = TimeUtil.convertDateT(leavePrepareBean.getEndTime());
-			leavePrepareBean.setEndTime(endTime);
-		}
-		leavePrepareDao.addLeavePrepare(leavePrepareBean);
 	}
 
 	/**
