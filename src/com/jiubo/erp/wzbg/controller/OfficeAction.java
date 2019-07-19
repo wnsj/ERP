@@ -47,7 +47,7 @@ public class OfficeAction {
     * @throws:
     * @version: 1.0
     **/
-    //http://127.0.0.1:8080/Erp/officeAction/queryOfficeSuppliesData?month=2019-08&
+    //http://127.0.0.1:8080/Erp/officeAction/queryOfficeSuppliesData?month=2019-08&accountId1=&departmentId=&name=
     @ResponseBody
     @RequestMapping(value = "/queryOfficeSuppliesData", method = RequestMethod.POST)
     public JSONObject queryOfficeSuppliesData(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {
@@ -116,7 +116,7 @@ public class OfficeAction {
      * @throws:
      * @version: 1.0
      **/
-    //http://127.0.0.1:8080/Erp/officeAction/addUpdateOfficeSupplies
+    //http://127.0.0.1:8080/Erp/officeAction/addUpdateOfficeSupplies?{"officeInfo":[{"id":"478","departmentId":"55","month":"2019-08-01","name":"小本","num":"2","specification":"本","remark":"2","accountId1":"239","accountId2":"239","advice2":3,"accountId3":null,"advice3":null,"state":0,"isTiJiao":null,"renShiId":null,"renShidAvice":null,"renShiSee":null,"fuZongId":null,"fuZongAdvice":null,"fuZongSee":null,"caiWuId":null,"caiWuAdvice":null,"caiWuSee":null,"zhuSee":null,"renSee":null,"shenSee":null,"isWanCheng":null,"renOtherSee":null,"departmentName":"开发组","account1Name":"王杰林","account2Name":"王杰林","officeId":"1","specId":"1","specificationList":[{"id":"1","specification":"本","nameId":"1"}]}],"delOffice":[]}
     @ResponseBody
     @RequestMapping(value = "/addUpdateOfficeSupplies", method = RequestMethod.POST)
     public JSONObject addUpdateOfficeSupplies(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {
@@ -152,6 +152,7 @@ public class OfficeAction {
      * @throws:
      * @version: 1.0
      **/
+    //http://127.0.0.1:8080/Erp/officeAction/isHuiZong?month=
     @ResponseBody
     @RequestMapping(value = "/isHuiZong", method = RequestMethod.POST)
     public JSONObject isHuiZong(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {
@@ -177,7 +178,7 @@ public class OfficeAction {
     }
 
     /* *
-     * @desc:数据审核
+     * @desc:主管组长数据审核
      * @author: dx
      * @date: 2019-07-16 09:21:36
      * @param request :
@@ -212,7 +213,7 @@ public class OfficeAction {
     }
 
     /* *
-     * @desc:办公用品汇总
+     * @desc:办公用品汇总查询
      * @author: dx
      * @date: 2019-07-17 09:48:12
      * @param request :
@@ -260,7 +261,7 @@ public class OfficeAction {
      * @throws:
      * @version: 1.0
      **/
-    //http://127.0.0.1:8080/Erp/officeAction/queryAdvancePeo
+    //http://127.0.0.1:8080/Erp/officeAction/queryAdvancePeo?{params:[{deptName:"总经办",postName:"副总经理",key:"自定义返回key"}]}
     @ResponseBody
     @RequestMapping(value = "/queryAdvancePeo", method = RequestMethod.POST)
     public JSONObject queryAdvancePeo(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {
@@ -332,7 +333,7 @@ public class OfficeAction {
      * @throws:
      * @version: 1.0
      **/
-    //http://127.0.0.1:8080/Erp/officeAction/commitAndSheHe
+    //http://127.0.0.1:8080/Erp/officeAction/commitAndSheHe?{"officeInfo":[{"month":"2019-08","accountId3":"239","isTiJiao":1,"state":1}]}
     @ResponseBody
     @RequestMapping(value = "/commitAndSheHe", method = RequestMethod.POST)
     public JSONObject commitAndSheHe(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {
@@ -368,7 +369,7 @@ public class OfficeAction {
      * @throws:
      * @version: 1.0
      **/
-    //http://127.0.0.1:8080/Erp/officeAction/queryDeptConscientious
+    //http://127.0.0.1:8080/Erp/officeAction/queryDeptConscientious?deptId=&level=
     @ResponseBody
     @RequestMapping(value = "/queryDeptConscientious", method = RequestMethod.POST)
     public JSONObject queryDeptConscientious(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {

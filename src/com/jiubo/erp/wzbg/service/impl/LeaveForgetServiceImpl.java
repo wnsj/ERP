@@ -64,11 +64,6 @@ public class LeaveForgetServiceImpl implements LeaveForgetService {
 	public void addLeaveForgetBean(LeaveForgetBean leaveForgetBean) throws MessageException {
 		logger.info("----------开始新增忘记打卡证明,方法:addLeaveForgetBean----------");
 		try {
-			if(!StringUtils.isBlank(leaveForgetBean.getStartTime())) {
-				logger.info("---------------日期格式格式-------------------");
-				String startTime = TimeUtil.convertDateT(leaveForgetBean.getStartTime());
-				leaveForgetBean.setStartTime(startTime);
-			}
 			leaveForgetBean.setStep("1");
 			leaveForgetDao.addLeaveForget(leaveForgetBean);
 		} catch (Exception e) {
