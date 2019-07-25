@@ -47,5 +47,7 @@ public class LeavePrepareBean implements Serializable {
 	private String fillPositionName;// 填表人职位名
 	private String checkEmpName;
 	private String checkPositionName;// 审批人职位名
+	private String typeId;	// 请假人职务级别
+	private String fillTypeId;	// 填表人职务级别
 	
 }

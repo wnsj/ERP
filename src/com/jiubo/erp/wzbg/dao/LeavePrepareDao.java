@@ -5,6 +5,7 @@ import java.util.List;
 import com.jiubo.erp.wzbg.bean.ApprovalBaoBeiBean;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
 import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
+import com.jiubo.erp.wzbg.vo.CheckInfo;
 import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 
 /**
@@ -37,7 +38,13 @@ public interface LeavePrepareDao {
     // 查询所在部门以及子部门的员工信息
     public List<DeptWithEmp> queryEmpByDeptOrParentDept(DeptWithEmp deptWithEmp);
 
-    //更新请假报备信息
+    //	更新请假报备信息
     public void updateLeavePrepare(LeavePrepareBean leavePrepareBean);
+    
+    // 	查询审查人信息
+    public List<CheckInfo> queryCheckInfo(CheckInfo checkInfo);
+    
+    // 查询父级部门ID
+    public String queryParentDept(String deptId);
 
 }

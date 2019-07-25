@@ -25,6 +25,7 @@ import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
 import com.jiubo.erp.wzbg.service.LeavePrepareService;
 import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
+import com.jiubo.erp.wzbg.vo.CheckInfo;
 import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 import com.quicksand.push.ToolClass;
 
@@ -75,12 +76,12 @@ public class LeavePrepareController {
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error("--------------MessageException-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = Constant.Result.ERROR_MSG;
-			logger.error("--------------查询部门下的员工姓名以及ERP账户信息失败-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);
@@ -154,17 +155,17 @@ public class LeavePrepareController {
 		} catch (IOException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = Constant.Result.ERROR_MSG;
-			logger.error("--------------IOException异常-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error("--------------MessageException-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = Constant.Result.ERROR_MSG;
-			logger.error("--------------请假报备查询失败-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);
@@ -202,17 +203,17 @@ public class LeavePrepareController {
 		} catch (IOException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = Constant.Result.ERROR_MSG;
-			logger.error("--------------IOException异常-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error("--------------参数接收失败-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = Constant.Result.ERROR_MSG;
-			logger.error("--------------请假报备添加失败-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);
@@ -254,12 +255,12 @@ public class LeavePrepareController {
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error("--------------MessageException-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = Constant.Result.ERROR_MSG;
-			logger.error("--------------查询请假代理人列表信息失败-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);
@@ -301,12 +302,12 @@ public class LeavePrepareController {
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error("--------------MessageException-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = Constant.Result.ERROR_MSG;
-			logger.error("-------------查询所在部门以及子部门的员工信息失败-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);
@@ -344,17 +345,106 @@ public class LeavePrepareController {
 		} catch (IOException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = Constant.Result.ERROR_MSG;
-			logger.error("--------------IOException异常-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = e.getMessage();
-			logger.error("--------------MessageException-------------------");
+			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
 			retCode = Constant.Result.ERROR;
 			retMsg = Constant.Result.ERROR_MSG;
-			logger.error("-------------更新请假报备信息失败-------------------");
+			logger.error(e.getMessage(), e);
+			return result;
+		}finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+		}
+	}
+	
+	/**
+	 * @Description: 查询审查人信息
+	 * @param
+	 * @return  JSONObject
+	 * @author: DingDong
+	 * @date: 2019年07月10日
+	 * @version: V1.0
+	 */
+	//http://127.0.0.1:8080/Erp/leavePrepareController/queryCheckInfo
+	@ResponseBody
+	@RequestMapping(value="/queryCheckInfo", method=RequestMethod.POST)
+	public JSONObject queryCheckInfo(HttpServletRequest request,HttpServletResponse response) {
+		JSONObject result = new JSONObject();
+		String retCode = null;
+		String retMsg = null;
+		String retData = null;
+		try {
+			String str = ToolClass.getStrFromInputStream(request);
+			if(StringUtils.isBlank(str)) {
+				throw new MessageException("参数接收失败！");
+			}
+			CheckInfo checkInfo =  JSONObject.parseObject(str,CheckInfo.class);
+			List<CheckInfo> list = leavePrepareService.queryCheckInfo(checkInfo);
+
+			retCode = Constant.Result.SUCCESS;
+			retMsg = Constant.Result.SUCCESS_MSG;
+			retData = Constant.Result.RETDATA;
+
+			result.put(retData, list);
+			logger.info("--------------查询审查人信息成功 返回json数据-------------------");
+			return result;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+			logger.error(e.getMessage(), e);
+			return result;
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			logger.error(e.getMessage(), e);
+			return result;
+		}finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+		}
+	}
+	
+	/**
+	 * @Description: 查询父级部门ID
+	 * @param
+	 * @return  JSONObject
+	 * @author: DingDong
+	 * @date: 2019年07月10日
+	 * @version: V1.0
+	 */
+	//http://127.0.0.1:8080/Erp/leavePrepareController/queryParentDept
+	@ResponseBody
+	@RequestMapping(value="/queryParentDept", method=RequestMethod.POST)
+	public JSONObject queryParentDept(@RequestBody Map<String,Object> params,HttpServletRequest request,HttpServletResponse response) {
+		JSONObject result = new JSONObject();
+		String retCode = null;
+		String retMsg = null;
+		String retData = null;
+		try {
+			String id = MapUtil.getString(params, "deptId", MapUtil.ALLOW_NULL);
+			String parentId = leavePrepareService.queryParentDept(id);
+			retCode = Constant.Result.SUCCESS;
+			retMsg = Constant.Result.SUCCESS_MSG;
+			retData = Constant.Result.RETDATA;
+
+			result.put(retData, parentId);
+			logger.info("--------------查询父级部门ID成功 返回json数据-------------------");
+			return result;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+			logger.error(e.getMessage(), e);
+			return result;
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			logger.error(e.getMessage(), e);
 			return result;
 		}finally {
 			result.put(Constant.Result.RETCODE, retCode);

@@ -16,10 +16,12 @@ import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.common.TimeUtil;
 
 import com.jiubo.erp.wzbg.bean.ApprovalBaoBeiBean;
+import com.jiubo.erp.wzbg.bean.LeaveForgetBean;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
 import com.jiubo.erp.wzbg.dao.LeavePrepareDao;
 import com.jiubo.erp.wzbg.service.LeavePrepareService;
 import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
+import com.jiubo.erp.wzbg.vo.CheckInfo;
 import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 
 /**
@@ -148,17 +150,51 @@ public class LeavePrepareServiceImpl implements LeavePrepareService {
 	 */
 	@Override
 	public void updateLeavePrepare(LeavePrepareBean leavePrepareBean) throws MessageException {
-		if(!StringUtils.isBlank(leavePrepareBean.getStartTime())) {
-			logger.info("---------------开始转换startTme格式-------------------");
-			String startTime = TimeUtil.convertDateT(leavePrepareBean.getStartTime());
-			leavePrepareBean.setStartTime(startTime);
+		logger.info("----------开始修改请假报备,方法:updateLeavePrepare----------");
+		try {
+			leavePrepareDao.updateLeavePrepare(leavePrepareBean);
+		} catch (Exception e) {
+			throw new MessageException(e.getMessage());
 		}
-		if(!StringUtils.isBlank(leavePrepareBean.getEndTime())) {
-			logger.info("---------------开始转换endTime格式-------------------");
-			String endTime = TimeUtil.convertDateT(leavePrepareBean.getEndTime());
-			leavePrepareBean.setEndTime(endTime);
-		}
-		leavePrepareDao.updateLeavePrepare(leavePrepareBean);
 	}
-
+	
+	/**
+	 * @Description: 查询审查人信息
+	 * @param  queryCheckInfo
+	 * @return
+	 * @author: DingDong
+	 * @date: 2019年7月24日
+	 * @version: V1.0
+	 */
+	@Override
+	public List<CheckInfo> queryCheckInfo(CheckInfo checkInfo) throws MessageException{
+		List<CheckInfo> list;
+		logger.info("----------开始查询审查人信息,方法:queryCheckInfo----------");
+		try {
+			list = leavePrepareDao.queryCheckInfo(checkInfo);
+		} catch (Exception e) {
+			throw new MessageException(e.getMessage());
+		}
+		return list;
+	}
+	
+	/**
+	 * @Description: 查询父级部门ID
+	 * @param  queryParentDept
+	 * @return	String
+	 * @author: DingDong
+	 * @date: 2019年7月24日
+	 * @version: V1.0
+	 */
+	@Override
+	public String queryParentDept(String deptId) throws MessageException {
+		String parentId;
+		logger.info("----------开始查询查询父级部门ID,方法:queryParentDept----------");
+		try {
+			parentId = leavePrepareDao.queryParentDept(deptId);
+		} catch (Exception e) {
+			throw new MessageException(e.getMessage());
+		}
+		return parentId;
+	}
 }
