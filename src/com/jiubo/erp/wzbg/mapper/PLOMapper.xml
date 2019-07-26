@@ -35,7 +35,7 @@
 		,CASE WHEN LQ.Result1 = 1 THEN '同意'
 		WHEN LQ.Result1 =
 		0 THEN '不同意'
-		ELSE '' END AS result1
+		ELSE NULL END AS result1
 		,LQ.Remark1 AS remark1
 		,LQ.Account2
 		AS account2
@@ -45,7 +45,7 @@
 		WHEN LQ.Result2 = 1 THEN '同意'
 		WHEN LQ.Result2 =
 		0 THEN '不同意'
-		ELSE '' END
+		ELSE NULL END
 		AS result2
 		,LQ.Remark2 AS remark2
 		,LQ.Account3 AS account3
@@ -55,7 +55,7 @@
 		LQ.Result3 = 1 THEN '同意'
 		WHEN LQ.Result3 =
 		0 THEN '不同意'
-		ELSE '' END AS
+		ELSE NULL END AS
 		result3
 		,LQ.Remark3 AS remark3
 		,LQ.Account4 AS account4
@@ -65,7 +65,7 @@
 		LQ.Result4 = 1 THEN '同意'
 		WHEN LQ.Result4 =
 		0 THEN '不同意'
-		ELSE '' END AS
+		ELSE NULL END AS
 		result4
 		,LQ.Remark4 AS remark4
 		,LQ.update_Time AS updateTime
@@ -186,21 +186,66 @@
 		parameterType="com.jiubo.erp.wzbg.bean.AskForLeaveBean">
 		INSERT INTO
 		Leave_Qingjia
-		LeaveType,AddTime,LeaveAccount,AgentAccount,StartTime,EndTime,Leave_Remark
+		(LeaveType,AddTime,LeaveAccount,AgentAccount,StartTime,EndTime,Leave_Remark
 		,Account1,Time1,Result1,Remark1
 		,Account2,Time2,Result2,Remark2
 		,Account3,Time3,Result3,Remark3
 		,Account4,Time4,Result4,Remark4
-		,update_Time,isSee,step,BaobeiID
+		,update_Time,isSee,step,BaobeiID)
 		VALUES
-		#{leaveType},#{addTime},#{leaveAccount},#{agentAccount},#{startTime},#{endTime},#{leaveRemark}
+		(#{leaveType},#{addTime},#{leaveAccount},#{agentAccount},#{startTime},#{endTime},#{leaveRemark}
 		,#{account1},#{time1},#{result1},#{remark1}
 		,#{account2},#{time2},#{result2},#{remark2}
 		,#{account3},#{time3},#{result3},#{remark3}
 		,#{account4},#{time4},#{result4},#{remark4}
-		,#{updateTime},#{isSee},#{step},#{baobeiID}
+		,#{updateTime},#{isSee},#{step},#{baobeiId})
 	</insert>
 
+	<!--请假修改  -->
+	<update id="updateLeaveApplication" parameterType="com.jiubo.erp.wzbg.bean.AskForLeaveBean">
+		UPDATE 
+		    Leave_Qingjia
+		SET
+		<if test="leaveType !=null and leaveType !=''"> LeaveType=#{leaveType} ,</if>
+		<if test="agentAccount !=null and agentAccount !=''"> AgentAccount=#{agentAccount}, </if>
+		<if test="startTime !=null and startTime !=''"> StartTime=#{startTime}, </if>
+		<if test="endTime !=null and endTime !=''"> EndTime=#{endTime} ,</if>
+		<if test="leaveRemark !=null and leaveRemark !=''"> LeaveRemark=#{leaveRemark} ,</if>
+		
+		<if test="account1 !=null and account1 !=''"> Account1=#{account1}, </if>
+		<if test="time1 !=null and time1 !=''"> Time1=#{time1}, </if>
+		<if test="result1 !=null and result1 !=''"> Result1=#{result1}, </if>
+		<if test="remark1 !=null and remark1 !=''"> Remark1=#{remark1}, </if>
+		
+		<if test="account2 !=null and account2 !=''"> Account2=#{account2}, </if>
+		<if test="time2 !=null and time2 !=''"> Time2=#{time2}, </if>
+		<if test="result2 !=null and result2 !=''"> Result2=#{result2}, </if>
+		<if test="remark2 !=null and remark2 !=''"> Remark2=#{remark2}, </if>
+		
+		<if test="account3 !=null and account3 !=''"> Account3=#{account3}, </if>
+		<if test="time3 !=null and time3 !=''"> Time3=#{time3}, </if>
+		<if test="result3 !=null and result3 !=''"> Result3=#{result3}, </if>
+		<if test="remark3 !=null and remark3 !=''"> Remark3=#{remark3}, </if>
+		
+		
+		<if test="time4 !=null and time4 !=''"> Time4=#{time4}, </if>
+		<if test="result4 !=null and result4 !=''"> Result4=#{result4}, </if>
+		<if test="remark4 !=null and remark4 !=''"> Remark4=#{remark4}, </if>
+		<if test="account4 !=null and account4 !=''"> Account4=#{account4} </if>
+		<trim
+			prefix="WHERE"
+			prefixOverrides="AND | OR">
+			<if test="leaveAccount !=null and leaveAccount !=''">
+				AND LeaveAccount=#{leaveAccount}
+			</if>
+			
+			<if test="id !=null and id !=''">
+				AND ID=#{id}
+			</if>
+		</trim>
+
+	</update>
+	
 	
 	<!-- 审查人员列表 --><!-- level级别，0=组长，1=主管，2=部长总监  clickTimes点击次数-->
 	<!-- The content of elements must consist of well-formed character data or markup 报错由于小于号的问题-->
@@ -218,6 +263,7 @@
 			WHERE
 			    TD.ID=(SELECT TD.ParentID FROM T_Department TD WHERE TD.ID=#{departId} AND TD.ID !=0)
 			    OR TD.ID=#{departId}
+			    OR TD.ID=(CASE WHEN 54=#{departId} THEN 55 END)
 			</when>
 			<when test="clickTimes == 1">
 			SELECT
@@ -323,43 +369,47 @@
 	<!-- 倒休列表 -->
 
 	<select
-		id="selectRestDown"
+		id="selectRestDownList"
 		parameterType="com.jiubo.erp.wzbg.vo.PLOParam"
-		resultType="com.jiubo.erp.wzbg.bean.AskForLeaveBean">
+		resultType="com.jiubo.erp.wzbg.bean.RestDownBean">
 		SELECT
-		,Reason AS reason
-		,LeaveAccount AS leaveAccount
-		,AddTime AS addTime
-		,StartTime AS startTime
-		,EndTime AS endTime
-		,LeaveTotal AS leaveTotal
-		,WorkTime AS workTime
-		,WorkTotal AS workTotal
-		,Leave_Remark AS leave_Remark
-		,Account1 AS account1
-		,Time1 AS time1
-		,Result1 AS result1
-		,Remark1 AS remark1
-		,Account2 AS account2
-		,Time2 AS time2
-		,Result2 AS result2
-		,Remark2 AS remark2
-		,Account3 AS account3
-		,Time3 AS time3
-		,Result3 AS result3
-		,Remark3 AS remark3
-		,Account4 AS account4
-		,Time4 AS time4
-		,Result4 AS result4
-		,Remark4 AS remark4
-		,update_Time AS update_Time
-		,isSee AS isSee
-		,step AS step
+		LD.Reason AS reason
+		,LD.LeaveAccount AS leaveAccount
+		,AD.Account_Name AS leaveAccountName
+		,TD.Name AS departName
+		,LD.AddTime AS addTime
+		,LD.StartTime AS startTime
+		,LD.EndTime AS endTime
+		,LD.LeaveTotal AS leaveTotal
+		,LD.WorkTime AS workTime
+		,LD.WorkTotal AS workTotal
+		,LD.Leave_Remark AS leaveRemark
+		,LD.Account1 AS account1
+		,AD1.Account_Name AS accountName1
+		,LD.Time1 AS time1
+		,LD.Result1 AS result1
+		,LD.Remark1 AS remark1
+		,LD.Account2 AS account2
+		,AD2.Account_Name AS accountName2
+		,LD.Time2 AS time2
+		,LD.Result2 AS result2
+		,LD.Remark2 AS remark2
+		,LD.Account3 AS account3
+		,AD3.Account_Name AS accountName3
+		,LD.Time3 AS time3
+		,LD.Result3 AS result3
+		,LD.Remark3 AS remark3
+		,LD.Account4 AS account4
+		,AD4.Account_Name AS accountName4
+		,LD.Time4 AS time4
+		,LD.Result4 AS result4
+		,LD.Remark4 AS remark4
+		,LD.update_Time AS updateTime
+		,LD.isSee AS isSee
+		,LD.step AS step
 		FROM Leave_Daoxiu LD
 		LEFT
 		JOIN Account_Data AD ON LD.LeaveAccount=AD.Account_ID
-		LEFT JOIN
-		Account_Data ADA ON LD.AgentAccount=ADA.Account_ID
 		LEFT JOIN
 		T_Employee_Basic TEB ON AD.Account_ID=TEB.Account
 		LEFT JOIN
@@ -383,8 +433,8 @@
 			<if test="endDate !=null and endDate !=''">
 				AND LD.AddTime &lt;=#{endDate}
 			</if>
-			<if test="accountId!=null and accountId!=''">
-				AND (LD.AgentAccount =#{accountId} OR LD.Account1
+			 <if test="accountId!=null and accountId!=''">
+				AND (LD.Account1
 				=#{accountId}
 				OR LD.Account2 =#{accountId} OR LD.Account3
 				=#{accountId} OR
@@ -397,7 +447,7 @@
 				AND TEB.Department_ID =#{departId}
 			</if>
 			<if test=" name !=null and name !=''">
-				AND LD.LeaveAccount =#{name}
+				AND AD.Account_Name =#{name}
 			</if>
 			<if test=" handleState == '待处理'">
 				AND LD.Result1 IS NULL AND LD.Result2 IS NULL AND
@@ -418,10 +468,94 @@
 				AND (LD.Result1 = 0 OR LD.Result2 = 0 OR LD.Result3 = 0
 				OR
 				LD.Result4 = 0)
-			</if>
+			</if> 
 
 		</trim>
-
-
 	</select>
+	
+	
+	<!-- 倒休申请 -->
+	<insert
+		id="insertRestDownApplication"
+		parameterType="com.jiubo.erp.wzbg.bean.RestDownBean">
+		INSERT INTO
+		Leave_Daoxiu
+		(Reason,LeaveAccount,AddTime,StartTime,EndTime,LeaveTotal
+		,WorkTime,WorkTotal,Leave_Remark
+		,Account1,Time1,Result1,Remark1
+		,Account2,Time2,Result2,Remark2
+		,Account3,Time3,Result3,Remark3
+		,Account4,Time4,Result4,Remark4
+		,update_Time,isSee,step)
+		VALUES
+		(#{reason},#{leaveAccount},#{addTime},#{startTime},#{endTime},#{leaveTotal}
+		,#{workTime},#{workTotal},#{leaveRemark}
+		,#{account1},#{time1},#{result1},#{remark1}
+		,#{account2},#{time2},#{result2},#{remark2}
+		,#{account3},#{time3},#{result3},#{remark3}
+		,#{account4},#{time4},#{result4},#{remark4}
+		,#{updateTime},#{isSee},#{step})
+	</insert>
+	
+	<!--倒休修改  -->
+	<update id="updateRestDownApplication" parameterType="com.jiubo.erp.wzbg.bean.RestDownBean">
+		UPDATE 
+		    Leave_Daoxiu
+		SET
+		<if test="reason !=null and reason !=''"> Reason=#{reason} ,</if>
+		<if test="startTime !=null and startTime !=''"> StartTime=#{startTime}, </if>
+		<if test="endTime !=null and endTime !=''"> EndTime=#{endTime} ,</if>
+		<if test="leaveTotal !=null and leaveTotal !=''"> LeaveTotal=#{leaveTotal} ,</if>
+		<if test="workTime !=null and workTime !=''"> WorkTime=#{workTime} ,</if>
+		<if test="workTotal !=null and workTotal !=''"> WorkTotal=#{workTotal} ,</if>
+		<if test="leaveRemark !=null and leaveRemark !=''"> Leave_Remark=#{leaveRemark} ,</if>
+		
+		<if test="account1 !=null and account1 !=''"> Account1=#{account1}, </if>
+		<if test="time1 !=null and time1 !=''"> Time1=#{time1}, </if>
+		<if test="result1 !=null and result1 !=''"> Result1=#{result1}, </if>
+		<if test="remark1 !=null and remark1 !=''"> Remark1=#{remark1}, </if>
+		
+		<if test="account2 !=null and account2 !=''"> Account2=#{account2}, </if>
+		<if test="time2 !=null and time2 !=''"> Time2=#{time2}, </if>
+		<if test="result2 !=null and result2 !=''"> Result2=#{result2}, </if>
+		<if test="remark2 !=null and remark2 !=''"> Remark2=#{remark2}, </if>
+		
+		<if test="account3 !=null and account3 !=''"> Account3=#{account3}, </if>
+		<if test="time3 !=null and time3 !=''"> Time3=#{time3}, </if>
+		<if test="result3 !=null and result3 !=''"> Result3=#{result3}, </if>
+		<if test="remark3 !=null and remark3 !=''"> Remark3=#{remark3}, </if>
+		
+		
+		<if test="time4 !=null and time4 !=''"> Time4=#{time4}, </if>
+		<if test="result4 !=null and result4 !=''"> Result4=#{result4}, </if>
+		<if test="remark4 !=null and remark4 !=''"> Remark4=#{remark4}, </if>
+		<if test="account4 !=null and account4 !=''"> Account4=#{account4} </if>
+		<trim
+			prefix="WHERE"
+			prefixOverrides="AND | OR">
+			<if test="leaveAccount !=null and leaveAccount !=''">
+				AND LeaveAccount=#{leaveAccount}
+			</if>
+			
+			<if test="id !=null and id !=''">
+				AND ID=#{id}
+			</if>
+		</trim>
+
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </mapper>

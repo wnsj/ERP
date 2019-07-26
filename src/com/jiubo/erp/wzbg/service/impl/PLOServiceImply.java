@@ -1,6 +1,7 @@
 package com.jiubo.erp.wzbg.service.impl;
 
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,12 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.Constant;
 import com.jiubo.erp.common.MapUtil;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.rygl.controller.EmpController;
+import com.jiubo.erp.rygl.vo.UserInfo;
 import com.jiubo.erp.wzbg.bean.AskForLeaveBean;
 import com.jiubo.erp.wzbg.dao.PLODao;
 import com.jiubo.erp.wzbg.service.PLOService;
@@ -147,13 +150,56 @@ public class PLOServiceImply implements PLOService {
 	@SuppressWarnings("finally")
 	public JSONObject insertLeaveApplication(HttpServletResponse response, HttpServletRequest request) {
 		
-		Map<String, String> departMap = new HashMap<>();
+		AskForLeaveBean aflb = new AskForLeaveBean();
         JSONObject result = new JSONObject();
         String retCode = Constant.Result.SUCCESS;
         String retMsg = Constant.Result.SUCCESS_MSG;
         try {
-        	departMap = ToolClass.mapShiftStr(request);
-//            result.put("resData", this.dao.checkOfEmpList(departMap.get("departId")));
+        	String str = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+        	if (StringUtils.isBlank(str))
+                throw new MessageException("参数接收失败！");
+			JSONObject jsonData = JSONObject.parseObject(str);
+            
+            JSONObject aflbStr = jsonData.getJSONObject("lInfo");
+            aflb= MapUtil.transJsonToObjectIgnoreCase(aflbStr, AskForLeaveBean.class);
+            System.out.println("insertLeaveApplication：" + aflb.getLeaveAccount()+aflb.toString());
+            result.put("resData", this.dao.insertLeaveApplication(aflb));
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            log.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+	}
+	/**
+	 * 请假修改
+	 * @param response
+	 * @param request
+	 * @return
+	 * JSONObject
+	 * @author 作者 : mwl
+	 * @version 创建时间：2019年7月22日 上午9:37:42
+	 */
+@SuppressWarnings("finally")
+public JSONObject updateLeaveApplication(HttpServletResponse response, HttpServletRequest request) {
+		
+		AskForLeaveBean aflb = new AskForLeaveBean();
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+        	String str = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+        	if (StringUtils.isBlank(str))
+                throw new MessageException("参数接收失败！");
+			JSONObject jsonData = JSONObject.parseObject(str);
+            
+            JSONObject aflbStr = jsonData.getJSONObject("lInfo");
+            aflb= MapUtil.transJsonToObjectIgnoreCase(aflbStr, AskForLeaveBean.class);
+            System.out.println("updateLeaveApplication：" + aflb.getLeaveAccount()+aflb.toString());
+            result.put("resData", this.dao.updateLeaveApplication(aflb));
         } catch (Exception e) {
             retCode = Constant.Result.ERROR;
             retMsg = Constant.Result.ERROR_MSG;
@@ -177,7 +223,7 @@ public class PLOServiceImply implements PLOService {
                 throw new MessageException("参数接收失败！");
             plop = MapUtil.transJsonStrToObjectIgnoreCase(str, PLOParam.class);
             System.out.println("plop:"+plop.toString());
-            result.put("resData", "");
+            result.put("resData", this.dao.selectRestDownList(plop));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
