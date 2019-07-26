@@ -335,7 +335,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="queryCheckInfo" parameterType="CheckInfo" resultType="CheckInfo">
 		SELECT
 			ACC.Account_ID accountId,
-			ACC.Account_Name accountName
+			ACC.Account_Name accountName,
+			DEPT.ID	deptId
 		FROM
 			T_Employee_Basic AS EMP
 			INNER JOIN Account_Data AS ACC ON EMP.Account = ACC.Account_ID
@@ -354,8 +355,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<foreach index="index" item="item" collection="typeIds" open="(" separator=","  close=")">
 				#{item}
 			</foreach>
-		ORDER BY
-			ACC.Account_Name
+		GROUP BY
+			DEPT.ID, ACC.Account_ID, ACC.Account_Name
+		ORDER BY 
+			DEPT.ID, ACC.Account_ID
 	</select>
 	
 	<!-- 查询父级部门ID -->
