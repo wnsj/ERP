@@ -5,6 +5,7 @@ import java.util.List;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.LeavePrepareBean;
 import com.jiubo.erp.wzbg.vo.AccWithApprovalLeaveAuth;
+import com.jiubo.erp.wzbg.vo.CheckInfo;
 import com.jiubo.erp.wzbg.vo.DeptWithEmp;
 
 /**
@@ -85,4 +86,24 @@ public interface LeavePrepareService {
 	 * @version: V1.0
 	 */
 	public void updateLeavePrepare(LeavePrepareBean leavePrepareBean) throws MessageException;
+	
+	/**
+	 * @Description: 查询审查人信息
+	 * @param  queryCheckInfo
+	 * @return
+	 * @author: DingDong
+	 * @date: 2019年7月24日
+	 * @version: V1.0
+	 */
+    public List<CheckInfo> queryCheckInfo(CheckInfo checkInfo) throws MessageException;
+    
+    /**
+	 * @Description: 查询父级部门ID
+	 * @param  queryParentDept
+	 * @return	String
+	 * @author: DingDong
+	 * @date: 2019年7月24日
+	 * @version: V1.0
+	 */
+    public String queryParentDept(String deptId) throws MessageException;
 }

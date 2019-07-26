@@ -41,10 +41,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			A.LEAVE_ACCOUNT,
 			A.FILL_ACCOUNT,
 			A.CHECK_ACCOUNT,
+			A.POSITIONTYPE_ID fillTypeId,
 			B.LEAVE_EMP_NAME leaveEmpName,
 			B.LEAVE_DEPT_ID leaveDeptId,
 			B.LEAVE_DEPT_NAME leaveDepartmentName,
 			B.POSITION_NAME leavePositionName,
+			B.POSITIONTYPE_ID typeId,
 			A.STARTTIME,
 			A.ENDTIME,
 			A.LEAVE_REMARK,
@@ -75,22 +77,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				LB.ISSEE,
 				LB.STATE,
 				A.FILL_EMP_NAME,
-				A.FILL_DEPT_NAME 
+				A.FILL_DEPT_NAME,
+				A.POSITIONTYPE_ID
 			FROM
 				(
 				SELECT
 					LB.FILL_ACCOUNT,
 					ACC.ACCOUNT_NAME AS FILL_EMP_NAME,
-					DEPT.NAME AS FILL_DEPT_NAME 
+					DEPT.NAME AS FILL_DEPT_NAME,
+					PT.POSITIONTYPE_ID
 				FROM
 					Leave_Baobei AS LB
 					LEFT JOIN Account_Data AS ACC ON LB.FILL_ACCOUNT = ACC.ACCOUNT_ID
 					LEFT JOIN T_EMPLOYEE_BASIC AS EMP ON ACC.ACCOUNT_ID = EMP.ACCOUNT
 					LEFT JOIN T_Department AS DEPT ON EMP.DEPARTMENT_ID = DEPT.ID 
+					LEFT JOIN Position_Data AS PD  ON ACC.POSITION_ID = PD.POSITION_ID
+					LEFT JOIN Position_Type AS PT ON PD.POSITIONTYPE_ID = PT.POSITIONTYPE_ID
 				GROUP BY
 					LB.FILL_ACCOUNT,
 					ACC.ACCOUNT_NAME,
-					DEPT.NAME 
+					DEPT.NAME,
+					PT.POSITIONTYPE_ID
 				) AS A,
 				Leave_Baobei AS LB 
 			WHERE
@@ -102,19 +109,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				ACC.ACCOUNT_NAME AS LEAVE_EMP_NAME,
 				DEPT.ID AS LEAVE_DEPT_ID,
 				DEPT.NAME AS LEAVE_DEPT_NAME,
-				PD.POSITION_NAME
+				PD.POSITION_NAME,
+				PT.POSITIONTYPE_ID
 			FROM
 				Leave_Baobei AS LB
 				LEFT JOIN Account_Data AS ACC ON LB.LEAVE_ACCOUNT = ACC.ACCOUNT_ID
 				LEFT JOIN T_EMPLOYEE_BASIC AS EMP ON ACC.ACCOUNT_ID = EMP.ACCOUNT
 				LEFT JOIN Position_Data AS PD  ON ACC.POSITION_ID = PD.POSITION_ID
+				LEFT JOIN Position_Type AS PT ON PD.POSITIONTYPE_ID = PT.POSITIONTYPE_ID
 				LEFT JOIN T_Department AS DEPT ON EMP.DEPARTMENT_ID = DEPT.ID  
 			GROUP BY
 				LB.LEAVE_ACCOUNT,
 				ACC.ACCOUNT_NAME,
 				DEPT.ID,
 				DEPT.NAME,
-				PD.POSITION_NAME
+				PD.POSITION_NAME,
+				PT.POSITIONTYPE_ID
 			) AS B,
 			(
 			SELECT
@@ -320,4 +330,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE 
 			ID = #{id}		 
 	</update>
+	
+	<!-- 查询审查人信息 -->
+	<select id="queryCheckInfo" parameterType="CheckInfo" resultType="CheckInfo">
+		SELECT
+			ACC.Account_ID accountId,
+			ACC.Account_Name accountName,
+			DEPT.ID	deptId
+		FROM
+			T_Employee_Basic AS EMP
+			INNER JOIN Account_Data AS ACC ON EMP.Account = ACC.Account_ID
+			INNER JOIN Position_Data AS PD ON ACC.Position_ID = PD.Position_ID
+			INNER JOIN T_Department AS DEPT ON DEPT.ID = EMP.Department_ID 
+		WHERE
+			EMP.IsDelete = '0' 
+			AND EMP.State = '1' 
+			AND	
+				DEPT.ID IN ( 
+				SELECT ID FROM [dbo].[f_GetChild] ( #{deptId} ) 
+				UNION 
+				SELECT ID FROM [dbo].[fnGetFather] ( #{deptId} ) ) 
+			AND 
+				PD.PositionType_ID IN 
+			<foreach index="index" item="item" collection="typeIds" open="(" separator=","  close=")">
+				#{item}
+			</foreach>
+		GROUP BY
+			DEPT.ID, ACC.Account_ID, ACC.Account_Name
+		ORDER BY 
+			DEPT.ID, ACC.Account_ID
+	</select>
+	
+	<!-- 查询父级部门ID -->
+	<select id="queryParentDept" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			DEPT.ParentID 
+		FROM
+			T_Department DEPT 
+		WHERE
+			DEPT.ID = #{deptId}
+	</select>
 </mapper>
