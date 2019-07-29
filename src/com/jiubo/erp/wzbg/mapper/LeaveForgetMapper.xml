@@ -149,7 +149,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			DEPT.ID AS departmentId, 
 			DEPT.Name deptName, 
 			POS.Position_ID positionId, 
-			POS.Position_Name positionName
+			POS.Position_Name positionName,
+			POS.PositionType_ID	typeId
 		FROM 
 			Account_Data ACC
 			LEFT JOIN T_Employee_Basic EMP ON ACC.Account_ID = EMP.Account
@@ -160,5 +161,164 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND EMP.State = '1'
 			AND Account_ID = #{account}
 	</select>
+	
+	<!-- 修改忘记打卡证明 -->
+	<update id="updateLeaveForget" parameterType="LeaveForgetBean">
+		UPDATE 
+			LEAVE_FORGET
+		 <trim prefix="set" suffixOverrides=",">
+		 	<if test="reason != null and reason != '' ">
+		 		Reason = #{reason},
+		 	</if>
+		 	<if test="startTime != null and startTime != '' ">
+		 		StartTime = #{startTime},
+		 	</if>
+		 	<if test="accountR != null and accountR != '' ">
+		 		AccountR = #{accountR},
+		 	</if>
+		 	<if test="account1 != null and account1 != '' ">
+		 		Account1 = #{account1},
+		 	</if>
+		 	<if test="account2 != null and account2 != '' ">
+		 		Account2 = #{account2},
+		 	</if>
+		 	<if test="account3 != null and account3 != '' ">
+		 		Account3 = #{account3},
+		 	</if>
+		 	<if test="account4 != null and account4 != '' ">
+		 		Account4 = #{account4},
+		 	</if>
+		 	<if test="leaveRemark != null and leaveRemark != '' ">
+		 		Leave_Remark = #{leaveRemark},
+		 	</if>
+		 	<if test="updateTime != null and updateTime != '' ">
+		 		update_Time = #{updateTime},
+		 	</if>
+		 	<choose>
+		 		<when test="timeR == null or timeR =='' ">
+		 			TimeR = null,
+		 		</when>
+		 		<when test="timeR != null or timeR !='' ">
+		 			TimeR = #{timeR},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="time1 == null or time1 =='' ">
+		 			Time1 = null,
+		 		</when>
+		 		<when test="time1 != null or time1 !='' ">
+		 			Time1 = #{time1},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="time2 == null or time2 =='' ">
+		 			Time2 = null,
+		 		</when>
+		 		<when test="time2 != null or time2 !='' ">
+		 			Time2 = #{time2},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="time3 == null or time3 =='' ">
+		 			Time3 = null,
+		 		</when>
+		 		<when test="time3 != null or time3 !='' ">
+		 			Time3 = #{time3},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="time4 == null or time4 =='' ">
+		 			Time4 = null,
+		 		</when>
+		 		<when test="time4 != null or time4 !='' ">
+		 			Time4 = #{time4},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="resultR == null or resultR =='' ">
+		 			ResultR = null,
+		 		</when>
+		 		<when test="resultR != null or resultR !='' ">
+		 			ResultR = #{resultR},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="result1 == null or result1 =='' ">
+		 			Result1 = null,
+		 		</when>
+		 		<when test="result1 != null or result1 !='' ">
+		 			Result1 = #{result1},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="result2 == null or result2 =='' ">
+		 			Result2 = null,
+		 		</when>
+		 		<when test="result2 != null or result2 !='' ">
+		 			Result2 = #{result2},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="result3 == null or result3 =='' ">
+		 			Result3 = null,
+		 		</when>
+		 		<when test="result3 != null or result3 !='' ">
+		 			Result3 = #{result3},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="result4 == null or result4 =='' ">
+		 			Result4 = null,
+		 		</when>
+		 		<when test="result4 != null or result4 !='' ">
+		 			Result4 = #{result4},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="remarkR == null or remarkR =='' ">
+		 			RemarkR = null,
+		 		</when>
+		 		<when test="remarkR != null or remarkR !='' ">
+		 			RemarkR = #{remarkR},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="remark1 == null or remark1 =='' ">
+		 			Remark1 = null,
+		 		</when>
+		 		<when test="remark1 != null or remark1 !='' ">
+		 			Remark1 = #{remark1},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="remark2 == null or remark2 =='' ">
+		 			Remark2 = null,
+		 		</when>
+		 		<when test="remark2 != null or remark2 !='' ">
+		 			Remark2 = #{remark2},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="remark3 == null or remark3 =='' ">
+		 			Remark3 = null,
+		 		</when>
+		 		<when test="remark3 != null or remark3 !='' ">
+		 			Remark3 = #{remark3},
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 		<when test="remark4 == null or remark4 =='' ">
+		 			Remark4 = null,
+		 		</when>
+		 		<when test="remark4 != null or remark4 !='' ">
+		 			Remark4 = #{remark4},
+		 		</when>
+		 	</choose>
+		 	isSee = NULL,
+		 	step = 0
+		 </trim>
+		WHERE 
+			ID = #{id}		 
+	</update>
 	
 </mapper>

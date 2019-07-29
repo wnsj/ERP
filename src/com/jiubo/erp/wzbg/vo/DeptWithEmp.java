@@ -19,4 +19,5 @@ public class DeptWithEmp {
 	private String deptParentName;// 父级部门名
 	private String positionId; // 职位ID
 	private String positionName;// 职位名
+	private String typeId;// 职位级别
 }
