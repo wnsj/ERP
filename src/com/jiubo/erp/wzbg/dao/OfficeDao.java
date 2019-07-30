@@ -4,7 +4,7 @@ import com.jiubo.erp.wzbg.bean.OfficeNameBean;
 import com.jiubo.erp.wzbg.bean.OfficeSuppliesDataBean;
 import com.jiubo.erp.wzbg.bean.OfficeUserDataBean;
 import com.jiubo.erp.wzbg.bean.SpecificationBean;
-import com.jiubo.erp.zpgl.bean.OfficeDataBean;
+import com.jiubo.erp.wzbg.bean.OfficeDataBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package com.jiubo.erp.wzbg.service;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.OfficeSuppliesDataBean;
 import com.jiubo.erp.wzbg.bean.OfficeUserDataBean;
-import com.jiubo.erp.zpgl.bean.OfficeDataBean;
+import com.jiubo.erp.wzbg.bean.OfficeDataBean;
 
 import java.util.List;
 import java.util.Map;

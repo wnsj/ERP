@@ -634,7 +634,7 @@
     </select>
 
     <!--会议室查询-->
-    <select id="queryOfficeData" resultType="com.jiubo.erp.zpgl.bean.OfficeDataBean">
+    <select id="queryOfficeData" resultType="com.jiubo.erp.wzbg.bean.OfficeDataBean">
         SELECT ID, NAME
         FROM OFFICEDATA
     </select>
