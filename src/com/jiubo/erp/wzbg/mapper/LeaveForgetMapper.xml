@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		, F.account3, F.approveAccountName, F.approveDeptId, F.approveDeptName, F.approvePositionId
 		, F.approvePositionName, F.result3, F.remark3, G.account4, G.reportAccountName
 		, G.reportDeptId, G.reportDeptName, G.reportPositionId, G.reportPositionName, G.result4
-		, G.remark4
+		, G.remark4, G.step
 	FROM (
 		SELECT L.ID AS id, L.Reason, L.AddTime, L.StartTime, L.Leave_Remark AS leaveRemark
 			, A.Account_ID AS leaveAccount, A.Account_Name AS leaveAccountName, A.Dept_ID AS leaveDeptId, A.Name AS leaveDeptName, A.Position_ID AS leavePositionId
@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		) F
 		ON E.ID = F.ID
 		LEFT JOIN (
-			SELECT L.ID, L.Time4, L.Result4, L.Remark4, A.Account_ID AS account4
+			SELECT L.ID, L.Time4, L.Result4, L.Remark4, L.step, A.Account_ID AS account4
 				, A.Account_Name AS reportAccountName, A.Dept_ID AS reportDeptId, A.Name AS reportDeptName, A.Position_ID AS reportPositionId, A.Position_Name AS reportPositionName
 			FROM Leave_Forget L
 				LEFT JOIN A ON L.Account4 = A.Account_ID
@@ -194,128 +194,160 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 	<if test="updateTime != null and updateTime != '' ">
 		 		update_Time = #{updateTime},
 		 	</if>
-		 	<choose>
-		 		<when test="timeR == null or timeR =='' ">
-		 			TimeR = null,
-		 		</when>
-		 		<when test="timeR != null or timeR !='' ">
-		 			TimeR = #{timeR},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="time1 == null or time1 =='' ">
-		 			Time1 = null,
-		 		</when>
-		 		<when test="time1 != null or time1 !='' ">
-		 			Time1 = #{time1},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="time2 == null or time2 =='' ">
-		 			Time2 = null,
-		 		</when>
-		 		<when test="time2 != null or time2 !='' ">
-		 			Time2 = #{time2},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="time3 == null or time3 =='' ">
-		 			Time3 = null,
-		 		</when>
-		 		<when test="time3 != null or time3 !='' ">
-		 			Time3 = #{time3},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="time4 == null or time4 =='' ">
-		 			Time4 = null,
-		 		</when>
-		 		<when test="time4 != null or time4 !='' ">
-		 			Time4 = #{time4},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="resultR == null or resultR =='' ">
-		 			ResultR = null,
-		 		</when>
-		 		<when test="resultR != null or resultR !='' ">
-		 			ResultR = #{resultR},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="result1 == null or result1 =='' ">
-		 			Result1 = null,
-		 		</when>
-		 		<when test="result1 != null or result1 !='' ">
-		 			Result1 = #{result1},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="result2 == null or result2 =='' ">
-		 			Result2 = null,
-		 		</when>
-		 		<when test="result2 != null or result2 !='' ">
-		 			Result2 = #{result2},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="result3 == null or result3 =='' ">
-		 			Result3 = null,
-		 		</when>
-		 		<when test="result3 != null or result3 !='' ">
-		 			Result3 = #{result3},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="result4 == null or result4 =='' ">
-		 			Result4 = null,
-		 		</when>
-		 		<when test="result4 != null or result4 !='' ">
-		 			Result4 = #{result4},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="remarkR == null or remarkR =='' ">
-		 			RemarkR = null,
-		 		</when>
-		 		<when test="remarkR != null or remarkR !='' ">
-		 			RemarkR = #{remarkR},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="remark1 == null or remark1 =='' ">
-		 			Remark1 = null,
-		 		</when>
-		 		<when test="remark1 != null or remark1 !='' ">
-		 			Remark1 = #{remark1},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="remark2 == null or remark2 =='' ">
-		 			Remark2 = null,
-		 		</when>
-		 		<when test="remark2 != null or remark2 !='' ">
-		 			Remark2 = #{remark2},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="remark3 == null or remark3 =='' ">
-		 			Remark3 = null,
-		 		</when>
-		 		<when test="remark3 != null or remark3 !='' ">
-		 			Remark3 = #{remark3},
-		 		</when>
-		 	</choose>
-		 	<choose>
-		 		<when test="remark4 == null or remark4 =='' ">
-		 			Remark4 = null,
-		 		</when>
-		 		<when test="remark4 != null or remark4 !='' ">
-		 			Remark4 = #{remark4},
-		 		</when>
-		 	</choose>
+		 	<if test="step != null and step != '' ">
+		 		step = #{step},
+		 	</if>
+		 	<if test="timeR != null and timeR != '' ">
+		 		<choose>
+			 		<when test="timeR == '-1' ">
+			 			TimeR = NULL,
+			 		</when>
+			 		<otherwise>
+			 			TimeR = #{timeR},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="time1 != null and time1 != '' ">
+		 		<choose>
+			 		<when test="time1 == '-1' ">
+			 			Time1 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Time1 = #{time1},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="time2 != null and time2 != '' ">
+		 		<choose>
+			 		<when test="time2 == '-1' ">
+			 			Time2 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Time2 = #{time2},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="time3 != null and time3 != '' ">
+		 		<choose>
+			 		<when test="time3 == '-1' ">
+			 			Time3 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Time3 = #{time3},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="time4 != null and time4 != '' ">
+		 		<choose>
+			 		<when test="time4 == '-1' ">
+			 			Time4 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Time4 = #{time4},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="resultR != null and resultR != '' ">
+		 		<choose>
+			 		<when test="resultR == '-1' ">
+			 			ResultR = NULL,
+			 		</when>
+			 		<otherwise>
+			 			ResultR = #{resultR},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="result1 != null and result1 != '' ">
+		 		<choose>
+			 		<when test="result1 == '-1' ">
+			 			Result1 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Result1 = #{result1},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="result2 != null and result2 != '' ">
+		 		<choose>
+			 		<when test="result2 == '-1' ">
+			 			Result2 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Result2 = #{result2},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="result3 != null and result3 != '' ">
+		 		<choose>
+			 		<when test="result3 == '-1' ">
+			 			Result3 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Result3 = #{result3},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="result4 != null and result4 != '' ">
+		 		<choose>
+			 		<when test="result4 == '-1' ">
+			 			Result4 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Result4 = #{result4},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="remarkR != null and remarkR != '' ">
+		 		<choose>
+			 		<when test="remarkR == '-1' ">
+			 			RemarkR = NULL,
+			 		</when>
+			 		<otherwise>
+			 			RemarkR = #{remarkR},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="remark1 != null and remark1 != '' ">
+		 		<choose>
+			 		<when test="remark1 == '-1' ">
+			 			Remark1 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Remark1 = #{remark1},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="remark2 != null and remark2 != '' ">
+		 		<choose>
+			 		<when test="remark2 == '-1' ">
+			 			Remark2 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Remark2 = #{remark2},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="remark3 != null and remark3 != '' ">
+		 		<choose>
+			 		<when test="remark3 == '-1' ">
+			 			Remark3 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Remark3 = #{remark3},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
+		 	<if test="remark4 != null and remark4 != '' ">
+		 		<choose>
+			 		<when test="remark4 == '-1' ">
+			 			Remark4 = NULL,
+			 		</when>
+			 		<otherwise>
+			 			Remark4 = #{remark4},
+			 		</otherwise>
+		 		</choose>
+		 	</if>
 		 	isSee = NULL,
-		 	step = 0
 		 </trim>
 		WHERE 
 			ID = #{id}		 

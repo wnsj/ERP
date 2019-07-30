@@ -64,7 +64,6 @@ public class LeaveForgetServiceImpl implements LeaveForgetService {
 	public void addLeaveForgetBean(LeaveForgetBean leaveForgetBean) throws MessageException {
 		logger.info("----------开始新增忘记打卡证明,方法:addLeaveForgetBean----------");
 		try {
-			leaveForgetBean.setStep("0");
 			leaveForgetDao.addLeaveForget(leaveForgetBean);
 		} catch (Exception e) {
 			throw new MessageException(e.getMessage());
