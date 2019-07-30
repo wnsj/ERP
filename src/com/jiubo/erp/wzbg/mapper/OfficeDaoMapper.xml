@@ -548,7 +548,7 @@
         WHERE ACCOUNT_STATE = '在用'
         AND (POSITION_TYPE .POSITIONTYPE_ID = 5 OR POSITION_TYPE .POSITIONTYPE_ID = 4)
         <if test="level == 0">
-            AND  (
+            AND (
             DEPARTMENT_ID IN (
             SELECT ID FROM T_DEPARTMENT
             WHERE PARENTID IN (
@@ -564,7 +564,7 @@
         </if>
         <if test="level == 1">
             AND (
-             DEPARTMENT_ID = #{deptId}
+            DEPARTMENT_ID = #{deptId}
             OR DEPARTMENT_ID IN (
             SELECT ID FROM T_DEPARTMENT WHERE PARENTID = #{deptId}
             )
@@ -585,4 +585,91 @@
             AND DEPARTMENT_ID = #{deptId}
         </if>
     </select>
+
+    <!--查询会议室申请信息-->
+    <select id="queryOfficeUserData" resultType="com.jiubo.erp.wzbg.bean.OfficeUserDataBean">
+        SELECT OU.ID, OU.ACCOUNTID, ACCOUNT_NAME, O.NAME, OU.NUM
+        , OU.USER_NAME,OFFICEID
+        , CONVERT(VARCHAR(16), STARTTIME, 120) AS STARTTIME
+        , CONVERT(VARCHAR(16), ENDTIME, 120) AS ENDTIME
+        , ACCOUNTZT, REMARK, YUYUE_TIME
+        , CASE
+        WHEN STATE = 1 THEN '已完成'
+        WHEN STATE = 0 THEN '未完成'
+        WHEN STATE = 2 THEN '未完成'
+        WHEN STATE = 3 THEN '已取消'
+        END AS STATE
+        , CASE
+        WHEN TYPE = 2 THEN '例会'
+        WHEN TYPE = 1 THEN '——'
+        END AS CONFERENCE,TYPE
+        FROM OFFICEUSERDATA OU
+        LEFT JOIN ACCOUNT_DATA A ON A.ACCOUNT_ID = OU.ACCOUNTID
+        LEFT JOIN OFFICEDATA O ON OU.OFFICEID = O.ID
+        <where>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND STARTTIME >= #{startTime}
+                AND ENDTIME &lt;= #{endTime}
+            </if>
+            <if test="officeId != null and officeId != ''">
+                AND O.ID = #{officeId}
+            </if>
+            <if test="state != null and state != ''">
+                AND STATE = #{state}
+            </if>
+            <if test="officeIdArr != null and officeIdArr != '' and officeIdArr.length > 0">
+                AND O.ID IN
+                <foreach collection="officeIdArr" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="stateArr != null and stateArr != '' and stateArr.length > 0">
+                AND STATE IN
+                <foreach collection="stateArr" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY STARTTIME
+    </select>
+
+    <!--会议室查询-->
+    <select id="queryOfficeData" resultType="com.jiubo.erp.zpgl.bean.OfficeDataBean">
+        SELECT ID, NAME
+        FROM OFFICEDATA
+    </select>
+
+    <!--申请会议室-->
+    <insert id="addOfficeUserData">
+        INSERT INTO OFFICEUSERDATA (OFFICEID, STARTTIME, ENDTIME, ACCOUNTID,
+         ACCOUNTZT, REMARK, STATE, NUM, USER_NAME, TYPE, YUYUE_TIME)
+        VALUES (#{officeId}, #{startTime},#{endTime}, #{accountId},
+        #{accountZt}, #{remark}, #{state}, #{num}, #{userName}, #{type}, #{yuYueTime})
+    </insert>
+
+    <!--修改会议室申请-->
+    <update id="updateOfficeUserData">
+        UPDATE OFFICEUSERDATA
+        SET
+            OFFICEID = #{officeId}
+            , STARTTIME = #{startTime}
+            , ENDTIME = #{endTime}
+            , ACCOUNTID = #{accountId}
+            , ACCOUNTZT = #{accountZt}
+            , REMARK =#{remark}
+            , STATE = #{state}
+            , NUM =  #{num}
+            , USER_NAME = #{userName}
+            , TYPE = #{type}
+        WHERE ID = #{id}
+    </update>
+
+    <update id="updateOfficeUserDataState">
+        UPDATE OFFICEUSERDATA
+        SET STATE = #{state}
+        WHERE ID = #{id} AND (STATE = 0 OR STATE = 2)
+        <if test="state == 1">
+            AND GETDATE() > STARTTIME
+        </if>
+    </update>
 </mapper>

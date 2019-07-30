@@ -2,7 +2,9 @@ package com.jiubo.erp.wzbg.dao;
 
 import com.jiubo.erp.wzbg.bean.OfficeNameBean;
 import com.jiubo.erp.wzbg.bean.OfficeSuppliesDataBean;
+import com.jiubo.erp.wzbg.bean.OfficeUserDataBean;
 import com.jiubo.erp.wzbg.bean.SpecificationBean;
+import com.jiubo.erp.zpgl.bean.OfficeDataBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -50,4 +52,18 @@ public interface OfficeDao {
 
     //查询部门相关负责人
     public List<Map<String, Object>> queryDeptConscientious(@Param("level") int level, @Param("deptId") String deptId);
+
+    //查询会议室申请信息
+    public List<OfficeUserDataBean> queryOfficeUserData(OfficeUserDataBean officeUserDataBean);
+
+    //会议室查询
+    public List<OfficeDataBean> queryOfficeData();
+
+    //申请会议室
+    public void addOfficeUserData(OfficeUserDataBean officeUserDataBean);
+
+    //修改会议室申请信息
+    public void updateOfficeUserData(OfficeUserDataBean officeUserDataBean);
+
+    public int updateOfficeUserDataState(OfficeUserDataBean officeUserDataBean);
 }
