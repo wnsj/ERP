@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jiubo.erp.common.Constant;
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.OfficeSuppliesDataBean;
+import com.jiubo.erp.wzbg.bean.OfficeUserDataBean;
 import com.jiubo.erp.wzbg.service.OfficeService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -233,7 +234,7 @@ public class OfficeAction {
         try {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
             Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
-            result.put(Constant.Result.RETDATA,wzbgService.gatherOfficeSupplies(requestMap));
+            result.put(Constant.Result.RETDATA, wzbgService.gatherOfficeSupplies(requestMap));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
@@ -271,7 +272,7 @@ public class OfficeAction {
         try {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
             Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
-            result.put(Constant.Result.RETDATA,wzbgService.queryAdvancePeo(requestMap));
+            result.put(Constant.Result.RETDATA, wzbgService.queryAdvancePeo(requestMap));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
@@ -307,7 +308,7 @@ public class OfficeAction {
         try {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
             Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
-            result.put(Constant.Result.RETDATA,wzbgService.queryAdvance(requestMap));
+            result.put(Constant.Result.RETDATA, wzbgService.queryAdvance(requestMap));
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
@@ -379,7 +380,149 @@ public class OfficeAction {
         try {
             if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
             Map<String, Object> requestMap = JSONObject.parseObject(params, Map.class);
-            result.put(Constant.Result.RETDATA,wzbgService.queryDeptConscientious(requestMap));
+            result.put(Constant.Result.RETDATA, wzbgService.queryDeptConscientious(requestMap));
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
+
+    /* *
+     * @desc:会议室申请信息查询
+     * @author: dx
+     * @date: 2019-07-23 09:26:25
+     * @param request :
+     * @param response :
+     * @param params :
+     * @return: com.alibaba.fastjson.JSONObject
+     * @throws:
+     * @version: 1.0
+     **/
+    //http://127.0.0.1:8080/Erp/officeAction/queryOfficeUserData?startTime=&endTime&officeId=
+    @ResponseBody
+    @RequestMapping(value = "/queryOfficeUserData", method = RequestMethod.POST)
+    public JSONObject queryOfficeUserData(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+            OfficeUserDataBean officeUserDataBean = JSONObject.parseObject(params, OfficeUserDataBean.class);
+            result.put(Constant.Result.RETDATA, wzbgService.queryOfficeUserData(officeUserDataBean));
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
+
+    /* *
+     * @desc:会议室查询
+     * @author: dx
+     * @date: 2019-07-23 09:38:17
+     * @param request :
+     * @param response :
+     * @param params :
+     * @return: com.alibaba.fastjson.JSONObject
+     * @throws:
+     * @version: 1.0
+     **/
+    //http://127.0.0.1:8080/Erp/officeAction/queryOfficeData
+    @ResponseBody
+    @RequestMapping(value = "/queryOfficeData", method = RequestMethod.POST)
+    public JSONObject queryOfficeData(HttpServletRequest request, HttpServletResponse response) {
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            result.put(Constant.Result.RETDATA, wzbgService.queryOfficeData());
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
+
+    /* *
+     * @desc:会议预约信息添加及修改
+     * @author: dx
+     * @date: 2019-07-25 15:13:59
+     * @param request :
+     * @param response :
+     * @param params :
+     * @return: com.alibaba.fastjson.JSONObject
+     * @throws:
+     * @version: 1.0
+     **/
+    //http://127.0.0.1:8080/Erp/officeAction/addUpdateOfficeUserData
+    @ResponseBody
+    @RequestMapping(value = "/addUpdateOfficeUserData", method = RequestMethod.POST)
+    public JSONObject addUpdateOfficeUserData(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+            OfficeUserDataBean officeUserDataBean = JSONObject.parseObject(params, OfficeUserDataBean.class);
+            wzbgService.addUpdateOfficeUserData(officeUserDataBean);
+        } catch (MessageException e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = e.getMessage();
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            logger.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+    }
+
+    /* *
+     * @desc:修改会议室预约信息状态
+     * @author: dx
+     * @date: 2019-07-30 09:13:35
+     * @param request :
+     * @param response :
+     * @param params :
+     * @return: com.alibaba.fastjson.JSONObject
+     * @throws:
+     * @version: 1.0
+     **/
+    //http://127.0.0.1:8080/Erp/officeAction/updateOfficeUserDataState?{id:'570',state:'1'}
+    @ResponseBody
+    @RequestMapping(value = "/updateOfficeUserDataState", method = RequestMethod.POST)
+    public JSONObject updateOfficeUserDataState(HttpServletRequest request, HttpServletResponse response, @RequestBody String params) {
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+            if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+            OfficeUserDataBean officeUserDataBean = JSONObject.parseObject(params, OfficeUserDataBean.class);
+            wzbgService.updateOfficeUserDataState(officeUserDataBean);
         } catch (MessageException e) {
             retCode = Constant.Result.ERROR;
             retMsg = e.getMessage();
