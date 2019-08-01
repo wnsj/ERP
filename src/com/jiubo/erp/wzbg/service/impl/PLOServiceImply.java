@@ -22,6 +22,7 @@ import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.rygl.controller.EmpController;
 import com.jiubo.erp.rygl.vo.UserInfo;
 import com.jiubo.erp.wzbg.bean.AskForLeaveBean;
+import com.jiubo.erp.wzbg.bean.RestDownBean;
 import com.jiubo.erp.wzbg.dao.PLODao;
 import com.jiubo.erp.wzbg.service.PLOService;
 import com.jiubo.erp.wzbg.vo.PLOParam;
@@ -211,6 +212,15 @@ public JSONObject updateLeaveApplication(HttpServletResponse response, HttpServl
         }
 	}
 	
+	/**
+	 * 倒休列表
+	 * @param response
+	 * @param request
+	 * @return
+	 * JSONObject
+	 * @author 作者 : mwl
+	 * @version 创建时间：2019年7月22日 上午9:37:42
+	 */
 	@SuppressWarnings("finally")
 	public JSONObject restDownList(HttpServletResponse response, HttpServletRequest request) {
         PLOParam plop = new PLOParam();
@@ -237,4 +247,79 @@ public JSONObject updateLeaveApplication(HttpServletResponse response, HttpServl
             return result;
         }
     }
+	
+	/**
+	 * 倒休申请
+	 * @param response
+	 * @param request
+	 * @return
+	 * JSONObject
+	 * @author 作者 : mwl
+	 * @version 创建时间：2019年7月22日 上午9:37:42
+	 */
+	@SuppressWarnings("finally")
+	public JSONObject restDownApply(HttpServletResponse response, HttpServletRequest request) {
+		RestDownBean rdb = new RestDownBean();
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+        	String str = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+        	if (StringUtils.isBlank(str))
+                throw new MessageException("参数接收失败！");
+			JSONObject jsonData = JSONObject.parseObject(str);
+            
+            JSONObject aflbStr = jsonData.getJSONObject("rdInfo");
+            rdb= MapUtil.transJsonToObjectIgnoreCase(aflbStr, RestDownBean.class);
+            System.out.println("insertRestApplication：" + rdb.getLeaveAccount()+rdb.toString());
+            result.put("resData", this.dao.insertRestDownApplication(rdb));
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            log.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+	}
+	
+
+	/**
+	 * 倒休修改
+	 * @param response
+	 * @param request
+	 * @return
+	 * JSONObject
+	 * @author 作者 : mwl
+	 * @version 创建时间：2019年7月22日 上午9:37:42
+	 */
+	@SuppressWarnings("finally")
+	public JSONObject restDownModify(HttpServletResponse response, HttpServletRequest request) {
+		RestDownBean rdb = new RestDownBean();
+        JSONObject result = new JSONObject();
+        String retCode = Constant.Result.SUCCESS;
+        String retMsg = Constant.Result.SUCCESS_MSG;
+        try {
+        	String str = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+        	if (StringUtils.isBlank(str))
+                throw new MessageException("参数接收失败！");
+			JSONObject jsonData = JSONObject.parseObject(str);
+            
+            JSONObject aflbStr = jsonData.getJSONObject("rdInfo");
+            rdb= MapUtil.transJsonToObjectIgnoreCase(aflbStr, RestDownBean.class);
+            System.out.println("insertLeaveApplication：" + rdb.getLeaveAccount()+rdb.toString());
+            result.put("resData", this.dao.updateRestDownApplication(rdb));
+        } catch (Exception e) {
+            retCode = Constant.Result.ERROR;
+            retMsg = Constant.Result.ERROR_MSG;
+            log.error(Constant.Result.RETMSG, e);
+        } finally {
+            result.put(Constant.Result.RETCODE, retCode);
+            result.put(Constant.Result.RETMSG, retMsg);
+            return result;
+        }
+	}
+	
+	
 }

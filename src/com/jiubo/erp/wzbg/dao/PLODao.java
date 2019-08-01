@@ -38,6 +38,19 @@ public interface PLODao {
 	//倒休修改
 	public int updateRestDownApplication(RestDownBean rdb);
 	
+	//人员需求列表
+	public int selectEmpRequireLsit(RestDownBean rdb);
+	
+	
+	public List<RestDownBean> selectApplyReason(RestDownBean rdb);
+	public List<RestDownBean> selectWorkAge();
+	public List<RestDownBean> selectMajor();
+	public List<RestDownBean> selectJobHopFrequency();
+	public List<RestDownBean> selectIndustryBackground();
+	public List<RestDownBean> selectAgeLsit();
+	public List<RestDownBean> selectEducationList();
+	
+	
 }
 
 
