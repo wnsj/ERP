@@ -129,6 +129,47 @@ public class PLOController {
 		return this.service.restDownList(response, request);
 	}
 
+	
+	/**
+	 * 倒休 申请
+	 * 
+	 * @param response
+	 * @param request
+	 * @return JSONObject
+	 * @author 作者 : mwl
+	 * @version 创建时间：2019年7月8日 上午9:45:48
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/restDownApply")
+	public JSONObject restDownApply(HttpServletResponse response, HttpServletRequest request) {
+
+		return this.service.restDownApply(response, request);
+	}
+
+	
+	/**
+	 * 倒休 修改
+	 * 
+	 * @param response
+	 * @param request
+	 * @return JSONObject
+	 * @author 作者 : mwl
+	 * @version 创建时间：2019年7月8日 上午9:45:48
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/updateRestDown")
+	public JSONObject updateRestDown(HttpServletResponse response, HttpServletRequest request) {
+
+		return this.service.restDownModify(response, request);
+	}
+
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 文件上传 方法说明
 	 * 
@@ -230,41 +271,7 @@ public class PLOController {
     }
 
 	
-//	<!-- 人员需求列表 -->
-//	<select id="selectEmpRequireLsit">
-//	</select>
-//	<select id="selectApplyReason">
-//	</select>
-//	
-//	<!-- 工龄列表 -->
-//	<select id="selectWorkAge">
-//		select * from Job_time
-//	</select>
-//	
-//	<!-- 专业 -->
-//	<select id="selectMajor">
-//		select * from Major
-//	</select>
-//	
-//	<!-- 跳槽频率 -->
-//	<select id="selectJobHopFrequency">
-//		select * from Tiaocao_cishu
-//	</select>
-//	
-//	<!-- 行业 -->
-//	<select id="selectIndustryBackground">
-//		select * from Business
-//	</select>
-//	
-//	<!-- 年龄段列表  -->
-//	<select id="selectAgeLsit">
-//		select * from Age_tab
-//	</select>
-//	
-//	
-//	<select id="selectEducationList">
-//	
-//	</select>
+	
 	
 //	
 //	public void downLoad(HttpServletRequest request, HttpServletResponse response){

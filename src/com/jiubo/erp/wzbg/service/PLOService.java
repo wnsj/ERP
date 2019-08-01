@@ -25,4 +25,11 @@ public interface PLOService {
 	
 	//倒休
 	public JSONObject restDownList(HttpServletResponse response, HttpServletRequest request);
+	
+	
+	//倒休申请
+	public JSONObject restDownApply(HttpServletResponse response, HttpServletRequest request);
+	
+	//倒休修改
+	public JSONObject restDownModify(HttpServletResponse response, HttpServletRequest request);
 }
