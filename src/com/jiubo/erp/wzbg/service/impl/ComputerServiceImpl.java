@@ -12,6 +12,7 @@ import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.ComputerBean;
 import com.jiubo.erp.wzbg.dao.ComputerDao;
 import com.jiubo.erp.wzbg.service.ComputerService;
+import com.jiubo.erp.wzbg.vo.LeaderInfo;
 import com.jiubo.erp.wzbg.vo.PositionInfo;
 
 /**
@@ -63,6 +64,12 @@ public class ComputerServiceImpl implements ComputerService{
 	public void addPreApplication(ComputerBean computerBean) throws MessageException {
 		logger.info("----------开始添加电脑预申请,方法:addPreApplication----------");
 		try {
+			computerBean.setLeaderId("0");
+			computerBean.setLeaderAudit("5");
+			computerBean.setPrincipalAudit("0");
+			computerBean.setTypeId("0");
+			computerBean.setApplyIsSee("1");
+			computerBean.setIsReserve("1");
 			computerDao.addPreApplication(computerBean);
 		} catch (Exception e) {
 			throw new MessageException(e.getMessage());
@@ -83,6 +90,26 @@ public class ComputerServiceImpl implements ComputerService{
 		List<PositionInfo> list;
 		try {
 			list = computerDao.queryPositionInfo();
+		} catch (Exception e) {
+			throw new MessageException(e.getMessage());
+		}
+		return list;
+	}
+	
+	/**
+	 * @Description: 查询所在部门的主管信息
+	 * @param  deptId
+	 * @return List<LeaderInfo>
+	 * @author: DingDong
+	 * @date: 2019年8月1日
+	 * @version: V1.0
+	 */
+	@Override
+	public List<LeaderInfo> queryLeaderInfo(String deptId) throws MessageException {
+		logger.info("----------开始查询所在部门的主管信息,方法:queryLeaderInfo----------");
+		List<LeaderInfo> list;
+		try {
+			list = computerDao.queryLeaderInfo(deptId);
 		} catch (Exception e) {
 			throw new MessageException(e.getMessage());
 		}

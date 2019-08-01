@@ -26,7 +26,8 @@ public class ComputerBean implements Serializable {
 	// 时间
 	private String submitTime; // 提交时间
 	private String useTime;	// 使用时间
-	private String finishTime; // 完成时间
+	private String finishTime; // 交接时间
+	private String flowEndTime;// 流程结束时间
 	// 查询时间类型
 	private String timeType;// 1.提交时间 2.使用时间 3.完成时间
 	// 查询起止时间

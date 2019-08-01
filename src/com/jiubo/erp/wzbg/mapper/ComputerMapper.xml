@@ -12,10 +12,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		C.Start_time submitTime,
 		C.renshi_time useTime,
 		C.prepare_time finishTime,
-		C.Apply_ID applyId,
 		C.Apply_name applyName,
 		C.Apply_see applyIsSee,
-		C.User_ID userId,
+		C.User_ID applyId,
 		C.User_name userName,
 		C.User_see userIsSee,
 		C.Zhu_ID leaderId,
@@ -35,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		C.Is_Ing status,
 		C.Shuoming remark 
 	</sql>
+	
 	<!-- 查询电脑预申请 -->
 	<select id="queryPreApplication" resultType="ComputerBean">
 		SELECT 
@@ -100,24 +100,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		ORDER BY C.ID
 	</select>
+	
 	<!-- 添加电脑预申请 -->
 	<insert id="addPreApplication" parameterType="ComputerBean">
 		INSERT INTO Computer 
-			(DepartmentID, Start_time, End_time, Apply_name, User_ID
-			, User_name, Articles_name, Zhu_ID, Prepare_ID, Job_ID
-			, Zhu_Advice, Fu_Advice, Type_ID, Apply_see, Zhu_see
-			, Fu_see, Dui_see, User_see, Apply_ID, Fu_ID
-			, Is_Reserve, renshi_time, prepare_time, Prepare_name, Shuoming
-			, Pei_Jiedan_ID, Pei_Jiedan_ID_see, Is_Pei, Is_Ing)
+			(DepartmentID, Start_time, Apply_name, User_ID
+			, User_name, Articles_name, Zhu_ID, Job_ID
+			, Zhu_Advice, Fu_Advice, Type_ID ,User_see
+			, Fu_ID, Is_Reserve, renshi_time
+			)
 		VALUES 
-			(#{deptId}, #{submitTime}, #{}, #{applyName}, #{userId},
-			#{userName}, #{typeName}, #{leaderId}, #{handId}, #{positionId},
-			#{leaderAudit}, #{principalAudit}, #{typeId}, #{applyIsSee}, #{leadreIsSee}, 
-			#{principalIsSee}, #{handIsSee}, #{userIsSee}, #{applyId}, #{principalId},
-			#{isReserve}, #{useTime}, #{finishTime}, #{handName}, #{remark},
-			#{configId}, #{configName}, #{isConfig}, #{status}
+			(#{deptId}, #{submitTime}, #{applyName}, #{applyId},
+			#{userName}, #{typeName}, #{leaderId}, #{positionId},
+			#{leaderAudit}, #{principalAudit}, #{typeId},#{applyIsSee}, 
+			#{principalId},#{isReserve}, #{useTime}
 			)
 	</insert>
+	
 	<!-- 查询岗位信息 -->
 	<select id="queryPositionInfo" resultType="PositionInfo">
 		SELECT  
@@ -125,5 +124,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			P.Position_Name positionName
 		FROM 
 		Position_Data P
+	</select>
+	
+	<!-- 查询所在部门主管信息  -->
+	<select id="queryLeaderInfo" resultType="LeaderInfo">
+		SELECT
+			Account_ID leaderId,
+			Account_Name leaderName
+		FROM
+			Account_Data A
+			LEFT JOIN T_Employee_Basic EMP ON A.Account_ID = EMP.Account
+			LEFT JOIN T_Department DEPT ON EMP.Department_ID = DEPT.ID
+			LEFT JOIN Position_Data PD ON A.Position_ID = PD.Position_ID
+			LEFT JOIN Position_Type PT ON PD.PositionType_ID = PT.PositionType_ID 
+		WHERE
+			EMP.IsDelete = '0' AND EMP.State = '1'
+		<if test="deptId != null and deptId != '' ">
+			<choose>
+				<when test="deptId == 50">
+					 AND DEPT.ID  = 50
+					 AND (PD.Position_Name = '副总经理' OR PD.Position_Name = '集团总经理助理')
+				</when>
+				<when test="deptId == 60">
+					 AND DEPT.ID  = 39
+					 AND PD.Position_Name = '办公室主任'
+				</when>
+				<otherwise>
+					 AND (PT.PositionType_ID = 5 OR Position_Name = '项目经理' OR PT.PositionType_ID = 6) 
+					 AND DEPT.ID IN ( 
+						SELECT ID FROM [dbo].[f_GetChild] (#{deptId}) 
+						UNION 
+						SELECT ID FROM [dbo].[fnGetFather] (#{deptId})
+					 ) 
+				</otherwise>
+			</choose>
+		</if>
 	</select>
 </mapper>

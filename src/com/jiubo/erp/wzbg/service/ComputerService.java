@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.ComputerBean;
+import com.jiubo.erp.wzbg.vo.LeaderInfo;
 import com.jiubo.erp.wzbg.vo.PositionInfo;
 
 /**
@@ -38,10 +39,20 @@ public interface ComputerService   {
 	/**
 	 * @Description: 查询岗位信息
 	 * @param  
-	 * @return 
+	 * @return List<PositionInfo>
 	 * @author: DingDong
 	 * @date: 2019年7月31日
 	 * @version: V1.0
 	 */
 	public List<PositionInfo> queryPositionInfo() throws MessageException;
+	
+	/**
+	 * @Description: 查询所在部门的主管信息
+	 * @param  deptId
+	 * @return List<LeaderInfo>
+	 * @author: DingDong
+	 * @date: 2019年8月1日
+	 * @version: V1.0
+	 */
+	public List<LeaderInfo> queryLeaderInfo(String deptId) throws MessageException;
 }

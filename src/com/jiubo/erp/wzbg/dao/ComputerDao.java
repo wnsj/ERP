@@ -2,7 +2,10 @@ package com.jiubo.erp.wzbg.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jiubo.erp.wzbg.bean.ComputerBean;
+import com.jiubo.erp.wzbg.vo.LeaderInfo;
 import com.jiubo.erp.wzbg.vo.PositionInfo;
 
 /**
@@ -20,4 +23,6 @@ public interface ComputerDao {
 	public void addPreApplication(ComputerBean computerBean);
 	// 查询所有岗位信息
 	public List<PositionInfo> queryPositionInfo();
+	// 根据部门查询主管信息
+	public List<LeaderInfo> queryLeaderInfo(@Param("deptId") String deptId);
 }

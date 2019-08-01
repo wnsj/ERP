@@ -75,7 +75,7 @@ public class LeavePrepareController {
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
+			 retMsg = Constant.Result.ERROR_MSG;
 			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
@@ -159,7 +159,7 @@ public class LeavePrepareController {
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
+			 retMsg = Constant.Result.ERROR_MSG;
 			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
@@ -207,7 +207,7 @@ public class LeavePrepareController {
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
+			 retMsg = Constant.Result.ERROR_MSG;
 			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
@@ -254,7 +254,7 @@ public class LeavePrepareController {
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
+			 retMsg = Constant.Result.ERROR_MSG;
 			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
@@ -301,7 +301,7 @@ public class LeavePrepareController {
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
+			 retMsg = Constant.Result.ERROR_MSG;
 			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
@@ -349,7 +349,7 @@ public class LeavePrepareController {
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
+			 retMsg = Constant.Result.ERROR_MSG;
 			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
@@ -396,7 +396,7 @@ public class LeavePrepareController {
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
+			 retMsg = Constant.Result.ERROR_MSG;
 			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
@@ -438,7 +438,7 @@ public class LeavePrepareController {
 			return result;
 		} catch (MessageException e) {
 			retCode = Constant.Result.ERROR;
-			retMsg = e.getMessage();
+			 retMsg = Constant.Result.ERROR_MSG;
 			logger.error(e.getMessage(), e);
 			return result;
 		} catch (Exception e) {
