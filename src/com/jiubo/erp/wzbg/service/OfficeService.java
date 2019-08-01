@@ -2,6 +2,8 @@ package com.jiubo.erp.wzbg.service;
 
 import com.jiubo.erp.common.MessageException;
 import com.jiubo.erp.wzbg.bean.OfficeSuppliesDataBean;
+import com.jiubo.erp.wzbg.bean.OfficeUserDataBean;
+import com.jiubo.erp.wzbg.bean.OfficeDataBean;
 
 import java.util.List;
 import java.util.Map;
@@ -77,7 +79,7 @@ public interface OfficeService {
      * @throws:
      * @version: 1.0
      **/
-    public Map<String,Object> gatherOfficeSupplies(Map<String, Object> params) throws MessageException;
+    public Map<String, Object> gatherOfficeSupplies(Map<String, Object> params) throws MessageException;
 
     /* *
      * @desc:获取意见给出人
@@ -90,7 +92,7 @@ public interface OfficeService {
      * @throws:
      * @version: 1.0
      **/
-    public Map<String,Object> queryAdvancePeo(Map<String, Object> params) throws MessageException;
+    public Map<String, Object> queryAdvancePeo(Map<String, Object> params) throws MessageException;
 
     /* *
      * @desc:查询审核意见
@@ -101,7 +103,7 @@ public interface OfficeService {
      * @throws:
      * @version: 1.0
      **/
-    public Map<String,Object> queryAdvance(Map<String, Object> params) throws MessageException;
+    public Map<String, Object> queryAdvance(Map<String, Object> params) throws MessageException;
 
     /* *
      * @desc:提交，审核
@@ -113,7 +115,7 @@ public interface OfficeService {
      * @version: 1.0
      **/
     public void commitAndSheHe(Map<String, Object> params) throws MessageException;
-    
+
     /* *
      * @desc:
      * @author: dx
@@ -124,4 +126,60 @@ public interface OfficeService {
      * @version: 1.0
      **/
     public List<Map<String, Object>> queryDeptConscientious(Map<String, Object> params) throws MessageException;
+
+    /* *
+     * @desc:会议室申请信息查询
+     * @author: dx
+     * @date: 2019-07-23 09:36:14
+     * @param officeUserDataBean :
+     * @return: java.util.List<com.jiubo.erp.wzbg.bean.OfficeUserDataBean>
+     * @throws:
+     * @version: 1.0
+     **/
+    public List<OfficeUserDataBean> queryOfficeUserData(OfficeUserDataBean officeUserDataBean) throws MessageException;
+
+    /* *
+     * @desc:会议室申请
+     * @author: dx
+     * @date: 2019-07-26 08:21:30
+     * @param officeUserDataBean :
+     * @return: void
+     * @throws:
+     * @version: 1.0
+     **/
+    public void addOfficeUserData(OfficeUserDataBean officeUserDataBean)throws MessageException;
+
+    public void updateOfficeUserData(OfficeUserDataBean officeUserDataBean)throws MessageException;
+
+    /* *
+    * @desc:会议室查询
+    * @author: dx
+    * @date: 2019-07-23 09:01:50
+    * @return: java.util.List<com.jiubo.erp.zpgl.bean.OfficeDataBean>
+    * @throws:
+    * @version: 1.0
+    **/
+    public List<OfficeDataBean> queryOfficeData()throws MessageException;
+
+    /* *
+     * @desc:会议预约信息添加及修改
+     * @author: dx
+     * @date: 2019-07-30 08:34:37
+     * @param officeUserDataBean :
+     * @return: void
+     * @throws:
+     * @version: 1.0
+     **/
+    public void addUpdateOfficeUserData(OfficeUserDataBean officeUserDataBean)throws MessageException;
+
+    /* *
+     * @desc:修改会议室预约信息状态
+     * @author: dx
+     * @date: 2019-07-30 09:12:41
+     * @param officeUserDataBean :
+     * @return: void
+     * @throws:
+     * @version: 1.0
+     **/
+    public void updateOfficeUserDataState(OfficeUserDataBean officeUserDataBean)throws MessageException;
 }

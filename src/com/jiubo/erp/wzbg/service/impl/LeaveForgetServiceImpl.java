@@ -64,7 +64,6 @@ public class LeaveForgetServiceImpl implements LeaveForgetService {
 	public void addLeaveForgetBean(LeaveForgetBean leaveForgetBean) throws MessageException {
 		logger.info("----------开始新增忘记打卡证明,方法:addLeaveForgetBean----------");
 		try {
-			leaveForgetBean.setStep("1");
 			leaveForgetDao.addLeaveForget(leaveForgetBean);
 		} catch (Exception e) {
 			throw new MessageException(e.getMessage());
@@ -89,6 +88,16 @@ public class LeaveForgetServiceImpl implements LeaveForgetService {
 			throw new MessageException(e.getMessage());
 		}
 		return empInfo;
+	}
+
+	@Override
+	public void updateLeaveForget(LeaveForgetBean leaveForgetBean) throws MessageException {
+		logger.info("----------开始通过账户ID查询某员工部门和职位,方法:queryEmpInfoByAccount----------");
+		try {
+			 leaveForgetDao.updateLeaveForget(leaveForgetBean);
+		} catch (Exception e) {
+			throw new MessageException(e.getMessage());
+		}
 	}
 
 }

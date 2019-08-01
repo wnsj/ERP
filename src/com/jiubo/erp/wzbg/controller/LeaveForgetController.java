@@ -186,5 +186,54 @@ public class LeaveForgetController {
 			result.put(Constant.Result.RETMSG, retMsg);
 		}
 	}
+	
+	/**
+	 * @Description: 更新忘记打卡
+	 * @param
+	 * @return  JSONObject
+	 * @author: DingDong
+	 * @date: 2019年07月29日
+	 * @version: V1.0
+	 */
+	//http://127.0.0.1:8080/Erp/leaveForgetController/updateLeaveForget
+	@ResponseBody
+	@RequestMapping(value="/updateLeaveForget", method=RequestMethod.POST)
+	public JSONObject updateLeavePrepare(HttpServletRequest request,HttpServletResponse response) {
+		JSONObject result = new JSONObject();
+		String retCode = null;
+		String retMsg = null;
+		try {
+			String str = ToolClass.getStrFromInputStream(request);
+			if(StringUtils.isBlank(str)) {
+				throw new MessageException("参数接收失败！");
+			}
+			LeaveForgetBean leaveForgetBean = MapUtil.transJsonStrToObjectIgnoreCase(str,LeaveForgetBean.class);
+			leaveForgetService.updateLeaveForget(leaveForgetBean);
+
+			retCode = Constant.Result.SUCCESS;
+			retMsg = Constant.Result.SUCCESS_MSG;
+			logger.info("--------------更新忘记打卡信息信息成功 返回json数据-------------------");
+			return result;
+		} catch (IOException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			logger.error(e.getMessage(), e);
+			return result;
+		} catch (MessageException e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = e.getMessage();
+			logger.error(e.getMessage(), e);
+			return result;
+		} catch (Exception e) {
+			retCode = Constant.Result.ERROR;
+			retMsg = Constant.Result.ERROR_MSG;
+			logger.error(e.getMessage(), e);
+			return result;
+		}finally {
+			result.put(Constant.Result.RETCODE, retCode);
+			result.put(Constant.Result.RETMSG, retMsg);
+		}
+	}
+	
 
 }

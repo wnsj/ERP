@@ -23,4 +23,6 @@ public interface LeaveForgetDao {
 	// 通过账户ID查询某员工部门和职位
 	public DeptWithEmp queryEmpInfoByAccount(DeptWithEmp deptWithEmp);
 	
+	// 修改忘记打卡证明
+	public void updateLeaveForget(LeaveForgetBean leaveForgetBean);
 }

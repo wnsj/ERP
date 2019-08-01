@@ -44,4 +44,14 @@ public interface LeaveForgetService {
 	 * @version: V1.0
 	 */
 	public DeptWithEmp queryEmpInfoByAccount(DeptWithEmp deptWithEmp) throws MessageException;
+	
+	/**
+	 * @Description: 修改忘记打卡证明
+	 * @param  leaveForgetBean
+	 * @return 
+	 * @author: DingDong
+	 * @date: 2019年7月29日
+	 * @version: V1.0
+	 */
+	public void updateLeaveForget(LeaveForgetBean leaveForgetBean) throws MessageException;
 }
