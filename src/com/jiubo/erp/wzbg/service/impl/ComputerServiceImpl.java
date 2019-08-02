@@ -66,8 +66,13 @@ public class ComputerServiceImpl implements ComputerService{
 		try {
 			computerBean.setLeaderId("0");
 			computerBean.setLeaderAudit("5");
+			computerBean.setLeaderIsSee("0");
+			computerBean.setPrincipalId("666");
+			computerBean.setPrincipalIsSee("0");
 			computerBean.setPrincipalAudit("0");
 			computerBean.setTypeId("0");
+			computerBean.setTypeName("领用电脑:电脑");
+			computerBean.setHandIsSee("0");
 			computerBean.setApplyIsSee("1");
 			computerBean.setIsReserve("1");
 			computerDao.addPreApplication(computerBean);

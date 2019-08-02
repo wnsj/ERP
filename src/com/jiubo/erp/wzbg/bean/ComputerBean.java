@@ -45,7 +45,7 @@ public class ComputerBean implements Serializable {
 	private String leaderId; // 主管ID
 	private String leaderName; // 主管姓名
 	private String leaderAudit; // 审核状态: 0.未审核 1.同意 2.不同意 
-	private String leadreIsSee; // 是否查看
+	private String leaderIsSee; // 是否查看
 	// 交接人
 	private String handId; // 交接人ID
 	private String handName; // 交接人姓名

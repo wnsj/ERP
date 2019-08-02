@@ -21,6 +21,8 @@ public interface ComputerDao {
 	public List<ComputerBean> queryPreApplication(ComputerBean computerBean);
 	// 添加电脑预申请
 	public void addPreApplication(ComputerBean computerBean);
+	// 添加电脑预申请
+	public void updatePreApplication(ComputerBean computerBean);
 	// 查询所有岗位信息
 	public List<PositionInfo> queryPositionInfo();
 	// 根据部门查询主管信息

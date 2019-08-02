@@ -13,14 +13,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		C.renshi_time useTime,
 		C.prepare_time finishTime,
 		C.Apply_name applyName,
-		C.Apply_see applyIsSee,
+		C.User_see applyIsSee,
 		C.User_ID applyId,
 		C.User_name userName,
-		C.User_see userIsSee,
+		C.Apply_see userIsSee,
 		C.Zhu_ID leaderId,
 		A1.Account_Name leaderName,
 		C.Zhu_Advice leaderAudit,
-		C.Zhu_see leadreIsSee,
+		C.Zhu_see leaderIsSee,
 		C.Prepare_ID handId,
 		C.Prepare_name handName,
 		C.Dui_see handIsSee,
@@ -104,18 +104,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 添加电脑预申请 -->
 	<insert id="addPreApplication" parameterType="ComputerBean">
 		INSERT INTO Computer 
-			(DepartmentID, Start_time, Apply_name, User_ID
-			, User_name, Articles_name, Zhu_ID, Job_ID
-			, Zhu_Advice, Fu_Advice, Type_ID ,User_see
-			, Fu_ID, Is_Reserve, renshi_time
+			(DepartmentID, Start_time, Apply_name, User_ID,
+			User_name, Articles_name, Zhu_ID, Job_ID, 
+			Zhu_Advice, Fu_Advice, Type_ID, 
+			Zhu_see, Fu_see, Dui_see, User_see, 
+			Fu_ID, Is_Reserve, renshi_time
 			)
 		VALUES 
 			(#{deptId}, #{submitTime}, #{applyName}, #{applyId},
 			#{userName}, #{typeName}, #{leaderId}, #{positionId},
-			#{leaderAudit}, #{principalAudit}, #{typeId},#{applyIsSee}, 
+			#{leaderAudit}, #{principalAudit}, #{typeId},
+			#{leaderIsSee}, #{principalIsSee}, #{handIsSee}, #{applyIsSee}, 
 			#{principalId},#{isReserve}, #{useTime}
 			)
 	</insert>
+	<!-- 更新电脑预申请 -->
+	<update id="updatePreApplication" parameterType="ComputerBean">
+		UPDATE Computer
+		<trim prefix="set" suffixOverrides=",">
+			<if test="handId != null and handId != '' ">
+		 		Pei_Jiedan_ID = #{handId}
+		 	</if>
+		 	<if test="handName != null and handName != '' ">
+		 		Prepare_name = #{handName}
+		 	</if>
+		 	<if test="isConfig != null and isConfig != '' ">
+		 		Is_Pei = #{isConfig}
+		 	</if>
+		 	<if test="principalAudit != null and principalAudit != '' ">
+		 		Fu_see = #{principalAudit}
+		 	</if>
+		 	<if test="remark != null and remark != '' ">
+		 		Shuoming = #{remark}
+		 	</if>
+		</trim>
+		WHERE
+			ID = #{id}
+	</update>
 	
 	<!-- 查询岗位信息 -->
 	<select id="queryPositionInfo" resultType="PositionInfo">
@@ -141,6 +166,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			EMP.IsDelete = '0' AND EMP.State = '1'
 		<if test="deptId != null and deptId != '' ">
 			<choose>
+				<when test="deptId == 0">
+					AND DEPT.ID = 0
+				</when>
 				<when test="deptId == 50">
 					 AND DEPT.ID  = 50
 					 AND (PD.Position_Name = '副总经理' OR PD.Position_Name = '集团总经理助理')
